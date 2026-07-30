@@ -15,6 +15,119 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
 
+<!-- Premium 3D Flashcard Styles -->
+<style>
+  .flashcards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+
+  /* 3D Card Container */
+  .flashcard-wrapper {
+    perspective: 1000px;
+    height: 180px;
+    cursor: pointer;
+  }
+
+  /* Inner Card for 3D Flip Animation */
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+
+  .flashcard-wrapper.is-flipped .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+
+  /* Front & Back Card Face Styling */
+  .flashcard-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .flashcard-wrapper:hover .flashcard-face {
+    box-shadow: 0 14px 35px rgba(67, 232, 216, 0.15);
+    border-color: rgba(67, 232, 216, 0.4);
+  }
+
+  /* Front Face */
+  .flashcard-front {
+    background: rgba(18, 25, 48, 0.85);
+  }
+
+  /* Back Face */
+  .flashcard-back {
+    background: rgba(12, 38, 48, 0.95);
+    transform: rotateY(180deg);
+    border-color: #43E8D8;
+  }
+
+  /* Question & Answer Badges */
+  .card-badge {
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  .card-badge.question {
+    background: rgba(67, 232, 216, 0.15);
+    color: #43E8D8;
+    border: 1px solid rgba(67, 232, 216, 0.3);
+  }
+
+  .card-badge.answer {
+    background: rgba(46, 213, 115, 0.15);
+    color: #2ed573;
+    border: 1px solid rgba(46, 213, 115, 0.3);
+  }
+
+  /* Text Content Inside Card */
+  .card-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.4;
+    max-height: 90px;
+    overflow-y: auto;
+    word-break: break-word;
+  }
+
+  .flip-hint {
+    position: absolute;
+    bottom: 10px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -70,8 +183,8 @@
     </div>
     <div class="panel">
       <h2>Your flashcards</h2>
-      <p class="hint" style="margin-top:-8px;">Click a card to flip it.</p>
-      <div id="output" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+      <p class="hint" style="margin-top:-8px;">Click any card to flip it over.</p>
+      <div id="output" class="flashcards-grid"></div>
     </div>
     
   </div>
@@ -137,24 +250,56 @@
 </footer>
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
+
+<!-- Upgraded Interactive 3D Flashcard Engine Script -->
 <script>
 document.getElementById('genBtn').addEventListener('click', function(){
   var lines = document.getElementById('input').value.split('\n').map(function(l){return l.trim();}).filter(Boolean);
   var out = document.getElementById('output');
   out.innerHTML = '';
-  if(!lines.length){ out.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Add at least one Question | Answer pair.</div>'; return; }
+  
+  if(!lines.length){ 
+    out.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Add at least one Question | Answer pair.</div>'; 
+    return; 
+  }
+  
   lines.forEach(function(line){
     var parts = line.split('|');
     var q = (parts[0] || '').trim(), a = (parts[1] || 'No answer given').trim();
-    var card = document.createElement('div');
-    card.style.cssText = 'background:var(--bg-soft);border:1px solid var(--border-soft);border-radius:10px;padding:16px;min-height:90px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.9rem;';
-    card.textContent = q;
-    card.dataset.showing = 'q';
-    card.addEventListener('click', function(){
-      if(card.dataset.showing === 'q'){ card.textContent = a; card.style.borderColor='var(--accent)'; card.dataset.showing='a'; }
-      else { card.textContent = q; card.style.borderColor='var(--border-soft)'; card.dataset.showing='q'; }
+    
+    // Create 3D Flip Structure
+    var wrapper = document.createElement('div');
+    wrapper.className = 'flashcard-wrapper';
+    wrapper.dataset.showing = 'q';
+
+    wrapper.innerHTML = `
+      <div class="flashcard-inner">
+        <!-- Front Side (Question) -->
+        <div class="flashcard-face flashcard-front">
+          <span class="card-badge question">Question</span>
+          <div class="card-text">${q}</div>
+          <div class="flip-hint">🔄 Click to see answer</div>
+        </div>
+        <!-- Back Side (Answer) -->
+        <div class="flashcard-face flashcard-back">
+          <span class="card-badge answer">Answer</span>
+          <div class="card-text">${a}</div>
+          <div class="flip-hint">🔄 Click to see question</div>
+        </div>
+      </div>
+    `;
+
+    // 3D Flip Event
+    wrapper.addEventListener('click', function(){
+      wrapper.classList.toggle('is-flipped');
+      if(wrapper.dataset.showing === 'q'){ 
+        wrapper.dataset.showing = 'a'; 
+      } else { 
+        wrapper.dataset.showing = 'q'; 
+      }
     });
-    out.appendChild(card);
+
+    out.appendChild(wrapper);
   });
 });
 </script>
