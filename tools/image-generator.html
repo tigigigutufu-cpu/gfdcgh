@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Image Generator | ToolSphere</title>
-<meta name="description" content="Generate images from text prompts with a built-in safety filter that blocks explicit or harmful requests.">
+<meta name="description" content="Generate high quality images from text prompts effortlessly with custom ratio and negative prompts.">
 <link rel="canonical" href="https://toolsphere.online/">
 <meta property="og:title" content="AI Image Generator | ToolSphere">
-<meta property="og:description" content="Generate images from text prompts with a built-in safety filter that blocks explicit or harmful requests.">
+<meta property="og:description" content="Generate high quality images from text prompts effortlessly with custom ratio and negative prompts.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
@@ -54,8 +54,8 @@
     <div class="crumbs"><a href="../index.html">Home</a> / <a href="../tools.html">Tools</a> / AI Image Generator</div>
     <span class="eyebrow">AI</span>
     <h1>AI Image Generator</h1>
-    <p style="max-width:60ch;">Generate images from text prompts with a built-in safety filter that blocks explicit or harmful requests.</p>
-    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No signup</span><span class="badge">Safety filtered</span></div>
+    <p style="max-width:60ch;">Generate stunning images from text prompts in seconds with custom styles and dimensions.</p>
+    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No signup</span><span class="badge">Advanced Controls</span></div>
   </div>
 </section>
 <section class="workspace">
@@ -63,24 +63,43 @@
     
     <div class="panel">
       <h2>Describe your image</h2>
-      <div class="alert alert-warn">This tool only creates respectful, fully-clothed, non-violent images. Explicit,
-      sexual, hateful or violent prompts are blocked automatically before generation.</div>
+      
+      <!-- Prompt Field -->
       <div class="field"><label for="prompt">Prompt</label>
-        <textarea id="prompt" placeholder="e.g. a girl in a beautiful hijab reading a book in a sunlit library, digital art"></textarea>
+        <textarea id="prompt" placeholder="e.g. a girl reading a book in a sunlit library, digital art"></textarea>
       </div>
-      <div class="field"><label for="style">Style</label>
-        <select id="style">
-          <option value="digital art">Digital art</option>
-          <option value="realistic photo">Realistic photo</option>
-          <option value="watercolor painting">Watercolor painting</option>
-          <option value="anime style">Anime style</option>
-          <option value="3d render">3D render</option>
-        </select>
+
+      <!-- Negative Prompt Field -->
+      <div class="field"><label for="negativePrompt">Negative Prompt (Optional)</label>
+        <input type="text" id="negativePrompt" placeholder="e.g. blur, low quality, distorted face, extra limbs" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-card); color:var(--text);" />
       </div>
+
+      <!-- Controls Row: Style and Aspect Ratio -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="field"><label for="style">Style</label>
+          <select id="style">
+            <option value="digital art">Digital art</option>
+            <option value="realistic photo">Realistic photo</option>
+            <option value="watercolor painting">Watercolor painting</option>
+            <option value="anime style">Anime style</option>
+            <option value="3d render">3D render</option>
+          </select>
+        </div>
+
+        <div class="field"><label for="aspectRatio">Aspect Ratio</label>
+          <select id="aspectRatio">
+            <option value="1:1">Square (1:1)</option>
+            <option value="9:16">Portrait (9:16)</option>
+            <option value="16:9">Landscape (16:9)</option>
+          </select>
+        </div>
+      </div>
+
       <div id="warnBox"></div>
       <button class="btn btn-primary btn-block" id="genBtn">Generate image</button>
-      <p class="hint" style="margin-top:12px;">Free to use, no API key needed &mdash; generation runs through our own server and can take 15-40 seconds.</p>
+      <p class="hint" style="margin-top:12px;">Free to use, no API key needed &mdash; generation takes a few seconds.</p>
     </div>
+
     <div class="panel center">
       <h2>Your image</h2>
       <div id="output"><div class="empty-state">Your generated image will appear here.</div></div>
@@ -92,20 +111,15 @@
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>About this tool</h2>
-    <p>Describe a scene and pick a style to generate an image. Every prompt passes through a safety filter
-    (checked both in your browser and again on our server) before anything is generated &mdash; explicit, sexual,
-    hateful or violent requests are blocked, and we automatically add modest, respectful styling to every request.
-    Generation itself runs through our own server, is completely free, and needs no API key or account. A small
-    "TP" watermark is added to the bottom-right corner of every generated image.</p>
+    <p>Describe a scene, select aspect ratios, add negative prompts to remove unwanted details, and generate high-quality images powered by advanced AI models.</p>
   </div>
 </section>
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>Frequently asked questions</h2>
-    <details class="faq-item"><summary>Why was my prompt blocked?</summary><p>Our filter blocks prompts referencing explicit, sexual, violent or hateful content. Try describing a respectful, fully-clothed, everyday scene instead.</p></details>
-<details class="faq-item"><summary>Do I need my own API key?</summary><p>No. This tool is completely free and works out of the box &mdash; no API key, billing or account needed by you or the site owner.</p></details>
-<details class="faq-item"><summary>Can I generate images of real people?</summary><p>Please avoid prompts naming real, identifiable people &mdash; use general descriptions instead.</p></details>
-<details class="faq-item"><summary>Is there a usage limit?</summary><p>The underlying free service may rate-limit heavy use; if generation fails, wait a moment and try again.</p></details>
+    <details class="faq-item"><summary>Why was my prompt blocked?</summary><p>Inappropriate, explicit, or offensive words are automatically blocked by our safety system.</p></details>
+    <details class="faq-item"><summary>What is a Negative Prompt?</summary><p>A negative prompt tells the AI what to exclude from your image (e.g., blur, extra fingers, dark lighting).</p></details>
+    <details class="faq-item"><summary>Do I need my own API key?</summary><p>No. This tool is completely free and works out of the box &mdash; no API key or account needed.</p></details>
   </div>
 </section>
 
@@ -157,6 +171,63 @@
 <script src="../assets/js/common.js"></script>
 <script src="../assets/js/safe-prompt.js"></script>
 <script>
+// Custom Safety Check & 1-Hour Ban System
+function validateAndCheckBan(promptText) {
+  var banTimeKey = 'ts_user_banned_until';
+  var strikeKey = 'ts_user_strikes';
+  var now = Date.now();
+
+  var bannedUntil = localStorage.getItem(banTimeKey);
+  if (bannedUntil && now < parseInt(bannedUntil, 10)) {
+    var remainingMinutes = Math.ceil((parseInt(bannedUntil, 10) - now) / (1000 * 60));
+    return {
+      allowed: false,
+      banned: true,
+      message: 'You have been temporarily blocked for entering explicit content. Please try again in ' + remainingMinutes + ' minutes.'
+    };
+  }
+
+  if (bannedUntil && now >= parseInt(bannedUntil, 10)) {
+    localStorage.removeItem(banTimeKey);
+    localStorage.setItem(strikeKey, '0');
+  }
+
+  var dirtyWords = [
+    'nude', 'naked', 'nsfw', 'sex', 'porn', 'breast', 'dick', 'pussy', 'vagina', 'penis', 'boobs',
+    'erotic', 'strip', 'undress', 'hentai', 'xrated', 'fuck', 'bitch', 'asshole', 'kill', 'gore', 'blood',
+    'choot', 'gand', 'lund', 'bhosda', 'chut', 'muth', 'randi', 'gaand'
+  ];
+
+  var lowerPrompt = promptText.toLowerCase();
+  var isDirty = dirtyWords.some(function(word) {
+    var regex = new RegExp('\\b' + word + '\\b', 'i');
+    return regex.test(lowerPrompt);
+  });
+
+  if (isDirty) {
+    var currentStrikes = parseInt(localStorage.getItem(strikeKey) || '0', 10) + 1;
+    localStorage.setItem(strikeKey, currentStrikes.toString());
+
+    if (currentStrikes >= 2) {
+      var banUntil = now + (60 * 60 * 1000);
+      localStorage.setItem(banTimeKey, banUntil.toString());
+      return {
+        allowed: false,
+        banned: true,
+        message: 'Explicit/Inappropriate content detected multiple times. You are blocked from generating images for 1 hour.'
+      };
+    } else {
+      return {
+        allowed: false,
+        banned: false,
+        message: 'Warning (1/2): Inappropriate or explicit words detected! Entering dirty/NSFW prompts again will block you for 1 hour.'
+      };
+    }
+  }
+
+  return { allowed: true };
+}
+
 function watermarkImage(dataUrl, callback){
   var img = new Image();
   img.onload = function(){
@@ -190,28 +261,49 @@ function watermarkImage(dataUrl, callback){
   img.src = dataUrl;
 }
 
-var genBtn = document.getElementById('genBtn');
-genBtn.addEventListener('click', function(){
+// Function to handle Image Generation Execution
+function executeGeneration() {
   var raw = document.getElementById('prompt').value.trim();
+  var negativePrompt = document.getElementById('negativePrompt').value.trim();
   var style = document.getElementById('style').value;
+  var aspectRatio = document.getElementById('aspectRatio').value;
   var out = document.getElementById('output');
   var warnBox = document.getElementById('warnBox');
+  var genBtn = document.getElementById('genBtn');
   warnBox.innerHTML = '';
 
-  var check = tsCheckPrompt(raw);
-  if(!check.ok){
-    warnBox.innerHTML = '<div class="alert alert-error">' + check.reason + '</div>';
+  if (!raw) {
+    warnBox.innerHTML = '<div class="alert alert-error">Please enter a prompt to generate an image.</div>';
     return;
+  }
+
+  var safetyCheck = validateAndCheckBan(raw);
+  if (!safetyCheck.allowed) {
+    warnBox.innerHTML = '<div class="alert alert-error">' + safetyCheck.message + '</div>';
+    return;
+  }
+
+  if (typeof tsCheckPrompt === 'function') {
+    var check = tsCheckPrompt(raw);
+    if (!check.ok) {
+      warnBox.innerHTML = '<div class="alert alert-error">' + check.reason + '</div>';
+      return;
+    }
   }
 
   genBtn.disabled = true;
   genBtn.textContent = 'Generating...';
-  out.innerHTML = '<div class="empty-state">Generating your image, please wait (15-40 seconds)...</div>';
+  out.innerHTML = '<div class="empty-state">Generating your image, please wait...</div>';
 
   fetch('/api/generate-image', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: raw, style: style })
+    body: JSON.stringify({ 
+      prompt: raw, 
+      negative_prompt: negativePrompt, 
+      style: style, 
+      aspect_ratio: aspectRatio 
+    })
   })
   .then(function(res){ return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
   .then(function(result){
@@ -221,8 +313,16 @@ genBtn.addEventListener('click', function(){
     }
     var src = result.data.image;
     watermarkImage(src, function(finalSrc){
-      out.innerHTML = '<img src="' + finalSrc + '" alt="AI generated image" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;max-width:100%;">' +
-        '<a class="btn btn-ghost btn-sm" href="' + finalSrc + '" download="toolsphere-image.png">Save image</a>';
+      out.innerHTML = '<img src="' + finalSrc + '" alt="AI generated image" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;max-width:100%;display:block;">' +
+        '<div style="display:flex; gap:10px; justify-center; align-items:center;">' +
+          '<a class="btn btn-ghost btn-sm" href="' + finalSrc + '" download="toolsphere-image.png">Save image</a>' +
+          '<button class="btn btn-primary btn-sm" id="regenBtn">🔄 Regenerate</button>' +
+        '</div>';
+
+      // Event listener for Regenerate Button
+      document.getElementById('regenBtn').addEventListener('click', function() {
+        executeGeneration();
+      });
     });
   })
   .catch(function(){
@@ -232,7 +332,11 @@ genBtn.addEventListener('click', function(){
     genBtn.disabled = false;
     genBtn.textContent = 'Generate image';
   });
-});
+}
+
+// Attach event listener to Generate Button
+document.getElementById('genBtn').addEventListener('click', executeGeneration);
 </script>
 </body>
-</html>
+                </html>
+                
