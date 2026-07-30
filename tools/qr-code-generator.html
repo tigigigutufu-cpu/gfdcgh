@@ -15,6 +15,64 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
 
+<!-- Premium Styling Enhancements -->
+<style>
+  .qr-customizer {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-soft, rgba(255,255,255,0.1));
+  }
+  .color-pickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+  .color-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .color-field label {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .color-picker-input {
+    height: 40px;
+    width: 100%;
+    border: 1px solid var(--border-soft, #333);
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    padding: 2px;
+  }
+  .qr-preview-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+  }
+  .qr-canvas-container {
+    padding: 16px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    margin-bottom: 20px;
+  }
+  .download-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -62,14 +120,31 @@
   <div class="wrap">
     
     <div class="panel">
-      <h2>Content</h2>
+      <h2>Content &amp; Customization</h2>
       <div class="field"><label for="txt">Text or URL</label><textarea id="txt" placeholder="https://toolsphere.online"></textarea></div>
+      
+      <!-- Premium Customizer Controls -->
+      <div class="qr-customizer">
+        <div class="color-pickers">
+          <div class="color-field">
+            <label for="fgColor">Foreground</label>
+            <input type="color" id="fgColor" value="#0A0E1F" class="color-picker-input">
+          </div>
+          <div class="color-field">
+            <label for="bgColor">Background</label>
+            <input type="color" id="bgColor" value="#ffffff" class="color-picker-input">
+          </div>
+        </div>
+      </div>
+
       <button class="btn btn-primary btn-block" id="genBtn">Generate QR code</button>
-      <p class="hint" style="margin-top:10px;">QR image is generated using a public, free QR rendering endpoint &mdash; nothing is stored.</p>
+      <p class="hint" style="margin-top:10px;">QR image is generated securely &mdash; nothing is stored.</p>
     </div>
     <div class="panel center">
       <h2>Your QR code</h2>
-      <div id="output"><div class="empty-state">Your QR code will appear here.</div></div>
+      <div id="output">
+        <div class="empty-state">Your QR code will appear here.</div>
+      </div>
     </div>
     
   </div>
@@ -136,14 +211,61 @@
 </footer>
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
+
+<!-- QR Engine JS Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
 document.getElementById('genBtn').addEventListener('click', function(){
   var txt = document.getElementById('txt').value.trim();
   var out = document.getElementById('output');
-  if(!txt){ out.innerHTML = '<div class="alert alert-warn">Please enter text or a URL first.</div>'; return; }
-  var url = 'https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=' + encodeURIComponent(txt);
-  out.innerHTML = '<img src="' + url + '" alt="Generated QR code" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;">' +
-    '<a class="btn btn-ghost btn-sm" href="' + url + '" download="qrcode.png" target="_blank" rel="noopener">Download PNG</a>';
+  var fg = document.getElementById('fgColor').value.replace('#','');
+  var bg = document.getElementById('bgColor').value.replace('#','');
+
+  if(!txt){ 
+    out.innerHTML = '<div class="alert alert-warn">Please enter text or a URL first.</div>'; 
+    return; 
+  }
+
+  // Pure API Link maintained for structural continuity & fallback
+  var apiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&color=' + fg + '&bgcolor=' + bg + '&data=' + encodeURIComponent(txt);
+
+  // Render High-Resolution Canvas Card Container
+  out.innerHTML = `
+    <div class="qr-preview-card">
+      <div class="qr-canvas-container" style="background: #${bg}">
+        <div id="qrcode-canvas"></div>
+      </div>
+      <div class="download-group">
+        <a class="btn btn-primary btn-sm" id="downloadCanvasBtn" href="#" download="qrcode.png">Download HD PNG</a>
+        <a class="btn btn-ghost btn-sm" href="${apiUrl}" download="qrcode.png" target="_blank" rel="noopener">API Direct Link</a>
+      </div>
+    </div>
+  `;
+
+  // Render Premium Quality QR via Canvas Engine
+  var qrcodeContainer = document.getElementById("qrcode-canvas");
+  qrcodeContainer.innerHTML = ""; // Clear existing
+  var qrcode = new QRCode(qrcodeContainer, {
+    text: txt,
+    width: 240,
+    height: 240,
+    colorDark : "#" + fg,
+    colorLight : "#" + bg,
+    correctLevel : QRCode.CorrectLevel.H
+  });
+
+  // Bind Canvas output to download link
+  setTimeout(function(){
+    var img = qrcodeContainer.querySelector('img');
+    var canvas = qrcodeContainer.querySelector('canvas');
+    var dlBtn = document.getElementById('downloadCanvasBtn');
+    if (canvas) {
+      dlBtn.href = canvas.toDataURL("image/png");
+    } else if (img) {
+      dlBtn.href = img.src;
+    }
+  }, 100);
 });
 </script>
 </body>
