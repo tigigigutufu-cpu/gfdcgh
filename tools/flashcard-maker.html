@@ -29,10 +29,12 @@
 
   /* 3D Perspective Canvas */
   .flashcard-wrapper {
-    perspective: 1200px;
+    perspective: 1000px;
     height: 220px;
     cursor: pointer;
     position: relative;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .flashcard-inner {
@@ -40,10 +42,11 @@
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
   }
 
+  /* Clean Flip Lock */
   .flashcard-wrapper.is-flipped .flashcard-inner {
     transform: rotateY(180deg);
   }
@@ -61,38 +64,34 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
     overflow: hidden;
   }
 
-  /* Front Side Design - Dark Neon Cyan Theme */
+  /* Front Side Design */
   .flashcard-front {
     background: radial-gradient(circle at 10% 10%, rgba(67, 232, 216, 0.08) 0%, rgba(10, 14, 31, 0.95) 90%);
     border: 1px solid rgba(67, 232, 216, 0.25);
   }
 
-  /* Back Side Design - Deep Gradient Glow Theme */
+  /* Back Side Design */
   .flashcard-back {
     background: radial-gradient(circle at 90% 90%, rgba(112, 0, 255, 0.15) 0%, rgba(10, 14, 31, 0.98) 90%);
     transform: rotateY(180deg);
     border: 1px solid rgba(112, 0, 255, 0.4);
   }
 
-  /* Elevated Lift on Hover */
-  .flashcard-wrapper:hover .flashcard-inner {
-    transform: translateY(-6px);
-  }
-
+  /* Hover Visual Glow Only (No Transform Movements to avoid flipping glitch) */
   .flashcard-wrapper:hover .flashcard-front {
-    box-shadow: 0 22px 45px -10px rgba(67, 232, 216, 0.25);
+    box-shadow: 0 20px 40px -10px rgba(67, 232, 216, 0.3);
     border-color: rgba(67, 232, 216, 0.6);
   }
 
   .flashcard-wrapper:hover .flashcard-back {
-    box-shadow: 0 22px 45px -10px rgba(112, 0, 255, 0.3);
+    box-shadow: 0 20px 40px -10px rgba(112, 0, 255, 0.35);
     border-color: rgba(112, 0, 255, 0.7);
   }
 
@@ -105,7 +104,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 2;
+    z-index: 5;
   }
 
   .card-header-right {
@@ -122,6 +121,7 @@
     text-transform: uppercase;
     padding: 3px 10px;
     border-radius: 20px;
+    pointer-events: none;
   }
 
   .card-badge.question {
@@ -143,6 +143,7 @@
     font-size: 0.72rem;
     color: rgba(255, 255, 255, 0.4);
     font-weight: 500;
+    pointer-events: none;
   }
 
   /* Delete Card Button Styling */
@@ -155,6 +156,7 @@
     font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    z-index: 10;
   }
 
   .card-delete-btn:hover {
@@ -177,6 +179,7 @@
     padding: 0 4px;
     letter-spacing: -0.2px;
     margin-top: 15px;
+    pointer-events: none;
   }
 
   /* Stylized Question Text Gradient */
@@ -205,11 +208,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: color 0.3s ease;
-  }
-
-  .flashcard-wrapper:hover .flip-hint {
-    color: rgba(255, 255, 255, 0.85);
+    pointer-events: none;
   }
 
   /* Buttons Controls Bar */
@@ -363,7 +362,6 @@
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
 
-<!-- Upgraded Interactive 3D Flashcard Engine Script -->
 <script>
 // Function to re-calculate card index numbers
 function updateCardNumbers() {
@@ -403,10 +401,8 @@ document.getElementById('genBtn').addEventListener('click', function(){
     var q = (parts[0] || '').trim(), a = (parts[1] || 'No answer given').trim();
     var cardNum = String(index + 1).padStart(2, '0');
     
-    // Create 3D Flip Structure
     var wrapper = document.createElement('div');
     wrapper.className = 'flashcard-wrapper';
-    wrapper.dataset.showing = 'q';
 
     wrapper.innerHTML = `
       <div class="flashcard-inner">
@@ -437,25 +433,20 @@ document.getElementById('genBtn').addEventListener('click', function(){
       </div>
     `;
 
-    // 3D Flip Event
+    // 3D Flip Event (Locked purely to Click)
     wrapper.addEventListener('click', function(e){
-      // Don't flip if user clicks the delete button
-      if (e.target.classList.contains('card-delete-btn')) {
-        return;
+      if (e.target.closest('.card-delete-btn')) {
+        return; // Ignore delete button click
       }
-      wrapper.classList.toggle('is-flipped');
-      if(wrapper.dataset.showing === 'q'){ 
-        wrapper.dataset.showing = 'a'; 
-      } else { 
-        wrapper.dataset.showing = 'q'; 
-      }
+      this.classList.toggle('is-flipped');
     });
 
-    // Delete Event for Delete Icon
+    // Delete Event
     var deleteBtns = wrapper.querySelectorAll('.card-delete-btn');
     deleteBtns.forEach(function(btn){
       btn.addEventListener('click', function(e){
-        e.stopPropagation(); // Stop card flipping
+        e.stopPropagation();
+        e.preventDefault();
         wrapper.style.transform = 'scale(0.8)';
         wrapper.style.opacity = '0';
         wrapper.style.transition = 'all 0.3s ease';
