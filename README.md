@@ -66,26 +66,36 @@ toolsphere/
   hain.
 - Contact email: `toolsphereweb@gmail.com` sabhi pages par already set hai.
 
-## AI Image Enhancer &amp; Background Remover — Google API key setup
+## AI Image Enhancer &amp; Background Remover — multi-provider + always-free fallback
 
-Ye dono tools ek hi Google API key use karte hain (Gemini image model): `api/enhance-image.js` aur
-`api/remove-bg.js`.
+Dono tools **hamesha kaam karte hain**, chahe koi API key set ho ya na ho:
 
-**Setup (ek baar karna hai, dono tools ke liye same key):**
+1. Pehle server kisi bhi **connected paid API** ko try karta hai (jo bhi key set ho)
+2. Agar koi key set nahi hai, ya wo API fail ho jaaye, to browser me **built-in free tool** automatically chal
+   jaata hai (koi error nahi dikhta, user ko pata bhi nahi chalta — bas result thoda simple hota hai)
 
-1. https://aistudio.google.com/apikey par jaake (apne Google Cloud account se) ek API key generate karo.
-2. Vercel dashboard → apna project → **Settings → Environment Variables**.
-3. Naya variable add karo:
-   - Name: `GOOGLE_API_KEY`
-   - Value: (apni copied key paste karo)
-4. **Save** karo, phir project **Redeploy** karo (Deployments tab → latest deployment → "..." → Redeploy).
-5. Bas — dono tools (Image Enhancer + Background Remover) ab live ho jayenge.
+**Koi bhi ek ya zyada API key Vercel Environment Variables me daal sakte ho** (Settings → Environment Variables
+→ Redeploy):
 
-Jab tak key set nahi hogi, dono tools ek clear error dikhayenge — koi crash nahi hoga.
+| Tool | Env variable(s) | Provider |
+|---|---|---|
+| Background Remover | `REMOVE_BG_API_KEY` | remove.bg |
+| Background Remover | `RAPIDAPI_KEY` + `RAPIDAPI_HOST` | Koi bhi RapidAPI "Remove Background" API (jo subscribe kiya ho, uska host daalo) |
+| Background Remover | `GOOGLE_API_KEY` | Google Gemini (aistudio.google.com/apikey) |
+| Image Enhancer | `REPLICATE_API_TOKEN` | Replicate (Real-ESRGAN upscale) |
+| Image Enhancer | `DEEPAI_API_KEY` | DeepAI (torch-srgan upscale) |
+| Image Enhancer | `GOOGLE_API_KEY` | Google Gemini (aistudio.google.com/apikey) |
 
-**Note:** Background Remover result transparent PNG nahi deta (pixel-level cutout nahi hai) — ye AI se photo ko
-clean solid-color background (white/black/gray/blue) ke saath re-render karta hai. Profile photos, ID-style
-pictures aur simple product shots ke liye achha kaam karta hai.
+Order jisme try hote hain: Background Remover → remove.bg → RapidAPI → Google Gemini → **free local fallback**.
+Image Enhancer → Replicate → DeepAI → Google Gemini → **free local fallback**.
+
+**Koi bhi key na daalo to bhi koi dikkat nahi** — dono tools free built-in browser processing se kaam karenge:
+- Image Enhancer: sharpening (unsharp mask) + auto contrast/brightness, sab canvas se browser me
+- Background Remover: flood-fill se background detect karke transparent/white/black/custom color se replace
+  karta hai (plain/uniform background wali photos pe best kaam karta hai)
+
+**Background Remover me ab custom background bhi hai** — dropdown me "Transparent", "White", "Black", "Light
+gray", "Soft blue" ya "Custom color..." (color picker se koi bhi color) choose kar sakte ho.
 
 ## Watermark
 
