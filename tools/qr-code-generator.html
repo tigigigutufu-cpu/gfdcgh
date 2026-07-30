@@ -17,6 +17,12 @@
 
 <!-- Premium Styling Enhancements -->
 <style>
+  :root {
+    --qr-frame-bg: #43E8D8; /* Customize frame color here */
+    --qr-dots-color: #0A0E1F; /* Customize QR dots color here */
+    --qr-bg-color: #ffffff; /* Customize QR background color here */
+  }
+
   .qr-customizer {
     margin-top: 18px;
     padding-top: 18px;
@@ -46,26 +52,68 @@
     background: transparent;
     padding: 2px;
   }
+  
+  /* --- Premium QR Frame Styling --- */
   .qr-preview-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 24px;
+    position: relative;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     transition: all 0.3s ease;
   }
-  .qr-canvas-container {
-    padding: 16px;
+
+  .qr-frame-container {
+    position: relative;
+    padding: 15px; /* Spacing for the frame */
+    border-radius: 24px;
+    background: #ffffff; /* Inner QR background */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    overflow: hidden;
+  }
+
+  /* Decorative Frame Border */
+  .qr-frame-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-color: var(--qr-frame-bg);
+    border-radius: 24px;
+    z-index: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+  }
+
+  /* The actual QR Canvas Area */
+  #qrcode-canvas {
+    position: relative;
+    z-index: 2;
     background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    margin-bottom: 20px;
+    padding: 10px;
   }
+
+  /* Frame Text 'SCAN ME' */
+  .qr-frame-text {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0A0E1F;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 3;
+    pointer-events: none;
+  }
+
   .download-group {
     display: flex;
     gap: 10px;
@@ -127,17 +175,21 @@
       <div class="qr-customizer">
         <div class="color-pickers">
           <div class="color-field">
-            <label for="fgColor">Foreground</label>
+            <label for="fgColor">QR Dots Color</label>
             <input type="color" id="fgColor" value="#0A0E1F" class="color-picker-input">
           </div>
           <div class="color-field">
-            <label for="bgColor">Background</label>
+            <label for="bgColor">QR Background Color</label>
             <input type="color" id="bgColor" value="#ffffff" class="color-picker-input">
+          </div>
+          <div class="color-field" style="grid-column: 1 / -1;">
+            <label for="frameColor">Frame Color ("Scan Me")</label>
+            <input type="color" id="frameColor" value="#43E8D8" class="color-picker-input">
           </div>
         </div>
       </div>
 
-      <button class="btn btn-primary btn-block" id="genBtn">Generate QR code</button>
+      <button class="btn btn-primary btn-block" id="genBtn">Generate Premium QR</button>
       <p class="hint" style="margin-top:10px;">QR image is generated securely &mdash; nothing is stored.</p>
     </div>
     <div class="panel center">
@@ -212,60 +264,83 @@
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
 
-<!-- QR Engine JS Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!-- *CRITICAL UPGRADE* - Integrated Advance QR Styling Library -->
+<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
 
 <script>
+// Global variable to hold the QR object
+let qrStyling;
+
 document.getElementById('genBtn').addEventListener('click', function(){
   var txt = document.getElementById('txt').value.trim();
   var out = document.getElementById('output');
-  var fg = document.getElementById('fgColor').value.replace('#','');
-  var bg = document.getElementById('bgColor').value.replace('#','');
+  var fg = document.getElementById('fgColor').value;
+  var bg = document.getElementById('bgColor').value;
+  var frameBg = document.getElementById('frameColor').value;
 
   if(!txt){ 
     out.innerHTML = '<div class="alert alert-warn">Please enter text or a URL first.</div>'; 
     return; 
   }
 
-  // Pure API Link maintained for structural continuity & fallback
-  var apiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&color=' + fg + '&bgcolor=' + bg + '&data=' + encodeURIComponent(txt);
+  // Update CSS Variables based on pickers
+  document.documentElement.style.setProperty('--qr-frame-bg', frameBg);
 
-  // Render High-Resolution Canvas Card Container
+  // Render High-Resolution Frame Container
   out.innerHTML = `
     <div class="qr-preview-card">
-      <div class="qr-canvas-container" style="background: #${bg}">
+      <div class="qr-frame-container" style="background: ${bg}">
         <div id="qrcode-canvas"></div>
+        <div class="qr-frame-text">SCAN ME</div>
       </div>
       <div class="download-group">
-        <a class="btn btn-primary btn-sm" id="downloadCanvasBtn" href="#" download="qrcode.png">Download HD PNG</a>
-        <a class="btn btn-ghost btn-sm" href="${apiUrl}" download="qrcode.png" target="_blank" rel="noopener">API Direct Link</a>
+        <button class="btn btn-primary btn-sm" id="downloadBtn">Download HD PNG</button>
       </div>
     </div>
   `;
 
-  // Render Premium Quality QR via Canvas Engine
-  var qrcodeContainer = document.getElementById("qrcode-canvas");
-  qrcodeContainer.innerHTML = ""; // Clear existing
-  var qrcode = new QRCode(qrcodeContainer, {
-    text: txt,
-    width: 240,
-    height: 240,
-    colorDark : "#" + fg,
-    colorLight : "#" + bg,
-    correctLevel : QRCode.CorrectLevel.H
+  // *PREMIUM QR ENGINE CONFIGURATION*
+  qrStyling = new QRCodeStyling({
+    width: 250,
+    height: 250,
+    type: "canvas",
+    data: txt,
+    dotsOptions: {
+      color: fg,
+      type: "rounded" // This creates the stylized dots look
+    },
+    backgroundOptions: {
+      color: bg,
+    },
+    cornersSquareOptions: {
+      type: "extra-rounded", // Smooths the main corner boxes
+      color: fg
+    },
+    cornersDotOptions: {
+      type: "dot",
+      color: fg
+    },
+    qrOptions: {
+      typeNumber: 0,
+      mode: "Byte",
+      errorCorrectionLevel: "Q" // Higher error correction for reliable scanning
+    },
+    imageOptions: {
+      hideBackgroundDots: true,
+      imageSize: 0.4,
+      margin: 5
+    }
   });
 
-  // Bind Canvas output to download link
-  setTimeout(function(){
-    var img = qrcodeContainer.querySelector('img');
-    var canvas = qrcodeContainer.querySelector('canvas');
-    var dlBtn = document.getElementById('downloadCanvasBtn');
-    if (canvas) {
-      dlBtn.href = canvas.toDataURL("image/png");
-    } else if (img) {
-      dlBtn.href = img.src;
+  // Render the modern QR inside the frame
+  qrStyling.append(document.getElementById("qrcode-canvas"));
+
+  // Bind Canvas output to download button (High Quality)
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    if (qrStyling) {
+        qrStyling.download({ name: "toolsphere-qr", extension: "png" });
     }
-  }, 100);
+  });
 });
 </script>
 </body>
