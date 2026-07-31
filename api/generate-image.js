@@ -37,32 +37,31 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'This prompt was blocked by our content guidelines.' });
   }
 
-  // 1. High Quality Prompt Enhancement
-  let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, masterpiece, 8k resolution, ultra-sharp focus, perfectly framed, detailed textures, professional photography`;
+  // Pure Positive Prompt (Bina negative text mix kiye)
+  let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, high quality, 4k, safe for work, masterwork`;
   
-  // Auto-Fix Cropping & Deformities
-  let defaultNegative = "cropped, out of frame, cut off, blurry, low resolution, bad anatomy, deformed limbs, extra limbs, watermark, bad composition";
+  // Clean Negative Prompt String
+  let cleanNegative = "nsfw, nude, naked, ugly, bad anatomy, deformed, distorted, blurry, low resolution, watermark";
   if (negative_prompt && negative_prompt.trim().length > 0) {
-    defaultNegative += `, ${negative_prompt.trim()}`;
+    cleanNegative += `, ${negative_prompt.trim()}`;
   }
 
-  // 2. Exact Model Dimensions (Prevents Cutting & Deformity)
   let width = 1024;
   let height = 1024;
   let googleRatio = "1:1";
 
   if (aspect_ratio === '16:9') {
     width = 1024;
-    height = 576; // Clean 16:9 ratio for AI without cutoff
+    height = 576;
     googleRatio = "16:9";
   } else if (aspect_ratio === '9:16') {
     width = 576;
-    height = 1024; // Clean 9:16 mobile format
+    height = 1024;
     googleRatio = "9:16";
   }
 
   // -----------------------------------------------------------
-  // MODEL 1: Together AI (Flux.1 Schnell - Highest Quality)
+  // MODEL 1: Together AI (Flux.1 Schnell)
   // -----------------------------------------------------------
   if (process.env.TOGETHER_API_KEY) {
     try {
@@ -74,7 +73,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           model: "black-forest-labs/FLUX.1-schnell",
-          prompt: `${cleanPrompt} [avoid: ${defaultNegative}]`,
+          prompt: cleanPrompt, // Direct pure prompt only
           width: width,
           height: height,
           steps: 4,
@@ -98,7 +97,7 @@ export default async function handler(req, res) {
   }
 
   // -----------------------------------------------------------
-  // MODEL 2: Google Imagen 3 (Very Sharp Details)
+  // MODEL 2: Google Imagen 3 (Supports Dedicated Negative Prompt)
   // -----------------------------------------------------------
   if (process.env.GOOGLE_API_KEY) {
     try {
@@ -110,6 +109,7 @@ export default async function handler(req, res) {
           parameters: {
             sampleCount: 1,
             aspectRatio: googleRatio,
+            negativePrompt: cleanNegative, // Dedicated Negative Parameter
             outputMimeType: "image/jpeg"
           }
         })
@@ -128,19 +128,20 @@ export default async function handler(req, res) {
   }
 
   // -----------------------------------------------------------
-  // MODEL 3: Pollinations AI (Flux Model - Unlimited Fallback)
+  // MODEL 3: Pollinations AI (Strict Prompt Isolation)
   // -----------------------------------------------------------
-  const seed = Math.floor(Math.random() * 1000000);
-  const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt + ' avoiding ' + defaultNegative)}?width=${width}&height=${height}&seed=${seed}&nologo=true&model=flux&enhance=true`;
+  const randomSeed = Math.floor(Math.random() * 9999999);
+  // Negative prompt is removed from main string so it doesn't leak into generation
+  const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=${width}&height=${height}&seed=${randomSeed}&nologo=true&model=flux&safe=true`;
 
   try {
     const imgRes = await fetch(pollinationsUrl);
     if (!imgRes.ok) {
-      return res.status(502).json({ error: 'The image provider failed to generate this image. Please try again.' });
+      return res.status(502).json({ error: 'Server busy, please try again.' });
     }
     const dataUrl = await toDataUrl(imgRes);
     return res.status(200).json({ image: dataUrl });
   } catch (err) {
-    return res.status(500).json({ error: 'Unexpected error while generating the image. Please try again.' });
+    return res.status(500).json({ error: 'Unexpected error while generating image.' });
   }
 }
