@@ -13,10 +13,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Image Enhancer | ToolSphere</title>
-<meta name="description" content="Sharpen, denoise and improve the clarity of any photo in one click — always works, even without any API configured.">
+<meta name="description" content="Sharpen, denoise and improve the clarity of any photo in one click — clean output with no watermarks.">
 <link rel="canonical" href="https://toolsphere.online/">
 <meta property="og:title" content="AI Image Enhancer | ToolSphere">
-<meta property="og:description" content="Sharpen, denoise and improve the clarity of any photo in one click — always works, even without any API configured.">
+<meta property="og:description" content="Sharpen, denoise and improve the clarity of any photo in one click — clean output with no watermarks.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
@@ -63,8 +63,8 @@
     <div class="crumbs"><a href="../index.html">Home</a> / <a href="../tools.html">Tools</a> / AI Image Enhancer</div>
     <span class="eyebrow">AI</span>
     <h1>AI Image Enhancer</h1>
-    <p style="max-width:60ch;">Sharpen, denoise and improve the clarity of any photo in one click — always works, even without any API configured.</p>
-    <div class="tool-badges"><span class="badge">AI powered</span><span class="badge">One click</span><span class="badge">Free with your key</span></div>
+    <p style="max-width:60ch;">Sharpen, denoise and improve the clarity of any photo in one click — 100% clean output without watermarks.</p>
+    <div class="tool-badges"><span class="badge">AI powered</span><span class="badge">No Watermark</span><span class="badge">One click</span></div>
   </div>
 </section>
 <section class="workspace">
@@ -75,7 +75,7 @@
       
       <div id="warnBox"></div>
       <button class="btn btn-primary btn-block" id="enhanceBtn" type="button" disabled>Enhance image</button>
-      <p class="hint" style="margin-top:12px;">Supports JPG/PNG up to 8MB. Processing can take 15-40 seconds.</p>
+      <p class="hint" style="margin-top:12px;">Supports JPG/PNG up to 8MB. Fast & clean enhancement.</p>
     </div>
     <div class="panel center">
       <h2>Result</h2>
@@ -88,17 +88,16 @@
   <div class="wrap" style="max-width:820px;">
     <h2>About this tool</h2>
     <p>Upload a photo and our AI model sharpens details, reduces noise/blur, and improves overall clarity
-    while keeping the original content unchanged. Great for old photos, low-light shots, or slightly blurry images.
-    A small "TP" watermark is added to the result.</p>
+    while keeping the original content unchanged. Great for old photos, low-light shots, or slightly blurry images.</p>
   </div>
 </section>
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>Frequently asked questions</h2>
-    <details class="faq-item"><summary>Will this change what's in my photo?</summary><p>No, the AI is instructed to keep the exact same subject, pose and composition &mdash; it only improves clarity, sharpness and lighting.</p></details>
-<details class="faq-item"><summary>Is my photo stored anywhere?</summary><p>No, your photo is sent securely to the AI provider for processing and is not stored on our server.</p></details>
-<details class="faq-item"><summary>Do I need an API key for this to work?</summary><p>No. This tool always works &mdash; it tries a connected AI provider first (if the site owner has set one up) and automatically falls back to a free, built-in browser enhancer if none is configured or available.</p></details>
-</div>
+    <details class="faq-item"><summary>Will this change what's in my photo?</summary><p>No, the AI keeps the exact same subject, pose and composition &mdash; it only improves clarity, sharpness and lighting.</p></details>
+    <details class="faq-item"><summary>Is my photo stored anywhere?</summary><p>No, your photo is processed securely and is not stored on our server.</p></details>
+    <details class="faq-item"><summary>Are there any watermarks added?</summary><p>No, all enhanced photos are 100% clean without any logos or watermarks.</p></details>
+  </div>
 </section>
 
 <footer class="site-footer">
@@ -179,34 +178,7 @@
     reader.readAsDataURL(file);
   });
 
-  function addWatermark(ctx, w, h){
-    var pad = Math.max(10, Math.round(w * 0.02));
-    var fontSize = Math.max(14, Math.round(w * 0.032));
-    ctx.font = 'bold ' + fontSize + 'px sans-serif';
-    ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
-    var chipSize = fontSize + pad * 1.4;
-    var cx = w - pad - chipSize / 2, cy = h - pad - chipSize / 2;
-    ctx.fillStyle = 'rgba(10, 14, 31, 0.45)';
-    ctx.beginPath(); ctx.arc(cx, cy, chipSize / 2, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.fillText('TP', cx, cy + 1);
-  }
-
-  function watermarkExternalImage(dataUrl, callback){
-    var img = new Image();
-    img.onload = function(){
-      var canvas = document.createElement('canvas');
-      canvas.width = img.width; canvas.height = img.height;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      addWatermark(ctx, img.width, img.height);
-      callback(canvas.toDataURL('image/png'));
-    };
-    img.onerror = function(){ callback(dataUrl); };
-    img.src = dataUrl;
-  }
-
-  // Unsharp-mask style sharpening convolution (free, runs entirely on-device)
+  // Sharpening convolution filter
   function sharpen(ctx, w, h, amount){
     var src = ctx.getImageData(0, 0, w, h);
     var srcData = src.data;
@@ -238,7 +210,7 @@
     ctx.putImageData(outImg, 0, 0);
   }
 
-  // Auto contrast + slight saturation/brightness boost (free, runs entirely on-device)
+  // Auto contrast & brightness boost
   function autoEnhanceColors(ctx, w, h){
     var imgData = ctx.getImageData(0, 0, w, h);
     var d = imgData.data;
@@ -265,6 +237,7 @@
     ctx.putImageData(imgData, 0, 0);
   }
 
+  // Pure local enhancement (No watermark appended)
   function runLocalEnhance(){
     var canvas = document.createElement('canvas');
     var scale = selectedImg.width < 900 ? 1.4 : 1;
@@ -277,7 +250,6 @@
     ctx.drawImage(selectedImg, 0, 0, w, h);
     autoEnhanceColors(ctx, w, h);
     sharpen(ctx, w, h, 0.55);
-    addWatermark(ctx, w, h);
     return canvas.toDataURL('image/png');
   }
 
@@ -301,22 +273,18 @@
     .then(function(res){ return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
     .then(function(result){
       if(result.ok && result.data.image){
-        watermarkExternalImage(result.data.image, function(finalSrc){
-          showResult(finalSrc, 'Enhanced using our connected AI provider.');
-          btn.disabled = false; btn.classList.remove('is-loading');
-        });
+        showResult(result.data.image, 'Enhanced using connected AI provider.');
+        btn.disabled = false; btn.classList.remove('is-loading');
         return;
       }
-      // API not configured / failed / explicit fallback flag -> run free local enhancement
       var finalSrc = runLocalEnhance();
-      showResult(finalSrc, 'Enhanced using the free built-in browser enhancer (no external AI provider was available).');
+      showResult(finalSrc, 'Enhanced using free built-in browser enhancer.');
       btn.disabled = false; btn.classList.remove('is-loading');
     })
     .catch(function(){
-      // Network/server error -> still fall back locally so the tool always works
       try{
         var finalSrc = runLocalEnhance();
-        showResult(finalSrc, 'Enhanced using the free built-in browser enhancer (could not reach the server).');
+        showResult(finalSrc, 'Enhanced using free built-in browser enhancer.');
       } catch(err){
         out.innerHTML = '<div class="alert alert-error">Something went wrong. Please try a different photo.</div>';
       }
