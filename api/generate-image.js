@@ -42,7 +42,6 @@ export default async function handler(req, res) {
   }
 
   let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, high quality, 4k, family friendly, safe for work`;
-  
   let cleanNegative = "nsfw, nude, naked, ugly, bad anatomy, deformed, distorted, blurry, low resolution, watermark";
   if (negative_prompt && negative_prompt.trim().length > 0) {
     cleanNegative += `, ${negative_prompt.trim()}`;
@@ -63,10 +62,11 @@ export default async function handler(req, res) {
   }
 
   // -----------------------------------------------------------
-  // MODEL 1: Together AI (FLUX.1 Schnell)
+  // MODEL 1: Together AI
   // -----------------------------------------------------------
   if (process.env.TOGETHER_API_KEY) {
     try {
+      console.log("--> Trying Model 1: Together AI...");
       const togetherRes = await fetch("https://api.together.xyz/v1/images/generations", {
         method: "POST",
         headers: {
@@ -89,12 +89,15 @@ export default async function handler(req, res) {
           const imgRes = await fetch(data.data[0].url);
           if (imgRes.ok) {
             const dataUrl = await toDataUrl(imgRes);
-            return res.status(200).json({ image: dataUrl });
+            console.log("✅ SUCCESS: Generated using Together AI!");
+            return res.status(200).json({ image: dataUrl, provider: "Together AI (Flux)" });
           }
         }
+      } else {
+        console.warn("❌ Together AI Failed with status:", togetherRes.status);
       }
     } catch (e) {
-      console.warn("Together AI failed, trying next model...");
+      console.warn("❌ Together AI Error:", e.message);
     }
   }
 
@@ -103,6 +106,7 @@ export default async function handler(req, res) {
   // -----------------------------------------------------------
   if (process.env.GOOGLE_API_KEY) {
     try {
+      console.log("--> Trying Model 2: Google Imagen 3...");
       const googleRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${process.env.GOOGLE_API_KEY}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -121,19 +125,23 @@ export default async function handler(req, res) {
         const data = await googleRes.json();
         if (data.predictions && data.predictions[0] && data.predictions[0].bytesBase64Encoded) {
           const dataUrl = `data:image/jpeg;base64,${data.predictions[0].bytesBase64Encoded}`;
-          return res.status(200).json({ image: dataUrl });
+          console.log("✅ SUCCESS: Generated using Google Imagen 3!");
+          return res.status(200).json({ image: dataUrl, provider: "Google Imagen 3" });
         }
+      } else {
+        console.warn("❌ Google Imagen Failed with status:", googleRes.status);
       }
     } catch (e) {
-      console.warn("Google Imagen failed, trying next model...");
+      console.warn("❌ Google Imagen Error:", e.message);
     }
   }
 
   // -----------------------------------------------------------
-  // MODEL 3: Hugging Face Inference API (Flux.1 Schnell)
+  // MODEL 3: Hugging Face
   // -----------------------------------------------------------
   if (process.env.HUGGINGFACE_API_KEY) {
     try {
+      console.log("--> Trying Model 3: Hugging Face...");
       const hfRes = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", {
         method: "POST",
         headers: {
@@ -145,28 +153,33 @@ export default async function handler(req, res) {
 
       if (hfRes.ok) {
         const dataUrl = await toDataUrl(hfRes);
-        return res.status(200).json({ image: dataUrl });
+        console.log("✅ SUCCESS: Generated using Hugging Face!");
+        return res.status(200).json({ image: dataUrl, provider: "Hugging Face" });
+      } else {
+        console.warn("❌ Hugging Face Failed with status:", hfRes.status);
       }
     } catch (e) {
-      console.warn("Hugging Face API failed, trying next model...");
+      console.warn("❌ Hugging Face Error:", e.message);
     }
   }
 
   // -----------------------------------------------------------
-  // MODEL 4: Pollinations AI (Final Free Fallback)
+  // MODEL 4: Pollinations AI (Fallback)
   // -----------------------------------------------------------
   try {
+    console.log("--> Trying Model 4: Pollinations AI Fallback...");
     const randomSeed = Math.floor(Math.random() * 9999999);
     const safeUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=${width}&height=${height}&seed=${randomSeed}&nologo=true&model=flux&safe=true`;
     
     const imgRes = await fetch(safeUrl);
     if (imgRes.ok) {
       const dataUrl = await toDataUrl(imgRes);
-      return res.status(200).json({ image: dataUrl });
+      console.log("✅ SUCCESS: Generated using Pollinations AI!");
+      return res.status(200).json({ image: dataUrl, provider: "Pollinations AI" });
     }
   } catch (err) {
-    console.warn("Pollinations Fallback failed:", err.message);
+    console.warn("❌ Pollinations Error:", err.message);
   }
 
-  return res.status(500).json({ error: 'Image generation service temporarily busy. Please try again in a few seconds.' });
+  return res.status(500).json({ error: 'Image generation service temporarily busy. Please try again.' });
 }
