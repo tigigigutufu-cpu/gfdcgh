@@ -38,13 +38,11 @@ export default async function handler(req, res) {
   }
 
   if (isBlocked(prompt)) {
-    return res.status(400).json({ error: 'This prompt contains restricted keywords and was blocked by our safety policy.' });
+    return res.status(400).json({ error: 'This prompt contains restricted keywords and was blocked by our content guidelines.' });
   }
 
-  // Pure Positive Prompt
-  let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, high quality, 4k, family friendly`;
+  let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, high quality, 4k, family friendly, safe for work`;
   
-  // Dynamic Negative Prompting
   let cleanNegative = "nsfw, nude, naked, ugly, bad anatomy, deformed, distorted, blurry, low resolution, watermark";
   if (negative_prompt && negative_prompt.trim().length > 0) {
     cleanNegative += `, ${negative_prompt.trim()}`;
@@ -96,12 +94,12 @@ export default async function handler(req, res) {
         }
       }
     } catch (e) {
-      console.warn("Together AI failed:", e.message);
+      console.warn("Together AI failed, trying next model...");
     }
   }
 
   // -----------------------------------------------------------
-  // MODEL 2: Google Imagen 3 (Official Google API)
+  // MODEL 2: Google Imagen 3
   // -----------------------------------------------------------
   if (process.env.GOOGLE_API_KEY) {
     try {
@@ -127,9 +125,48 @@ export default async function handler(req, res) {
         }
       }
     } catch (e) {
-      console.warn("Google Imagen API failed:", e.message);
+      console.warn("Google Imagen failed, trying next model...");
     }
   }
 
-  return res.status(500).json({ error: 'Image generation service unavailable. Please check API Key status.' });
+  // -----------------------------------------------------------
+  // MODEL 3: Hugging Face Inference API (Flux.1 Schnell)
+  // -----------------------------------------------------------
+  if (process.env.HUGGINGFACE_API_KEY) {
+    try {
+      const hfRes = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ inputs: cleanPrompt })
+      });
+
+      if (hfRes.ok) {
+        const dataUrl = await toDataUrl(hfRes);
+        return res.status(200).json({ image: dataUrl });
+      }
+    } catch (e) {
+      console.warn("Hugging Face API failed, trying next model...");
+    }
+  }
+
+  // -----------------------------------------------------------
+  // MODEL 4: Pollinations AI (Final Free Fallback)
+  // -----------------------------------------------------------
+  try {
+    const randomSeed = Math.floor(Math.random() * 9999999);
+    const safeUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=${width}&height=${height}&seed=${randomSeed}&nologo=true&model=flux&safe=true`;
+    
+    const imgRes = await fetch(safeUrl);
+    if (imgRes.ok) {
+      const dataUrl = await toDataUrl(imgRes);
+      return res.status(200).json({ image: dataUrl });
+    }
+  } catch (err) {
+    console.warn("Pollinations Fallback failed:", err.message);
+  }
+
+  return res.status(500).json({ error: 'Image generation service temporarily busy. Please try again in a few seconds.' });
 }
