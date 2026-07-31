@@ -6,12 +6,16 @@ const BLOCKLIST = [
   'hentai', 'nudity', 'strip', 'explicit', 'xxx', 'onlyfans',
   'gore', 'blood', 'kill', 'murder', 'suicide', 'self harm', 'weapon',
   'terrorist', 'bomb', 'nazi', 'hate symbol', 'child', 'minor', 'kid',
-  'teen', 'underage', 'loli', 'choot', 'gand', 'lund', 'bhosda', 'chut', 'muth', 'randi'
+  'teen', 'underage', 'loli', 'choot', 'gand', 'lund', 'bhosda', 'chut', 'muth', 'randi',
+  'girl', 'girls', 'woman', 'women', 'lady', 'hot'
 ];
 
 function isBlocked(prompt) {
   const lower = prompt.toLowerCase();
-  return BLOCKLIST.some((w) => lower.includes(w));
+  return BLOCKLIST.some((w) => {
+    const regex = new RegExp(`\\b${w}\\b`, 'i');
+    return regex.test(lower);
+  });
 }
 
 async function toDataUrl(res) {
@@ -34,13 +38,13 @@ export default async function handler(req, res) {
   }
 
   if (isBlocked(prompt)) {
-    return res.status(400).json({ error: 'This prompt was blocked by our content guidelines.' });
+    return res.status(400).json({ error: 'This prompt contains restricted keywords and was blocked by our safety policy.' });
   }
 
-  // Pure Positive Prompt (Bina negative text mix kiye)
-  let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, high quality, 4k, safe for work, masterwork`;
+  // Pure Positive Prompt
+  let cleanPrompt = `${prompt.trim()}, ${style || 'digital art'}, high quality, 4k, family friendly`;
   
-  // Clean Negative Prompt String
+  // Dynamic Negative Prompting
   let cleanNegative = "nsfw, nude, naked, ugly, bad anatomy, deformed, distorted, blurry, low resolution, watermark";
   if (negative_prompt && negative_prompt.trim().length > 0) {
     cleanNegative += `, ${negative_prompt.trim()}`;
@@ -61,7 +65,7 @@ export default async function handler(req, res) {
   }
 
   // -----------------------------------------------------------
-  // MODEL 1: Together AI (Flux.1 Schnell)
+  // MODEL 1: Together AI (FLUX.1 Schnell)
   // -----------------------------------------------------------
   if (process.env.TOGETHER_API_KEY) {
     try {
@@ -73,7 +77,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
           model: "black-forest-labs/FLUX.1-schnell",
-          prompt: cleanPrompt, // Direct pure prompt only
+          prompt: cleanPrompt,
           width: width,
           height: height,
           steps: 4,
@@ -97,7 +101,7 @@ export default async function handler(req, res) {
   }
 
   // -----------------------------------------------------------
-  // MODEL 2: Google Imagen 3 (Supports Dedicated Negative Prompt)
+  // MODEL 2: Google Imagen 3 (Official Google API)
   // -----------------------------------------------------------
   if (process.env.GOOGLE_API_KEY) {
     try {
@@ -109,7 +113,7 @@ export default async function handler(req, res) {
           parameters: {
             sampleCount: 1,
             aspectRatio: googleRatio,
-            negativePrompt: cleanNegative, // Dedicated Negative Parameter
+            negativePrompt: cleanNegative,
             outputMimeType: "image/jpeg"
           }
         })
@@ -127,21 +131,5 @@ export default async function handler(req, res) {
     }
   }
 
-  // -----------------------------------------------------------
-  // MODEL 3: Pollinations AI (Strict Prompt Isolation)
-  // -----------------------------------------------------------
-  const randomSeed = Math.floor(Math.random() * 9999999);
-  // Negative prompt is removed from main string so it doesn't leak into generation
-  const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?width=${width}&height=${height}&seed=${randomSeed}&nologo=true&model=flux&safe=true`;
-
-  try {
-    const imgRes = await fetch(pollinationsUrl);
-    if (!imgRes.ok) {
-      return res.status(502).json({ error: 'Server busy, please try again.' });
-    }
-    const dataUrl = await toDataUrl(imgRes);
-    return res.status(200).json({ image: dataUrl });
-  } catch (err) {
-    return res.status(500).json({ error: 'Unexpected error while generating image.' });
-  }
+  return res.status(500).json({ error: 'Image generation service unavailable. Please check API Key status.' });
 }
