@@ -18,13 +18,6 @@ function isBlocked(prompt) {
   });
 }
 
-async function toDataUrl(res) {
-  const arrayBuffer = await res.arrayBuffer();
-  const base64 = Buffer.from(arrayBuffer).toString('base64');
-  const contentType = res.headers.get('content-type') || 'image/jpeg';
-  return `data:${contentType};base64,${base64}`;
-}
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -38,30 +31,33 @@ export default async function handler(req, res) {
   }
 
   if (isBlocked(prompt)) {
-    return res.status(400).json({ error: 'This prompt contains restricted keywords and was blocked.' });
+    return res.status(400).json({ error: 'This prompt contains restricted keywords and was blocked by our content guidelines.' });
   }
 
-  // Master HD Prompt Injection for Crystal Clear Quality
-  let cleanPrompt = `${prompt.trim()}, ${style || 'realistic photo'}, masterpiece, ultra-detailed, sharp focus, 8k resolution, photorealistic lighting, perfect composition`;
+  // Pure High-Quality Prompt & Negative Prompt Injection
+  let cleanPrompt = `raw photo, ${prompt.trim()}, ${style || 'photorealistic'}, masterful artistry, ultra high definition, highly detailed, sharp focus, 8k resolution, cinematic lighting`;
   
-  let cleanNegative = "blurry, distorted, deformed, low resolution, ugly, bad anatomy, stretched, pixelated, watermark, logo";
+  let cleanNegative = "blurry, lowres, ugly, bad anatomy, deformed face, stretched, pixelated, watermark, logo, bad hands";
   if (negative_prompt && negative_prompt.trim().length > 0) {
     cleanNegative += `, ${negative_prompt.trim()}`;
   }
 
-  // Always use 1024x1024 square native generation to prevent stretching and distortion
   let width = 1024;
   let height = 1024;
   let googleRatio = "1:1";
 
   if (aspect_ratio === '16:9') {
+    width = 1280;
+    height = 720;
     googleRatio = "16:9";
   } else if (aspect_ratio === '9:16') {
+    width = 720;
+    height = 1280;
     googleRatio = "9:16";
   }
 
   // -----------------------------------------------------------
-  // MODEL 1: Together AI (FLUX.1 Schnell - Native Square HD)
+  // MODEL 1: Together AI (Flux 1 Schnell HD)
   // -----------------------------------------------------------
   if (process.env.TOGETHER_API_KEY) {
     try {
@@ -85,11 +81,16 @@ export default async function handler(req, res) {
       if (togetherRes.ok) {
         const data = await togetherRes.json();
         if (data && data.data && data.data[0] && data.data[0].b64_json) {
-          return res.status(200).json({ image: `data:image/png;base64,${data.data[0].b64_json}`, aspect_ratio: aspect_ratio || '1:1' });
+          return res.status(200).json({ image: `data:image/png;base64,${data.data[0].b64_json}` });
         }
+      } else {
+        // Together API key error or quota error
+        const errText = await togetherRes.text();
+        console.error("Together API Failed:", errText);
+        return res.status( togetherRes.status ).json({ error: `Together API is available but returned an error. Check if your API key is valid.`, details: errText });
       }
     } catch (e) {
-      console.warn("Together AI failed, falling back...");
+      console.error("Together AI fetch exception:", e.message);
     }
   }
 
@@ -115,29 +116,18 @@ export default async function handler(req, res) {
       if (googleRes.ok) {
         const data = await googleRes.json();
         if (data.predictions && data.predictions[0] && data.predictions[0].bytesBase64Encoded) {
-          return res.status(200).json({ image: `data:image/jpeg;base64,${data.predictions[0].bytesBase64Encoded}`, aspect_ratio: aspect_ratio || '1:1' });
+          return res.status(200).json({ image: `data:image/jpeg;base64,${data.predictions[0].bytesBase64Encoded}` });
         }
+      } else {
+        const errText = await googleRes.text();
+        console.error("Google Imagen API Failed:", errText);
       }
     } catch (e) {
-      console.warn("Google Imagen failed, falling back...");
+      console.error("Google Imagen fetch exception:", e.message);
     }
   }
 
-  // -----------------------------------------------------------
-  // MODEL 3: Pollinations AI (Safe High-Quality Fallback)
-  // -----------------------------------------------------------
-  try {
-    const randomSeed = Math.floor(Math.random() * 9999999);
-    const safeUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt + ' avoiding ' + cleanNegative)}?width=1024&height=1024&seed=${randomSeed}&nologo=true&model=flux&enhance=true`;
-    
-    const imgRes = await fetch(safeUrl);
-    if (imgRes.ok) {
-      const dataUrl = await toDataUrl(imgRes);
-      return res.status(200).json({ image: dataUrl, aspect_ratio: aspect_ratio || '1:1' });
-    }
-  } catch (err) {
-    console.warn("Pollinations Backup Failed:", err.message);
-  }
-
-  return res.status(500).json({ error: 'Image generation service temporarily busy.' });
-}
+  // No backend APIs are configured/working properly
+  return res.status(500).json({ error: 'Image generation APIs are currently unavailable. Please verify your Together AI or Google API key status.' });
+          }
+        
