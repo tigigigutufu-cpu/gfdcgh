@@ -64,7 +64,7 @@
     <span class="eyebrow">AI</span>
     <h1>AI Image Generator</h1>
     <p style="max-width:60ch;">Generate stunning images from text prompts in seconds with custom styles and dimensions.</p>
-    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No signup</span><span class="badge">Advanced Controls</span></div>
+    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No Watermark</span><span class="badge">Advanced Controls</span></div>
   </div>
 </section>
 <section class="workspace">
@@ -75,7 +75,7 @@
       
       <!-- Prompt Field -->
       <div class="field"><label for="prompt">Prompt</label>
-        <textarea id="prompt" placeholder="e.g. a girl reading a book in a sunlit library, digital art"></textarea>
+        <textarea id="prompt" placeholder="e.g. a high detail supercar on mountain road, cinematic lighting"></textarea>
       </div>
 
       <!-- Negative Prompt Field -->
@@ -106,12 +106,12 @@
 
       <div id="warnBox"></div>
       <button class="btn btn-primary btn-block" id="genBtn">Generate image</button>
-      <p class="hint" style="margin-top:12px;">Free to use, no API key needed &mdash; generation takes a few seconds.</p>
+      <p class="hint" style="margin-top:12px;">Free to use, clean HD outputs with zero watermarks.</p>
     </div>
 
     <div class="panel center">
       <h2>Your image</h2>
-      <div id="output"><div class="empty-state">Your generated image will appear here.</div></div>
+      <div id="output"><div class="empty-state">Your clean generated image will appear here.</div></div>
     </div>
     
   </div>
@@ -126,9 +126,9 @@
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>Frequently asked questions</h2>
-    <details class="faq-item"><summary>Why was my prompt blocked?</summary><p>Inappropriate, explicit, or offensive words are automatically blocked by our safety system.</p></details>
+    <details class="faq-item"><summary>Why was my prompt blocked?</summary><p>Inappropriate, explicit, or restricted words are automatically blocked by our safety system.</p></details>
     <details class="faq-item"><summary>What is a Negative Prompt?</summary><p>A negative prompt tells the AI what to exclude from your image (e.g., blur, extra fingers, dark lighting).</p></details>
-    <details class="faq-item"><summary>Do I need my own API key?</summary><p>No. This tool is completely free and works out of the box &mdash; no API key or account needed.</p></details>
+    <details class="faq-item"><summary>Are there any watermarks on generated images?</summary><p>No. Images are completely clean and free of watermarks or logos.</p></details>
   </div>
 </section>
 
@@ -180,7 +180,7 @@
 <script src="../assets/js/common.js"></script>
 <script src="../assets/js/safe-prompt.js"></script>
 <script>
-// Custom Safety Check & 1-Hour Ban System
+// Custom Safety Check & Ban System
 function validateAndCheckBan(promptText) {
   var banTimeKey = 'ts_user_banned_until';
   var strikeKey = 'ts_user_strikes';
@@ -192,7 +192,7 @@ function validateAndCheckBan(promptText) {
     return {
       allowed: false,
       banned: true,
-      message: 'You have been temporarily blocked for entering explicit content. Please try again in ' + remainingMinutes + ' minutes.'
+      message: 'You have been temporarily blocked for entering restricted content. Please try again in ' + remainingMinutes + ' minutes.'
     };
   }
 
@@ -204,7 +204,7 @@ function validateAndCheckBan(promptText) {
   var dirtyWords = [
     'nude', 'naked', 'nsfw', 'sex', 'porn', 'breast', 'dick', 'pussy', 'vagina', 'penis', 'boobs',
     'erotic', 'strip', 'undress', 'hentai', 'xrated', 'fuck', 'bitch', 'asshole', 'kill', 'gore', 'blood',
-    'choot', 'gand', 'lund', 'bhosda', 'chut', 'muth', 'randi', 'gaand'
+    'choot', 'gand', 'lund', 'bhosda', 'chut', 'muth', 'randi', 'gaand', 'girl', 'girls', 'woman', 'women', 'lady', 'hot'
   ];
 
   var lowerPrompt = promptText.toLowerCase();
@@ -223,13 +223,13 @@ function validateAndCheckBan(promptText) {
       return {
         allowed: false,
         banned: true,
-        message: 'Explicit/Inappropriate content detected multiple times. You are blocked from generating images for 1 hour.'
+        message: 'Restricted content detected multiple times. You are blocked from generating images for 1 hour.'
       };
     } else {
       return {
         allowed: false,
         banned: false,
-        message: 'Warning (1/2): Inappropriate or explicit words detected! Entering dirty/NSFW prompts again will block you for 1 hour.'
+        message: 'Warning (1/2): Inappropriate or restricted keywords detected! Entering these prompts again will block you for 1 hour.'
       };
     }
   }
@@ -237,40 +237,7 @@ function validateAndCheckBan(promptText) {
   return { allowed: true };
 }
 
-function watermarkImage(dataUrl, callback){
-  var img = new Image();
-  img.onload = function(){
-    var canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    var ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-
-    var pad = Math.max(10, Math.round(img.width * 0.02));
-    var fontSize = Math.max(14, Math.round(img.width * 0.032));
-    ctx.font = 'bold ' + fontSize + 'px sans-serif';
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
-    var text = 'TP';
-    var chipSize = fontSize + pad * 1.4;
-    var cx = img.width - pad - chipSize / 2;
-    var cy = img.height - pad - chipSize / 2;
-
-    ctx.fillStyle = 'rgba(10, 14, 31, 0.45)';
-    ctx.beginPath();
-    ctx.arc(cx, cy, chipSize / 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.fillText(text, cx, cy + 1);
-
-    callback(canvas.toDataURL('image/png'));
-  };
-  img.onerror = function(){ callback(dataUrl); };
-  img.src = dataUrl;
-}
-
-// Function to handle Image Generation Execution
+// Function to handle Image Generation Execution (Clean output without Canvas Watermark)
 function executeGeneration() {
   var raw = document.getElementById('prompt').value.trim();
   var negativePrompt = document.getElementById('negativePrompt').value.trim();
@@ -302,7 +269,7 @@ function executeGeneration() {
 
   genBtn.disabled = true;
   genBtn.textContent = 'Generating...';
-  out.innerHTML = '<div class="empty-state">Generating your image, please wait...</div>';
+  out.innerHTML = '<div class="empty-state">Generating your clean image, please wait...</div>';
 
   fetch('/api/generate-image', {
     method: 'POST',
@@ -320,18 +287,18 @@ function executeGeneration() {
       out.innerHTML = '<div class="alert alert-error">' + (result.data.error || 'Image generation failed. Please try again.') + '</div>';
       return;
     }
-    var src = result.data.image;
-    watermarkImage(src, function(finalSrc){
-      out.innerHTML = '<img src="' + finalSrc + '" alt="AI generated image" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;max-width:100%;display:block;">' +
-        '<div style="display:flex; gap:10px; justify-center; align-items:center;">' +
-          '<a class="btn btn-ghost btn-sm" href="' + finalSrc + '" download="toolsphere-image.png">Save image</a>' +
-          '<button class="btn btn-primary btn-sm" id="regenBtn">🔄 Regenerate</button>' +
-        '</div>';
+    
+    // DIRECT ORIGINAL CLEAN IMAGE DISPLAY (Watermark Completely Removed)
+    var cleanSrc = result.data.image;
+    out.innerHTML = '<img src="' + cleanSrc + '" alt="AI generated image" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;max-width:100%;display:block;">' +
+      '<div style="display:flex; gap:10px; justify-content:center; align-items:center;">' +
+        '<a class="btn btn-ghost btn-sm" href="' + cleanSrc + '" download="toolsphere-image.png">Save image</a>' +
+        '<button class="btn btn-primary btn-sm" id="regenBtn">🔄 Regenerate</button>' +
+      '</div>';
 
-      // Event listener for Regenerate Button
-      document.getElementById('regenBtn').addEventListener('click', function() {
-        executeGeneration();
-      });
+    // Event listener for Regenerate Button
+    document.getElementById('regenBtn').addEventListener('click', function() {
+      executeGeneration();
     });
   })
   .catch(function(){
@@ -347,5 +314,4 @@ function executeGeneration() {
 document.getElementById('genBtn').addEventListener('click', executeGeneration);
 </script>
 </body>
-                </html>
-                
+</html>
