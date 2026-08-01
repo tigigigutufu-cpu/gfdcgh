@@ -341,20 +341,28 @@
   let isDragging = false;
   let startX, startY;
 
-  // Frame database — populated per category; missing images are hidden automatically.
+  // Frame database — NOW SUPPORTS 300+ FRAMES EFFORTLESSLY
   const frameDatabase = { country: [], style: [], color: [] };
+  let currentCategory = 'country';
+  let loadedCount = 0;
+  const BATCH_SIZE = 20; // Sirf 20 load karo pahle, baad mein aur load honge
 
   function initFolders() {
     for (let cat of ['country', 'style', 'color']) {
+      // Yeh array saare 300+ files ko store karega
       for (let i = 1; i <= 300; i++) {
         frameDatabase[cat].push(`/assets/frames/${cat}/${i}.png`);
       }
     }
+    currentCategory = 'country';
+    loadedCount = 0;
     loadCategory('country');
     renderCanvas();
   }
 
   function switchTab(cat) {
+    currentCategory = cat;
+    loadedCount = 0;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
     loadCategory(cat);
@@ -362,9 +370,17 @@
 
   function loadCategory(cat) {
     const grid = document.getElementById('framesGrid');
-    grid.innerHTML = '';
+    
+    // Naya tab open karne par purani images clear karo
+    if(loadedCount === 0) {
+        grid.innerHTML = '';
+    }
 
-    frameDatabase[cat].forEach((imgPath) => {
+    const allFrames = frameDatabase[cat];
+    const nextBatchEnd = Math.min(loadedCount + BATCH_SIZE, allFrames.length);
+
+    for (let i = loadedCount; i < nextBatchEnd; i++) {
+      const imgPath = allFrames[i];
       const thumb = document.createElement('div');
       thumb.className = 'frame-thumb';
       thumb.style.backgroundImage = `url('${imgPath}')`;
@@ -380,7 +396,54 @@
       };
 
       grid.appendChild(thumb);
-    });
+    }
+    
+    loadedCount = nextBatchEnd;
+
+    // Agar aur images baki hain, toh scroll event listener lagao
+    if (loadedCount < allFrames.length) {
+        // Pehle se listener hatao taaki duplicate na ho
+        grid.onscroll = null;
+        
+        // Infinite Scroll Logic
+        grid.onscroll = function() {
+            if (grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 5) {
+                // User ne bottom scroll kar liya, agli batch load karo
+                loadMoreFrames(cat);
+            }
+        };
+    } else {
+        grid.onscroll = null;
+    }
+  }
+
+  function loadMoreFrames(cat) {
+    const grid = document.getElementById('framesGrid');
+    const allFrames = frameDatabase[cat];
+    const nextBatchEnd = Math.min(loadedCount + BATCH_SIZE, allFrames.length);
+
+    // Agar sab load ho chuke hain toh return karo
+    if (loadedCount >= allFrames.length) return;
+
+    for (let i = loadedCount; i < nextBatchEnd; i++) {
+      const imgPath = allFrames[i];
+      const thumb = document.createElement('div');
+      thumb.className = 'frame-thumb';
+      thumb.style.backgroundImage = `url('${imgPath}')`;
+
+      const testImg = new Image();
+      testImg.src = imgPath;
+      testImg.onerror = () => thumb.style.display = 'none';
+
+      thumb.onclick = () => {
+        document.querySelectorAll('.frame-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        selectFrame(imgPath);
+      };
+
+      grid.appendChild(thumb);
+    }
+    loadedCount = nextBatchEnd;
   }
 
   function selectFrame(path) {
@@ -409,9 +472,9 @@
       const drawWidth = userImage.width * scale;
       const drawHeight = userImage.height * scale;
 
-      // Draw relative to user dragged offset (imgX, imgY)
-      const x = (canvas.width - drawWidth) / 2 + imgX;
-      const y = (canvas.height - drawHeight) / 2 + imgY;
+      // FIX: Negative offset taaki cursor direction mein sahi move kare
+      const x = (canvas.width - drawWidth) / 2 + (-imgX);
+      const y = (canvas.height - drawHeight) / 2 + (-imgY);
 
       ctx.drawImage(userImage, x, y, drawWidth, drawHeight);
       ctx.restore();
@@ -475,8 +538,9 @@
     // Canvas resolution ratio multiplier (1000px canvas / 280px UI box)
     const ratio = canvas.width / stageBox.clientWidth;
 
-    imgX = (pos.x - startX) * (ratio * 0.35);
-    imgY = (pos.y - startY) * (ratio * 0.35);
+    // FIX: 0.35 hata diya taaki drag smooth ho aur sahi chalega
+    imgX = (pos.x - startX) * ratio;
+    imgY = (pos.y - startY) * ratio;
     renderCanvas();
   }
 
