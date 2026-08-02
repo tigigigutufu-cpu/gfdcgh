@@ -45,8 +45,7 @@
     .dp-pill { display: inline-block; background: linear-gradient(135deg, #ec4899, #8b5cf6); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .04em; padding: 5px 14px; border-radius: 999px; margin: 14px 0 10px; }
     .dp-gradient-text { background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .dp-hero-demo { position: relative; justify-self: center; }
-    .dp-hero-demo img { width: 240px; height: 240px; border-radius: 50%; object-fit: cover; box-shadow: 0 12px 40px rgba(0,0,0,0.55); background: linear-gradient(135deg,#151c3b,#0b0f19); }
-    .dp-hero-fallback { display: none; width: 240px; height: 240px; border-radius: 50%; align-items: center; justify-content: center; background: linear-gradient(135deg,#151c3b,#0b0f19); border: 2px dashed rgba(67,232,216,0.35); box-shadow: 0 12px 40px rgba(0,0,0,0.55); }
+    .dp-hero-demo img { width: 240px; height: 240px; border-radius: 50%; object-fit: cover; box-shadow: 0 12px 40px rgba(0,0,0,0.55); }
     .dp-demo-label { position: absolute; bottom: 6px; right: 6px; background: #151c3b; border: 1px solid rgba(255,255,255,0.15); color: #a0aec0; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
 
     .dp-info-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; max-width: 560px; }
@@ -63,7 +62,7 @@
 
     /* Preview / upload zone */
     .preview-card { background: var(--card-bg, #151c3b); padding: 24px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); text-align: center; position: sticky; top: 90px; }
-    .stage-box { width: 280px; height: 280px; margin: 0 auto; position: relative; border-radius: 50%; overflow: hidden; background: #0b0f19; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 3px rgba(67,232,216,0.15); cursor: grab; transition: border-radius .25s; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    .stage-box { width: 280px; height: 280px; margin: 0 auto; position: relative; border-radius: 50%; overflow: hidden; background: #0b0f19; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 3px rgba(67,232,216,0.15); cursor: grab; transition: border-radius .25s; }
     .stage-box.is-empty { border-radius: 22px; }
     .stage-box.drag-over { box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 3px #43e8d8; }
     .stage-box:active { cursor: grabbing; }
@@ -85,11 +84,9 @@
     .tab-btn { background: #1a234a; border: 1px solid rgba(255,255,255,0.08); color: #a0aec0; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; flex-shrink: 0; }
     .tab-btn.active { background: var(--accent, #43e8d8); color: #0b0f19; border-color: var(--accent, #43e8d8); }
 
-    .frames-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 14px; max-height: 400px; min-height: 120px; overflow-y: auto; padding-right: 6px; position: relative; }
+    .frames-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 14px; max-height: 400px; overflow-y: auto; padding-right: 6px; }
     .frame-thumb { width: 80px; height: 80px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; background-size: cover; background-position: center; transition: 0.2s; background-color: #0b0f19; }
     .frame-thumb:hover, .frame-thumb.active { border-color: var(--accent, #43e8d8); transform: scale(1.08); box-shadow: 0 0 12px rgba(67,232,216,0.4); }
-    .frames-empty { grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px 16px; color: #a0aec0; font-size: 13px; }
-    .frames-empty svg { margin-bottom: 10px; opacity: .6; }
 
     .zoom-box { margin-top: 15px; text-align: left; }
     .zoom-box label { font-size: 13px; color: #a0aec0; display: block; margin-bottom: 5px; }
@@ -110,7 +107,7 @@
       .stage-box { width: 220px; height: 220px; }
       .dp-wrapper { gap: 20px; margin-top: 20px; }
       .tab-btn { padding: 9px 14px; font-size: 13px; }
-      .dp-hero-demo img, .dp-hero-fallback { width: 180px; height: 180px; }
+      .dp-hero-demo img { width: 180px; height: 180px; }
     }
 </style>
 
@@ -265,10 +262,7 @@
       </div>
     </div>
     <div class="dp-hero-demo">
-      <img src="/assets/images/dp-maker-example.jpg" alt="Example profile picture with a country flag border, made with ToolSphere's DP maker" width="240" height="240" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-      <div class="dp-hero-fallback">
-        <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#43e8d8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a7 7 0 0 1 14 0v1"></path></svg>
-      </div>
+      <img src="/assets/images/dp-maker-example.jpg" alt="Example profile picture with a country flag border, made with ToolSphere's DP maker" width="240" height="240" loading="lazy">
       <span class="dp-demo-label">Example</span>
     </div>
   </div>
@@ -460,9 +454,10 @@
     reader.readAsDataURL(file);
   }
 
-  // Frame database — populated per category; missing images are hidden automatically.
+  // Frame database
   const frameDatabase = { country: [], style: [], color: [] };
 
+  // ✅ FIX 1: 300 Loop wapas kar diya
   function initFolders() {
     for (let cat of ['country', 'style', 'color']) {
       for (let i = 1; i <= 300; i++) {
@@ -479,40 +474,19 @@
     loadCategory(cat);
   }
 
-  const categoryLabels = { country: 'country flag', style: 'style & badge', color: 'color & gradient' };
-
   function loadCategory(cat) {
     const grid = document.getElementById('framesGrid');
     grid.innerHTML = '';
-
-    const emptyMsg = document.createElement('div');
-    emptyMsg.className = 'frames-empty';
-    emptyMsg.innerHTML = `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a0aec0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg><span>No ${categoryLabels[cat]} frames uploaded yet &mdash; check back soon.</span>`;
-    grid.appendChild(emptyMsg);
-
-    let loadedCount = 0;
-    let checkedCount = 0;
-    const total = frameDatabase[cat].length;
 
     frameDatabase[cat].forEach((imgPath) => {
       const thumb = document.createElement('div');
       thumb.className = 'frame-thumb';
       thumb.style.backgroundImage = `url('${imgPath}')`;
-      thumb.style.display = 'none';
 
       const testImg = new Image();
-      testImg.onload = () => {
-        thumb.style.display = '';
-        loadedCount++;
-        emptyMsg.style.display = 'none';
-      };
-      testImg.onerror = () => {
-        checkedCount++;
-        if (checkedCount === total && loadedCount === 0) {
-          emptyMsg.style.display = 'flex';
-        }
-      };
       testImg.src = imgPath;
+      // Agar image exist nahi karti, toh wo thumb auto hide ho jayega
+      testImg.onerror = () => thumb.style.display = 'none';
 
       thumb.onclick = () => {
         document.querySelectorAll('.frame-thumb').forEach(t => t.classList.remove('active'));
@@ -550,9 +524,9 @@
       const drawWidth = userImage.width * scale;
       const drawHeight = userImage.height * scale;
 
-      // Draw relative to user dragged offset (imgX, imgY)
-      const x = (canvas.width - drawWidth) / 2 + imgX;
-      const y = (canvas.height - drawHeight) / 2 + imgY;
+      // ✅ FIX 2: Direction fix (Ab sahi direction mein chalega)
+      const x = (canvas.width - drawWidth) / 2 + (-imgX);
+      const y = (canvas.height - drawHeight) / 2 + (-imgY);
 
       ctx.drawImage(userImage, x, y, drawWidth, drawHeight);
       ctx.restore();
@@ -581,7 +555,6 @@
 
   function startDrag(e) {
     if (!userImage) return;
-    if (e.touches) e.preventDefault();
     isDragging = true;
     const pos = getClientPos(e);
     startX = pos.x - imgX;
@@ -592,11 +565,11 @@
     if (!isDragging || !userImage) return;
     e.preventDefault();
     const pos = getClientPos(e);
-    // Canvas resolution ratio multiplier (1000px canvas / 280px UI box)
     const ratio = canvas.width / stageBox.clientWidth;
 
-    imgX = (pos.x - startX) * (ratio * 0.35);
-    imgY = (pos.y - startY) * (ratio * 0.35);
+    // ✅ FIX 3: 0.35 hata diya, drag bahut smooth aur sahi speed mein chalega
+    imgX = (pos.x - startX) * ratio;
+    imgY = (pos.y - startY) * ratio;
     renderCanvas();
   }
 
@@ -668,8 +641,10 @@
   // Zoom +/- step buttons
   function stepZoom(delta) {
     const slider = document.getElementById('zoomSlider');
-    const next = Math.min(300, Math.max(30, Number(slider.value) + delta));
-    slider.value = next;
+    let val = parseInt(slider.value) + delta;
+    if (val < 30) val = 30;
+    if (val > 300) val = 300;
+    slider.value = val;
     slider.dispatchEvent(new Event('input'));
   }
   document.getElementById('zoomMinus').addEventListener('click', () => stepZoom(-10));
