@@ -550,15 +550,16 @@
 
   const frameFiles = {
     country: [
+      "toolsphere-nobg.png
       "toolsphere-nobg(1).png",
       "toolsphere-nobg(2).png",
       "toolsphere-nobg(3).png"
     ],
     style: [
-      "toolsphere-nobg(1).png"
+      
     ],
     color: [
-      "toolsphere-nobg(1).png"
+      
     ]
   };
 
@@ -566,14 +567,24 @@
 
   function switchTab(cat) {
     activeCategory = cat;
-    document.querySelectorAll('.ts-dp-tab-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+    
+    // Sabhi tab buttons se active class hatao aur click hue button par lagao
+    const tabs = document.querySelectorAll('.ts-dp-tab-btn');
+    tabs.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(cat)) {
+        btn.classList.add('active');
+      }
+    });
+
     loadCategory(cat);
   }
 
   function loadCategory(cat) {
     const grid = document.getElementById('framesGrid');
+    if (!grid) return;
     grid.innerHTML = '';
+    
     const list = frameFiles[cat] || [];
 
     list.forEach(fileName => {
@@ -591,6 +602,7 @@
       grid.appendChild(thumb);
     });
   }
+
 
       thumb.onclick = () => {
         document.querySelectorAll('.ts-dp-frame-item').forEach(t => t.classList.remove('active'));
