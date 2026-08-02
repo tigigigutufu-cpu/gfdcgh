@@ -14,42 +14,6 @@
   <title>Profile Picture & Flag Border Maker | ToolSphere</title>
   <meta name="description" content="Create HD profile pictures with 100+ country flag borders, aesthetic rings, and royal badges. Drag, position, zoom and download for free.">
   <meta name="keywords" content="dp maker, profile picture generator, country flag dp, palestine flag border, india flag frame, toolsphere">
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KV0PV8JKTD');
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Profile Picture & Flag Border Maker | ToolSphere</title>
-  <meta name="description" content="Create HD profile pictures with 100+ country flag borders, aesthetic rings, and royal badges. Drag, position, zoom and download for free.">
-  <meta name="keywords" content="dp maker, profile picture generator, country flag dp, palestine flag border, india flag fr:title" content="Profile Picture & Flag Border Maker | ToolSphere">
-  <meta name="twitter:description" content="Create HD profile pictures with aesthetic borders and country flag frames online.">
-  <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
-  <meta name="theme-color" content="#0A0E1F">
-
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/style.css">
-
-  <!-- Schema.org WebApplication SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Profile Picture & Flag Border Maker",
-    "url": "https://toolsphere.online/tools/dp-maker",
-    "description": "Create HD profile pictures with custom frames, flags, and badges.",
-    "applicationCategory": "MultimediaApplication",
-    "operatingSystem": "All",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USDame, toolsphere">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://toolsphere.online/tools/dp-maker">
 
@@ -62,63 +26,83 @@
   <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter" }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsphere.online/" },
-      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsphere.online/tools" },
-      { "@type": "ListItem", "position": 3, "name": "Profile Picture Maker", "item": "https://toolsphere.online/tools/dp-maker" }
-    ]
-  }
-  </script>
+  <meta name="twitter:title" content="Profile Picture & Flag Border Maker | ToolSphere">
+  <meta name="twitter:description" content="Create HD profile pictures with aesthetic borders and country flag frames online.">
+  <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="theme-color" content="#0A0E1F">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
 
   <style>
-    /* Safe In-line Additions for DP Stage Component */
-    .dp-workspace-grid {
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-    @media (max-width: 850px) {
-      .dp-workspace-grid { grid-template-columns: 1fr; }
-    }
-
-    .dp-stage-card {
-      text-align: center;
+    /* ==========================================
+       ISOLATED MOBILE-FIRST DP MAKER OVERRIDES
+       ========================================== */
+    .ts-dp-app {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (min-width: 850px) {
+      .ts-dp-app {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        align-items: start;
+      }
     }
 
-    .dp-stage-box {
-      width: 240px;
-      height: 240px;
-      position: relative;
-      border-radius: 50%;
+    .ts-dp-card {
+      background: var(--card-bg, #11172e);
+      border: 1px solid var(--border-soft, rgba(255,255,255,0.08));
+      border-radius: 16px;
+      padding: 16px;
+      box-sizing: border-box;
+      width: 100%;
       overflow: hidden;
-      background: #050814;
-      border: 2px dashed var(--accent, #43E8D8);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      cursor: grab;
-      touch-action: none;
-      margin-bottom: 12px;
     }
-    .dp-stage-box:active { cursor: grabbing; }
+
+    /* Fixed Stage Canvas Box for Phone & Laptop */
+    .ts-dp-stage-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .ts-dp-stage-box {
+      width: 240px !important;
+      height: 240px !important;
+      min-width: 240px !important;
+      min-height: 240px !important;
+      position: relative !important;
+      border-radius: 50% !important;
+      overflow: hidden !important;
+      background: #050814 !important;
+      border: 2px dashed var(--accent, #43E8D8) !important;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5) !important;
+      cursor: grab !important;
+      touch-action: none !important;
+      box-sizing: border-box !important;
+    }
+    .ts-dp-stage-box:active { cursor: grabbing !important; }
 
     #dpCanvas {
       width: 100% !important;
       height: 100% !important;
-      display: block;
-      border-radius: 50%;
+      display: block !important;
+      border-radius: 50% !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
-    .dp-upload-overlay {
+    .ts-dp-overlay {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       display: flex;
@@ -129,84 +113,85 @@
       z-index: 2;
     }
 
-    .dp-hint {
-      font-size: 0.8rem;
+    .ts-dp-hint {
+      font-size: 0.78rem;
       color: var(--accent, #43E8D8);
       font-weight: 600;
-      margin-bottom: 16px;
+      text-align: center;
+      margin-bottom: 12px;
     }
 
-    .dp-zoom-control {
+    .ts-dp-control-box {
       width: 100%;
-      background: var(--bg-card-alt, rgba(255,255,255,0.03));
-      border: 1px solid var(--border-soft, rgba(255,255,255,0.08));
-      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 10px;
       border-radius: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
     }
 
-    .dp-zoom-bar {
+    .ts-dp-zoom-bar {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .dp-btn-row {
+    .ts-dp-btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    /* Tab Controller */
-    .dp-tabs-nav {
+    /* Tabs Engine */
+    .ts-dp-tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border-soft, rgba(255,255,255,0.08));
-      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 8px;
       overflow-x: auto;
     }
 
-    .dp-tab-btn {
+    .ts-dp-tab-btn {
       background: transparent;
-      border: 1px solid var(--border-soft, rgba(255,255,255,0.1));
-      color: var(--text-muted, #94a3b8);
-      padding: 6px 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #94a3b8;
+      padding: 6px 12px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       white-space: nowrap;
       cursor: pointer;
     }
 
-    .dp-tab-btn.active {
+    .ts-dp-tab-btn.active {
       background: var(--accent, #43E8D8);
       color: #0A0E1F;
       border-color: var(--accent, #43E8D8);
     }
 
-    /* Scrollable Frame Grid (Locked to ~200 items) */
-    .dp-scroll-grid {
-      max-height: 380px;
+    /* Frames Grid Box (Compact & Scrollable) */
+    .ts-dp-scroll-grid {
+      max-height: 350px;
       overflow-y: auto;
       padding-right: 4px;
     }
-
-    .dp-scroll-grid::-webkit-scrollbar { width: 5px; }
-    .dp-scroll-grid::-webkit-scrollbar-thumb {
-      background: var(--border-soft, rgba(255,255,255,0.15));
+    .ts-dp-scroll-grid::-webkit-scrollbar { width: 4px; }
+    .ts-dp-scroll-grid::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.15);
       border-radius: 10px;
     }
 
-    .dp-frames-layout {
+    .ts-dp-frames-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+      gap: 10px;
     }
 
-    .dp-frame-item {
+    .ts-dp-frame-item {
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       border: 2px solid transparent;
@@ -216,8 +201,7 @@
       background-color: #050814;
       transition: 0.2s;
     }
-
-    .dp-frame-item.active, .dp-frame-item:hover {
+    .ts-dp-frame-item.active, .ts-dp-frame-item:hover {
       border-color: var(--accent, #43E8D8);
       transform: scale(1.05);
     }
@@ -270,32 +254,34 @@
 
 <section class="workspace">
   <div class="wrap">
-    <div class="dp-workspace-grid">
+    <div class="ts-dp-app">
       
-      <!-- Left Box: Preview Stage & Controls -->
-      <div class="panel dp-stage-card">
-        <h2>Canvas Preview</h2>
+      <!-- Preview Canvas Card -->
+      <div class="ts-dp-card">
+        <h2 style="font-size:1.1rem;margin-top:0;margin-bottom:12px;text-align:center;">Canvas Preview</h2>
         
-        <div class="dp-stage-box" id="stageBox">
-          <canvas id="dpCanvas" width="1000" height="1000"></canvas>
-          <div class="dp-upload-overlay" id="uploadOverlay">
-            <div style="font-size:2rem;margin-bottom:4px;">☁️</div>
-            <div style="font-size:0.85rem;font-weight:600;">Upload Photo</div>
+        <div class="ts-dp-stage-wrapper">
+          <div class="ts-dp-stage-box" id="stageBox">
+            <canvas id="dpCanvas" width="1000" height="1000"></canvas>
+            <div class="ts-dp-overlay" id="uploadOverlay">
+              <div style="font-size:2rem;margin-bottom:4px;">☁️</div>
+              <div style="font-size:0.8rem;font-weight:600;">Upload Photo</div>
+            </div>
           </div>
         </div>
 
-        <div class="dp-hint">🖐️ Drag or touch inside canvas to position photo</div>
+        <div class="ts-dp-hint">🖐️ Drag photo inside circle to position</div>
 
-        <div class="dp-zoom-control">
-          <label style="font-size:0.8rem;display:block;margin-bottom:6px;color:var(--text-faint);">Adjust Photo Zoom</label>
-          <div class="dp-zoom-bar">
+        <div class="ts-dp-control-box">
+          <label style="font-size:0.75rem;display:block;margin-bottom:4px;color:var(--text-faint);">Adjust Zoom</label>
+          <div class="ts-dp-zoom-bar">
             <button class="btn btn-ghost btn-sm" id="zoomOutBtn">-</button>
             <input type="range" id="zoomSlider" min="30" max="300" value="100" style="flex:1;">
             <button class="btn btn-ghost btn-sm" id="zoomInBtn">+</button>
           </div>
         </div>
 
-        <div class="dp-btn-row">
+        <div class="ts-dp-btn-grid">
           <button class="btn btn-ghost btn-sm" id="centerBtn">🎯 Center</button>
           <button class="btn btn-ghost btn-sm" id="resetBtn">🔄 Reset</button>
         </div>
@@ -303,25 +289,25 @@
         <button class="btn btn-primary btn-block" id="downloadBtn" disabled>Download HD DP (PNG)</button>
       </div>
 
-      <!-- Right Box: Choose Image & Frame Tabs -->
-      <div class="panel">
-        <h2>Frames & Options</h2>
+      <!-- Option Panel Card -->
+      <div class="ts-dp-card">
+        <h2 style="font-size:1.1rem;margin-top:0;margin-bottom:12px;">Frames & Options</h2>
 
-        <div class="field">
+        <div class="field" style="margin-bottom:12px;">
           <label for="imageInput">Upload Your Photo</label>
           <input type="file" id="imageInput" accept="image/*" class="btn btn-ghost btn-block" style="text-align:left;">
         </div>
 
         <!-- Category Tabs -->
-        <div class="dp-tabs-nav">
-          <button class="dp-tab-btn active" onclick="switchTab('country')">🌍 Country Flags</button>
-          <button class="dp-tab-btn" onclick="switchTab('style')">👑 Rings & Royal</button>
-          <button class="dp-tab-btn" onclick="switchTab('color')">🎨 Color Badges</button>
+        <div class="ts-dp-tabs">
+          <button class="ts-dp-tab-btn active" onclick="switchTab('country')">🌍 Country Flags</button>
+          <button class="ts-dp-tab-btn" onclick="switchTab('style')">👑 Rings & Royal</button>
+          <button class="ts-dp-tab-btn" onclick="switchTab('color')">🎨 Color Badges</button>
         </div>
 
         <!-- Scrollable Frames Container -->
-        <div class="dp-scroll-grid">
-          <div id="framesGrid" class="dp-frames-layout"></div>
+        <div class="ts-dp-scroll-grid">
+          <div id="framesGrid" class="ts-dp-frames-layout"></div>
         </div>
       </div>
 
@@ -401,7 +387,6 @@
 <script src="../assets/js/common.js"></script>
 
 <script>
-  // Core Engine Initialization
   const canvas = document.getElementById('dpCanvas');
   const ctx = canvas.getContext('2d');
   const stageBox = document.getElementById('stageBox');
@@ -420,7 +405,7 @@
 
   function switchTab(cat) {
     activeCategory = cat;
-    document.querySelectorAll('.dp-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.ts-dp-tab-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
     loadCategory(cat);
   }
@@ -433,7 +418,7 @@
     for (let i = 1; i <= maxCount; i++) {
       const imgPath = `/assets/frames/${cat}/${i}.png`;
       const thumb = document.createElement('div');
-      thumb.className = 'dp-frame-item';
+      thumb.className = 'ts-dp-frame-item';
       thumb.style.backgroundImage = `url('${imgPath}')`;
 
       const testImg = new Image();
@@ -441,7 +426,7 @@
       testImg.onerror = () => thumb.style.display = 'none';
 
       thumb.onclick = () => {
-        document.querySelectorAll('.dp-frame-item').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.ts-dp-frame-item').forEach(t => t.classList.remove('active'));
         thumb.classList.add('active');
         selectFrame(imgPath);
       };
