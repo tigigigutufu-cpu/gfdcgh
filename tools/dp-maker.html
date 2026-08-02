@@ -150,7 +150,7 @@
       background: #0A0E1F !important;
       border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 14px !important;
-      padding: 7px !important;
+      padding: 12px !important;
       width: 100% !important;
       max-width: 100% !important;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
@@ -165,13 +165,13 @@
     }
 
     .ts-dp-stage-box {
-      width: 150px !important;
-      height: 150px !important;
+      width: 180px !important;
+      height: 180px !important;
       position: relative !important;
       border-radius: 50% !important;
       overflow: hidden !important;
       background: #050814 !important;
-      border: 1px solid var(--accent, #43E8D8) !important;
+      border: 2px solid var(--accent, #43E8D8) !important;
       cursor: grab !important;
       touch-action: none !important;
       box-shadow: 0 0 15px rgba(67, 232, 216, 0.2) !important;
@@ -440,9 +440,9 @@
 
         <!-- Category Tabs -->
         <div class="ts-dp-tabs">
-          <button class="ts-dp-tab-btn active" onclick="switchTab('country')">🌍 Country Flags frames </button>
-          <button class="ts-dp-tab-btn" onclick="switchTab('style')">👑 Rings &amp; primium frames </button>
-          <button class="ts-dp-tab-btn" onclick="switchTab('color')">🎨 normal Badges frame </button>
+          <button class="ts-dp-tab-btn active" onclick="switchTab('country')">🌍 Country Flags</button>
+          <button class="ts-dp-tab-btn" onclick="switchTab('style')">👑 Rings &amp; Royal</button>
+          <button class="ts-dp-tab-btn" onclick="switchTab('color')">🎨 Color Badges</button>
         </div>
 
         <!-- Scrollable Frames Grid Box -->
@@ -599,11 +599,6 @@
     const radius = center - 20;
 
     if (userImage) {
-      // Add boundaries inside renderCanvas function right before ctx.drawImage
-const maxOffset = canvas.width * 0.8;
-imgX = Math.max(-maxOffset, Math.min(maxOffset, imgX));
-imgY = Math.max(-maxOffset, Math.min(maxOffset, imgY));
-
       ctx.save();
       ctx.beginPath();
       ctx.arc(center, center, radius, 0, Math.PI * 2);
@@ -666,23 +661,15 @@ imgY = Math.max(-maxOffset, Math.min(maxOffset, imgY));
   }
 
   function doDrag(e) {
-  if (!isDragging || !userImage) return;
-  
-  // Prevents mobile screen rubber-band / scrolling effect while dragging
-  if (e.cancelable) e.preventDefault();
+    if (!isDragging || !userImage) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    const ratio = canvas.width / stageBox.clientWidth;
 
-  const pos = getPos(e);
-  const ratio = canvas.width / stageBox.clientWidth;
-
-  // Reduced sensitivity multiplier from 0.4 to 0.15 for buttery smooth touch drag
-  const damping = e.touches ? 0.15 : 0.25; 
-
-  imgX = (pos.x - startX) * (ratio * damping);
-  imgY = (pos.y - startY) * (ratio * damping);
-  
-  renderCanvas();
-}
-
+    imgX = (pos.x - startX) * (ratio * 0.4);
+    imgY = (pos.y - startY) * (ratio * 0.4);
+    renderCanvas();
+  }
 
   function stopDrag() { isDragging = false; }
 
