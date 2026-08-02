@@ -10,14 +10,13 @@
     gtag('config', 'G-KV0PV8JKTD');
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Profile Picture &amp; Flag Border Maker | ToolSphere</title>
   <meta name="description" content="Create HD profile pictures with 100+ country flag borders, aesthetic rings, and royal badges. Drag, position, zoom and download for free.">
   <meta name="keywords" content="dp maker, profile picture generator, country flag dp, palestine flag border, india flag frame, toolsphere">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://toolsphere.online/tools/dp-maker">
 
-  <!-- Social Meta Tags -->
   <meta property="og:title" content="Profile Picture &amp; Flag Border Maker | ToolSphere">
   <meta property="og:url" content="https://toolsphere.online/tools/dp-maker">
   <meta property="og:description" content="Create HD profile pictures with aesthetic borders and country flag frames online.">
@@ -37,49 +36,48 @@
   <link rel="stylesheet" href="../assets/css/style.css">
 
   <style>
-    /* Clean Seamless Mobile Layout Fix */
-    body {
+    /* STRICT ISOLATED MOBILE ENGINE FIX */
+    html, body {
       overflow-x: hidden !important;
-    }
-
-    .wrap {
-      box-sizing: border-box !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
 
     .ts-dp-app {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      width: 100%;
-      box-sizing: border-box;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
     }
+
     @media (min-width: 850px) {
       .ts-dp-app {
-        display: grid;
-        grid-template-columns: 340px 1fr;
-        align-items: start;
+        display: grid !important;
+        grid-template-columns: 340px 1fr !important;
+        align-items: start !important;
       }
     }
 
-    /* Embedded Panel (No Floating Weird Borders) */
+    /* Embedded Cards Fix */
     .ts-dp-card {
-      background: var(--card-bg, #0A0E1F);
-      border: 1px solid var(--border-soft, rgba(255,255,255,0.08));
-      border-radius: 12px;
-      padding: 16px;
-      box-sizing: border-box;
-      width: 100%;
+      background: #0A0E1F !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 12px !important;
+      padding: 16px !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+      box-shadow: none !important;
     }
 
     .ts-dp-stage-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-      margin-bottom: 10px;
+      width: 100% !important;
+      display: flex !important;
+      justify-content: center !important;
+      margin: 8px 0 !important;
     }
 
-    /* Flat Integrated Circle Canvas Stage */
+    /* Strictly Fixed Stage Circle (No Dashed Floating Ring) */
     .ts-dp-stage-box {
       width: 220px !important;
       height: 220px !important;
@@ -87,10 +85,12 @@
       border-radius: 50% !important;
       overflow: hidden !important;
       background: #050814 !important;
-      border: 2px solid var(--border-soft, rgba(67, 232, 216, 0.3)) !important;
+      border: 2px solid rgba(67, 232, 216, 0.4) !important; /* Smooth solid accent border */
+      box-shadow: none !important;
       cursor: grab !important;
       touch-action: none !important;
       box-sizing: border-box !important;
+      outline: none !important;
     }
     .ts-dp-stage-box:active { cursor: grabbing !important; }
 
@@ -102,110 +102,105 @@
       position: absolute !important;
       top: 0 !important;
       left: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
     }
 
     .ts-dp-overlay {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 2;
+      position: absolute !important;
+      top: 0 !important; left: 0 !important; 
+      width: 100% !important; height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      pointer-events: none !important;
+      z-index: 2 !important;
     }
 
     .ts-dp-hint {
-      font-size: 0.78rem;
-      color: var(--accent, #43E8D8);
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 12px;
+      font-size: 0.78rem !important;
+      color: #43E8D8 !important;
+      font-weight: 600 !important;
+      text-align: center !important;
+      margin-bottom: 12px !important;
     }
 
     .ts-dp-control-box {
-      width: 100%;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      box-sizing: border-box;
+      width: 100% !important;
+      background: rgba(255,255,255,0.02) !important;
+      border: 1px solid rgba(255,255,255,0.05) !important;
+      padding: 10px !important;
+      border-radius: 8px !important;
+      margin-bottom: 12px !important;
+      box-sizing: border-box !important;
     }
 
     .ts-dp-zoom-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
     }
 
     .ts-dp-btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      width: 100%;
-      margin-bottom: 12px;
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 8px !important;
+      width: 100% !important;
+      margin-bottom: 12px !important;
     }
 
-    /* Category Tabs */
     .ts-dp-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      padding-bottom: 8px;
-      overflow-x: auto;
+      display: flex !important;
+      gap: 8px !important;
+      margin-bottom: 12px !important;
+      border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+      padding-bottom: 8px !important;
+      overflow-x: auto !important;
     }
 
     .ts-dp-tab-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-faint, #94a3b8);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
+      background: transparent !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      color: #94a3b8 !important;
+      padding: 6px 12px !important;
+      border-radius: 20px !important;
+      font-size: 0.8rem !important;
+      font-weight: 600 !important;
+      white-space: nowrap !important;
+      cursor: pointer !important;
     }
 
     .ts-dp-tab-btn.active {
-      background: var(--accent, #43E8D8);
-      color: #0A0E1F;
-      border-color: var(--accent, #43E8D8);
+      background: #43E8D8 !important;
+      color: #0A0E1F !important;
+      border-color: #43E8D8 !important;
     }
 
-    /* Scrollable Inner Frame Grid */
     .ts-dp-scroll-grid {
-      max-height: 320px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .ts-dp-scroll-grid::-webkit-scrollbar { width: 4px; }
-    .ts-dp-scroll-grid::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
+      max-height: 320px !important;
+      overflow-y: auto !important;
+      padding-right: 4px !important;
     }
 
     .ts-dp-frames-layout {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-      gap: 10px;
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)) !important;
+      gap: 10px !important;
     }
 
     .ts-dp-frame-item {
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      background-size: cover;
-      background-position: center;
-      background-color: #050814;
-      transition: 0.2s;
+      aspect-ratio: 1 / 1 !important;
+      border-radius: 50% !important;
+      border: 2px solid transparent !important;
+      cursor: pointer !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-color: #050814 !important;
     }
-    .ts-dp-frame-item.active, .ts-dp-frame-item:hover {
-      border-color: var(--accent, #43E8D8);
-      transform: scale(1.05);
+    .ts-dp-frame-item.active {
+      border-color: #43E8D8 !important;
     }
   </style>
 </head>
@@ -258,7 +253,7 @@
   <div class="wrap">
     <div class="ts-dp-app">
       
-      <!-- Preview Panel -->
+      <!-- Canvas Preview Panel -->
       <div class="ts-dp-card">
         <h2 style="font-size:1.1rem;margin-top:0;margin-bottom:8px;text-align:center;">Canvas Preview</h2>
         
@@ -275,7 +270,7 @@
         <div class="ts-dp-hint">🖐️ Drag photo inside circle to position</div>
 
         <div class="ts-dp-control-box">
-          <label style="font-size:0.75rem;display:block;margin-bottom:4px;color:var(--text-faint);">Adjust Zoom</label>
+          <label style="font-size:0.75rem;display:block;margin-bottom:4px;color:#94a3b8;">Adjust Zoom</label>
           <div class="ts-dp-zoom-bar">
             <button class="btn btn-ghost btn-sm" id="zoomOutBtn">-</button>
             <input type="range" id="zoomSlider" min="30" max="300" value="100" style="flex:1;">
@@ -402,7 +397,6 @@
   let isDragging = false;
   let startX = 0, startY = 0;
 
-  // Zero Rename Dynamic Folder Index Buffer
   const categories = { country: 200, style: 150, color: 100 };
   let activeCategory = 'country';
 
@@ -594,3 +588,4 @@
 </script>
 </body>
 </html>
+
