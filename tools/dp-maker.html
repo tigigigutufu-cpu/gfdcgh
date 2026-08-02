@@ -548,7 +548,20 @@
   let isDragging = false;
   let startX = 0, startY = 0;
 
-  const categories = { country: 200, style: 150, color: 100 };
+  const frameFiles = {
+    country: [
+      "toolsphere-nobg(1).png",
+      "toolsphere-nobg(2).png",
+      "toolsphere-nobg(3).png"
+    ],
+    style: [
+      "toolsphere-nobg(1).png"
+    ],
+    color: [
+      "toolsphere-nobg(1).png"
+    ]
+  };
+
   let activeCategory = 'country';
 
   function switchTab(cat) {
@@ -561,17 +574,23 @@
   function loadCategory(cat) {
     const grid = document.getElementById('framesGrid');
     grid.innerHTML = '';
-    const maxCount = categories[cat] || 100;
+    const list = frameFiles[cat] || [];
 
-    for (let i = 1; i <= maxCount; i++) {
-      const imgPath = `/assets/frames/${cat}/${i}.png`;
+    list.forEach(fileName => {
+      const imgPath = `/assets/frames/${cat}/${fileName}`;
       const thumb = document.createElement('div');
       thumb.className = 'ts-dp-frame-item';
       thumb.style.backgroundImage = `url('${imgPath}')`;
 
-      const testImg = new Image();
-      testImg.src = imgPath;
-      testImg.onerror = () => thumb.style.display = 'none';
+      thumb.onclick = () => {
+        document.querySelectorAll('.ts-dp-frame-item').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        selectFrame(imgPath);
+      };
+
+      grid.appendChild(thumb);
+    });
+  }
 
       thumb.onclick = () => {
         document.querySelectorAll('.ts-dp-frame-item').forEach(t => t.classList.remove('active'));
