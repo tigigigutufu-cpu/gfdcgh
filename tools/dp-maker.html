@@ -36,11 +36,23 @@
   <link rel="stylesheet" href="../assets/css/style.css">
 
   <style>
-    /* STRICT ISOLATED MOBILE ENGINE FIX */
+    /* ==========================================
+       SCREEN OVERFLOW & COMPACT CARD ENGINE FIX
+       ========================================== */
     html, body {
       overflow-x: hidden !important;
       margin: 0 !important;
       padding: 0 !important;
+      width: 100% !important;
+    }
+
+    /* Override parent wrappers padding to fit mobile screen */
+    .workspace .wrap, .workspace {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+      box-sizing: border-box !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
     }
 
     .ts-dp-app {
@@ -48,49 +60,50 @@
       flex-direction: column !important;
       gap: 16px !important;
       width: 100% !important;
+      max-width: 100% !important;
       box-sizing: border-box !important;
+      margin: 0 auto !important;
     }
 
     @media (min-width: 850px) {
       .ts-dp-app {
         display: grid !important;
-        grid-template-columns: 340px 1fr !important;
+        grid-template-columns: 320px 1fr !important;
         align-items: start !important;
       }
     }
 
-    /* Embedded Cards Fix */
+    /* Compact Screen-Fitting Cards */
     .ts-dp-card {
       background: #0A0E1F !important;
       border: 1px solid rgba(255, 255, 255, 0.08) !important;
       border-radius: 12px !important;
-      padding: 16px !important;
+      padding: 12px !important;
       box-sizing: border-box !important;
       width: 100% !important;
-      box-shadow: none !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
     }
 
     .ts-dp-stage-wrapper {
       width: 100% !important;
       display: flex !important;
       justify-content: center !important;
-      margin: 8px 0 !important;
+      margin: 4px 0 !important;
     }
 
-    /* Strictly Fixed Stage Circle (No Dashed Floating Ring) */
+    /* Perfectly Sized Compact Stage Box (190px - Fitting Every Mobile Screen) */
     .ts-dp-stage-box {
-      width: 220px !important;
-      height: 220px !important;
+      width: 190px !important;
+      height: 190px !important;
       position: relative !important;
       border-radius: 50% !important;
       overflow: hidden !important;
       background: #050814 !important;
-      border: 2px solid rgba(67, 232, 216, 0.4) !important; /* Smooth solid accent border */
-      box-shadow: none !important;
+      border: 2px solid rgba(67, 232, 216, 0.4) !important;
       cursor: grab !important;
       touch-action: none !important;
       box-sizing: border-box !important;
-      outline: none !important;
     }
     .ts-dp-stage-box:active { cursor: grabbing !important; }
 
@@ -102,9 +115,6 @@
       position: absolute !important;
       top: 0 !important;
       left: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
     }
 
     .ts-dp-overlay {
@@ -120,43 +130,43 @@
     }
 
     .ts-dp-hint {
-      font-size: 0.78rem !important;
+      font-size: 0.75rem !important;
       color: #43E8D8 !important;
       font-weight: 600 !important;
       text-align: center !important;
-      margin-bottom: 12px !important;
+      margin-bottom: 10px !important;
     }
 
     .ts-dp-control-box {
       width: 100% !important;
       background: rgba(255,255,255,0.02) !important;
       border: 1px solid rgba(255,255,255,0.05) !important;
-      padding: 10px !important;
+      padding: 8px !important;
       border-radius: 8px !important;
-      margin-bottom: 12px !important;
+      margin-bottom: 10px !important;
       box-sizing: border-box !important;
     }
 
     .ts-dp-zoom-bar {
       display: flex !important;
       align-items: center !important;
-      gap: 8px !important;
+      gap: 6px !important;
     }
 
     .ts-dp-btn-grid {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
-      gap: 8px !important;
+      gap: 6px !important;
       width: 100% !important;
-      margin-bottom: 12px !important;
+      margin-bottom: 10px !important;
     }
 
     .ts-dp-tabs {
       display: flex !important;
-      gap: 8px !important;
-      margin-bottom: 12px !important;
+      gap: 6px !important;
+      margin-bottom: 10px !important;
       border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-      padding-bottom: 8px !important;
+      padding-bottom: 6px !important;
       overflow-x: auto !important;
     }
 
@@ -164,9 +174,9 @@
       background: transparent !important;
       border: 1px solid rgba(255,255,255,0.1) !important;
       color: #94a3b8 !important;
-      padding: 6px 12px !important;
+      padding: 5px 10px !important;
       border-radius: 20px !important;
-      font-size: 0.8rem !important;
+      font-size: 0.78rem !important;
       font-weight: 600 !important;
       white-space: nowrap !important;
       cursor: pointer !important;
@@ -179,15 +189,15 @@
     }
 
     .ts-dp-scroll-grid {
-      max-height: 320px !important;
+      max-height: 280px !important;
       overflow-y: auto !important;
-      padding-right: 4px !important;
+      padding-right: 2px !important;
     }
 
     .ts-dp-frames-layout {
       display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)) !important;
-      gap: 10px !important;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)) !important;
+      gap: 8px !important;
     }
 
     .ts-dp-frame-item {
@@ -255,14 +265,14 @@
       
       <!-- Canvas Preview Panel -->
       <div class="ts-dp-card">
-        <h2 style="font-size:1.1rem;margin-top:0;margin-bottom:8px;text-align:center;">Canvas Preview</h2>
+        <h2 style="font-size:1rem;margin-top:0;margin-bottom:6px;text-align:center;">Canvas Preview</h2>
         
         <div class="ts-dp-stage-wrapper">
           <div class="ts-dp-stage-box" id="stageBox">
             <canvas id="dpCanvas" width="1000" height="1000"></canvas>
             <div class="ts-dp-overlay" id="uploadOverlay">
-              <div style="font-size:1.8rem;margin-bottom:2px;">☁️</div>
-              <div style="font-size:0.75rem;font-weight:600;">Upload Photo</div>
+              <div style="font-size:1.6rem;margin-bottom:2px;">☁️</div>
+              <div style="font-size:0.7rem;font-weight:600;">Upload Photo</div>
             </div>
           </div>
         </div>
@@ -270,29 +280,29 @@
         <div class="ts-dp-hint">🖐️ Drag photo inside circle to position</div>
 
         <div class="ts-dp-control-box">
-          <label style="font-size:0.75rem;display:block;margin-bottom:4px;color:#94a3b8;">Adjust Zoom</label>
+          <label style="font-size:0.72rem;display:block;margin-bottom:2px;color:#94a3b8;">Adjust Zoom</label>
           <div class="ts-dp-zoom-bar">
-            <button class="btn btn-ghost btn-sm" id="zoomOutBtn">-</button>
+            <button class="btn btn-ghost btn-sm" id="zoomOutBtn" style="padding:2px 8px;">-</button>
             <input type="range" id="zoomSlider" min="30" max="300" value="100" style="flex:1;">
-            <button class="btn btn-ghost btn-sm" id="zoomInBtn">+</button>
+            <button class="btn btn-ghost btn-sm" id="zoomInBtn" style="padding:2px 8px;">+</button>
           </div>
         </div>
 
         <div class="ts-dp-btn-grid">
-          <button class="btn btn-ghost btn-sm" id="centerBtn">🎯 Center</button>
-          <button class="btn btn-ghost btn-sm" id="resetBtn">🔄 Reset</button>
+          <button class="btn btn-ghost btn-sm" id="centerBtn" style="padding:6px;">🎯 Center</button>
+          <button class="btn btn-ghost btn-sm" id="resetBtn" style="padding:6px;">🔄 Reset</button>
         </div>
 
-        <button class="btn btn-primary btn-block" id="downloadBtn" disabled>Download HD DP (PNG)</button>
+        <button class="btn btn-primary btn-block" id="downloadBtn" disabled style="padding:10px;">Download HD DP (PNG)</button>
       </div>
 
       <!-- Frames Selector Panel -->
       <div class="ts-dp-card">
-        <h2 style="font-size:1.1rem;margin-top:0;margin-bottom:12px;">Frames &amp; Options</h2>
+        <h2 style="font-size:1rem;margin-top:0;margin-bottom:10px;">Frames &amp; Options</h2>
 
-        <div class="field" style="margin-bottom:12px;">
-          <label for="imageInput">Upload Your Photo</label>
-          <input type="file" id="imageInput" accept="image/*" class="btn btn-ghost btn-block" style="text-align:left;">
+        <div class="field" style="margin-bottom:10px;">
+          <label for="imageInput" style="font-size:0.8rem;">Upload Your Photo</label>
+          <input type="file" id="imageInput" accept="image/*" class="btn btn-ghost btn-block" style="text-align:left;padding:6px;">
         </div>
 
         <!-- Category Tabs -->
@@ -588,4 +598,3 @@
 </script>
 </body>
 </html>
-
