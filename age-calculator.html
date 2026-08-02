@@ -12,21 +12,21 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit Converter | ToolSphere</title>
-<meta name="description" content="Convert length, weight and temperature units instantly with a simple, fast interface.">
-<meta name="keywords" content="unit converter, free unit converter, online unit converter, utility tool, toolsphere">
+<title>SIP Calculator | ToolSphere</title>
+<meta name="description" content="Estimate the future value and wealth gain of your monthly SIP mutual fund investment.">
+<meta name="keywords" content="sip calculator, free sip calculator, online sip calculator, finance tool, toolsphere">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<link rel="canonical" href="https://toolsphere.online/tools/unit-converter">
-<meta property="og:title" content="Unit Converter | ToolSphere">
-<meta property="og:url" content="https://toolsphere.online/tools/unit-converter">
-<meta property="og:description" content="Convert length, weight and temperature units instantly with a simple, fast interface.">
+<link rel="canonical" href="https://toolsphere.online/tools/sip-calculator">
+<meta property="og:title" content="SIP Calculator | ToolSphere">
+<meta property="og:url" content="https://toolsphere.online/tools/sip-calculator">
+<meta property="og:description" content="Estimate the future value and wealth gain of your monthly SIP mutual fund investment.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ToolSphere">
 <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Unit Converter | ToolSphere">
-<meta name="twitter:description" content="Convert length, weight and temperature units instantly with a simple, fast interface.">
+<meta name="twitter:title" content="SIP Calculator | ToolSphere">
+<meta name="twitter:description" content="Estimate the future value and wealth gain of your monthly SIP mutual fund investment.">
 <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
@@ -38,9 +38,9 @@
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Unit Converter",
-  "url": "https://toolsphere.online/tools/unit-converter",
-  "description": "Convert length, weight and temperature units instantly with a simple, fast interface.",
+  "name": "SIP Calculator",
+  "url": "https://toolsphere.online/tools/sip-calculator",
+  "description": "Estimate the future value and wealth gain of your monthly SIP mutual fund investment.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "All",
   "offers": {
@@ -70,8 +70,8 @@
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Unit Converter",
-      "item": "https://toolsphere.online/tools/unit-converter"
+      "name": "SIP Calculator",
+      "item": "https://toolsphere.online/tools/sip-calculator"
     }
   ]
 }
@@ -83,10 +83,18 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Which unit categories are supported?",
+      "name": "Is the SIP return guaranteed?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Length (m, km, cm, mm, mile, yard, foot, inch), weight (kg, g, mg, lb, oz, ton) and temperature (Celsius, Fahrenheit, Kelvin)."
+        "text": "No. This is an estimate based on your assumed rate of return; actual mutual fund returns fluctuate with the market."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What return rate should I assume?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Many long-term equity SIPs historically averaged 10-14% p.a. in India, but past performance doesn't guarantee future returns."
       }
     }
   ]
@@ -128,10 +136,10 @@
 
 <section class="tool-header">
   <div class="wrap">
-    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / Unit Converter</div>
-    <span class="eyebrow">Utility</span>
-    <h1>Unit Converter</h1>
-    <p style="max-width:60ch;">Convert length, weight and temperature units instantly with a simple, fast interface.</p>
+    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / SIP Calculator</div>
+    <span class="eyebrow">Finance</span>
+    <h1>SIP Calculator</h1>
+    <p style="max-width:60ch;">Estimate the future value and wealth gain of your monthly SIP mutual fund investment.</p>
     <div class="tool-badges"><span class="badge">Free</span><span class="badge">Private</span><span class="badge">Instant</span></div>
   </div>
 </section>
@@ -139,24 +147,17 @@
   <div class="wrap">
     
     <div class="panel">
-      <h2>Convert units</h2>
-      <div class="field"><label for="cat">Category</label>
-        <select id="cat">
-          <option value="length">Length</option>
-          <option value="weight">Weight</option>
-          <option value="temp">Temperature</option>
-        </select>
-      </div>
+      <h2>SIP details</h2>
+      <div class="field"><label for="amt">Monthly investment (&#8377;)</label><input type="number" id="amt" value="5000"></div>
       <div class="row-2">
-        <div class="field"><label for="from">From</label><select id="from"></select></div>
-        <div class="field"><label for="to">To</label><select id="to"></select></div>
+        <div class="field"><label for="rate">Expected annual return (%)</label><input type="number" id="rate" value="12" step="0.1"></div>
+        <div class="field"><label for="years">Duration (years)</label><input type="number" id="years" value="10"></div>
       </div>
-      <div class="field"><label for="val">Value</label><input type="number" id="val" value="1"></div>
-      <button class="btn btn-primary btn-block" id="calcBtn">Convert</button>
+      <button class="btn btn-primary btn-block" id="calcBtn">Calculate returns</button>
     </div>
     <div class="panel">
       <h2>Result</h2>
-      <div id="output"><div class="empty-state">Choose units and a value to convert.</div></div>
+      <div id="output"><div class="empty-state">Enter SIP details to estimate your future value.</div></div>
     </div>
     
   </div>
@@ -165,14 +166,15 @@
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>About this tool</h2>
-    <p>Convert between common length, weight and temperature units instantly &mdash; no ads-heavy detours,
-    just pick your units and get the number.</p>
+    <p>Estimate the future value of a monthly Systematic Investment Plan (SIP) using the standard compound-growth
+    SIP formula. Actual mutual fund returns are market-linked and not guaranteed.</p>
   </div>
 </section>
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>Frequently asked questions</h2>
-    <details class="faq-item"><summary>Which unit categories are supported?</summary><p>Length (m, km, cm, mm, mile, yard, foot, inch), weight (kg, g, mg, lb, oz, ton) and temperature (Celsius, Fahrenheit, Kelvin).</p></details>
+    <details class="faq-item"><summary>Is the SIP return guaranteed?</summary><p>No. This is an estimate based on your assumed rate of return; actual mutual fund returns fluctuate with the market.</p></details>
+<details class="faq-item"><summary>What return rate should I assume?</summary><p>Many long-term equity SIPs historically averaged 10-14% p.a. in India, but past performance doesn't guarantee future returns.</p></details>
   </div>
 </section>
 
@@ -223,42 +225,24 @@
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
 <script>
-var UNITS = {
-  length: { m:1, km:1000, cm:0.01, mm:0.001, mile:1609.34, yard:0.9144, foot:0.3048, inch:0.0254 },
-  weight: { kg:1, g:0.001, mg:0.000001, lb:0.453592, oz:0.0283495, ton:1000 }
-};
-var catSel = document.getElementById('cat'), fromSel = document.getElementById('from'), toSel = document.getElementById('to');
-function populate(){
-  var cat = catSel.value;
-  fromSel.innerHTML = ''; toSel.innerHTML = '';
-  if(cat === 'temp'){
-    ['Celsius','Fahrenheit','Kelvin'].forEach(function(u){
-      fromSel.innerHTML += '<option>'+u+'</option>'; toSel.innerHTML += '<option>'+u+'</option>';
-    });
-    toSel.selectedIndex = 1;
-  } else {
-    Object.keys(UNITS[cat]).forEach(function(u){
-      fromSel.innerHTML += '<option>'+u+'</option>'; toSel.innerHTML += '<option>'+u+'</option>';
-    });
-    toSel.selectedIndex = 1;
-  }
-}
-catSel.addEventListener('change', populate);
-populate();
-function toCelsius(v, u){ if(u==='Celsius') return v; if(u==='Fahrenheit') return (v-32)*5/9; return v-273.15; }
-function fromCelsius(v, u){ if(u==='Celsius') return v; if(u==='Fahrenheit') return v*9/5+32; return v+273.15; }
 document.getElementById('calcBtn').addEventListener('click', function(){
-  var cat = catSel.value, val = parseFloat(document.getElementById('val').value);
+  var P = parseFloat(document.getElementById('amt').value);
+  var annualRate = parseFloat(document.getElementById('rate').value);
+  var years = parseFloat(document.getElementById('years').value);
   var out = document.getElementById('output');
-  if(isNaN(val)){ out.innerHTML = '<div class="alert alert-warn">Enter a valid value.</div>'; return; }
-  var result;
-  if(cat === 'temp'){
-    result = fromCelsius(toCelsius(val, fromSel.value), toSel.value);
-  } else {
-    var base = val * UNITS[cat][fromSel.value];
-    result = base / UNITS[cat][toSel.value];
+  if(!P || !annualRate || !years || P<=0 || years<=0){
+    out.innerHTML = '<div class="alert alert-warn">Please enter valid values.</div>'; return;
   }
-  out.innerHTML = '<div class="score-wrap"><div><div style="font-size:.8rem;color:var(--text-faint)">' + val + ' ' + fromSel.value + ' =</div><div style="font-size:1.8rem;font-weight:700;color:var(--accent)" class="mono">' + (Math.round(result*10000)/10000) + ' ' + toSel.value + '</div></div></div>';
+  var i = annualRate / 12 / 100;
+  var n = years * 12;
+  var fv = P * ((Math.pow(1+i, n) - 1) / i) * (1+i);
+  var invested = P * n;
+  var gains = fv - invested;
+  function inr(x){ return '₹' + Math.round(x).toLocaleString('en-IN'); }
+  out.innerHTML =
+    '<div class="score-wrap"><div><div style="font-size:.8rem;color:var(--text-faint)">Estimated future value</div><div style="font-size:1.8rem;font-weight:700;color:var(--accent)" class="mono">' + inr(fv) + '</div></div></div>' +
+    '<div class="output-item"><div class="txt">Total invested</div><div class="mono">' + inr(invested) + '</div></div>' +
+    '<div class="output-item"><div class="txt">Estimated gains</div><div class="mono">' + inr(gains) + '</div></div>';
 });
 </script>
 </body>

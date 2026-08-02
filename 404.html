@@ -12,27 +12,200 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Page Not Found | ToolSphere</title>
-<meta name="description" content="The page you're looking for doesn't exist.">
-<meta name="robots" content="noindex, follow">
-<link rel="canonical" href="https://toolsphere.online/404">
-<meta property="og:title" content="Page Not Found | ToolSphere">
-<meta property="og:url" content="https://toolsphere.online/404">
-<meta property="og:description" content="The page you're looking for doesn't exist.">
+<title>QR Code Generator | ToolSphere</title>
+<meta name="description" content="Generate a downloadable, scannable QR code for any link, text or message instantly.">
+<meta name="keywords" content="qr code generator, free qr code generator, online qr code generator, utility tool, toolsphere">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://toolsphere.online/tools/qr-code-generator">
+<meta property="og:title" content="QR Code Generator | ToolSphere">
+<meta property="og:url" content="https://toolsphere.online/tools/qr-code-generator">
+<meta property="og:description" content="Generate a downloadable, scannable QR code for any link, text or message instantly.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ToolSphere">
 <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Page Not Found | ToolSphere">
-<meta name="twitter:description" content="The page you're looking for doesn't exist.">
+<meta name="twitter:title" content="QR Code Generator | ToolSphere">
+<meta name="twitter:description" content="Generate a downloadable, scannable QR code for any link, text or message instantly.">
 <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
+<!-- Premium Styling Enhancements -->
+<style>
+  :root {
+    --qr-frame-bg: #43E8D8; /* Customize frame color here */
+    --qr-dots-color: #0A0E1F; /* Customize QR dots color here */
+    --qr-bg-color: #ffffff; /* Customize QR background color here */
+  }
+
+  .qr-customizer {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-soft, rgba(255,255,255,0.1));
+  }
+  .color-pickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+  .color-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .color-field label {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .color-picker-input {
+    height: 40px;
+    width: 100%;
+    border: 1px solid var(--border-soft, #333);
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    padding: 2px;
+  }
+  
+  /* --- Premium QR Frame Styling --- */
+  .qr-preview-card {
+    position: relative;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .qr-frame-container {
+    position: relative;
+    padding: 15px; /* Spacing for the frame */
+    border-radius: 24px;
+    background: #ffffff; /* Inner QR background */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    overflow: hidden;
+  }
+
+  /* Decorative Frame Border */
+  .qr-frame-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background-color: var(--qr-frame-bg);
+    border-radius: 24px;
+    z-index: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+  }
+
+  /* The actual QR Canvas Area */
+  #qrcode-canvas {
+    position: relative;
+    z-index: 2;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 10px;
+  }
+
+  /* Frame Text 'SCAN ME' */
+  .qr-frame-text {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0A0E1F;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .download-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "QR Code Generator",
+  "url": "https://toolsphere.online/tools/qr-code-generator",
+  "description": "Generate a downloadable, scannable QR code for any link, text or message instantly.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://toolsphere.online/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Tools",
+      "item": "https://toolsphere.online/tools"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "QR Code Generator",
+      "item": "https://toolsphere.online/tools/qr-code-generator"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the QR code expire?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, once generated the image is static and works indefinitely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data stored?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The QR image is rendered by a third-party public API based on the text you enter; we don't store it ourselves."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <header class="site-header">
@@ -52,7 +225,7 @@
           <a href="/tools/sip-calculator">SIP Calculator</a>
           <a href="/tools/password-generator">Password Generator</a>
           <a href="/tools/qr-code-generator">QR Code Generator</a>
-          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 28 tools &rarr;</a>
+          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 27 tools &rarr;</a>
         </div>
       </div>
       <a href="/blog">Blog</a>
@@ -68,14 +241,64 @@
 </header>
 
 <section class="tool-header">
-  <div class="wrap center">
-    <span class="eyebrow">404</span>
-    <h1>This page wandered off</h1>
-    <p style="max-width:50ch;margin:0 auto;">The page you're looking for doesn't exist or may have moved.</p>
-    <div class="hero-cta" style="justify-content:center;">
-      <a href="/" class="btn btn-primary">Go home</a>
-      <a href="/tools" class="btn btn-ghost">Browse all tools</a>
+  <div class="wrap">
+    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / QR Code Generator</div>
+    <span class="eyebrow">Utility</span>
+    <h1>QR Code Generator</h1>
+    <p style="max-width:60ch;">Generate a downloadable, scannable QR code for any link, text or message instantly.</p>
+    <div class="tool-badges"><span class="badge">Free</span><span class="badge">Instant</span><span class="badge">Downloadable</span></div>
+  </div>
+</section>
+<section class="workspace">
+  <div class="wrap">
+    
+    <div class="panel">
+      <h2>Content &amp; Customization</h2>
+      <div class="field"><label for="txt">Text or URL</label><textarea id="txt" placeholder="https://toolsphere.online"></textarea></div>
+      
+      <!-- Premium Customizer Controls -->
+      <div class="qr-customizer">
+        <div class="color-pickers">
+          <div class="color-field">
+            <label for="fgColor">QR Dots Color</label>
+            <input type="color" id="fgColor" value="#0A0E1F" class="color-picker-input">
+          </div>
+          <div class="color-field">
+            <label for="bgColor">QR Background Color</label>
+            <input type="color" id="bgColor" value="#ffffff" class="color-picker-input">
+          </div>
+          <div class="color-field" style="grid-column: 1 / -1;">
+            <label for="frameColor">Frame Color ("Scan Me")</label>
+            <input type="color" id="frameColor" value="#43E8D8" class="color-picker-input">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="genBtn">Generate Premium QR</button>
+      <p class="hint" style="margin-top:10px;">QR image is generated securely &mdash; nothing is stored.</p>
     </div>
+    <div class="panel center">
+      <h2>Your QR code</h2>
+      <div id="output">
+        <div class="empty-state">Your QR code will appear here.</div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+<div class="wrap"><div class="ad-slot">Ad space &mdash; 728&times;90</div></div>
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>About this tool</h2>
+    <p>Turn any text, link, Wi-Fi detail or message into a scannable QR code instantly, ready to download
+    and print or share digitally.</p>
+  </div>
+</section>
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>Frequently asked questions</h2>
+    <details class="faq-item"><summary>Does the QR code expire?</summary><p>No, once generated the image is static and works indefinitely.</p></details>
+<details class="faq-item"><summary>Is my data stored?</summary><p>The QR image is rendered by a third-party public API based on the text you enter; we don't store it ourselves.</p></details>
   </div>
 </section>
 
@@ -124,7 +347,86 @@
   </div>
 </footer>
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
-<script src="assets/js/common.js"></script>
+<script src="../assets/js/common.js"></script>
 
+<!-- *CRITICAL UPGRADE* - Integrated Advance QR Styling Library -->
+<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
+
+<script>
+// Global variable to hold the QR object
+let qrStyling;
+
+document.getElementById('genBtn').addEventListener('click', function(){
+  var txt = document.getElementById('txt').value.trim();
+  var out = document.getElementById('output');
+  var fg = document.getElementById('fgColor').value;
+  var bg = document.getElementById('bgColor').value;
+  var frameBg = document.getElementById('frameColor').value;
+
+  if(!txt){ 
+    out.innerHTML = '<div class="alert alert-warn">Please enter text or a URL first.</div>'; 
+    return; 
+  }
+
+  // Update CSS Variables based on pickers
+  document.documentElement.style.setProperty('--qr-frame-bg', frameBg);
+
+  // Render High-Resolution Frame Container
+  out.innerHTML = `
+    <div class="qr-preview-card">
+      <div class="qr-frame-container" style="background: ${bg}">
+        <div id="qrcode-canvas"></div>
+        <div class="qr-frame-text">SCAN ME</div>
+      </div>
+      <div class="download-group">
+        <button class="btn btn-primary btn-sm" id="downloadBtn">Download HD PNG</button>
+      </div>
+    </div>
+  `;
+
+  // *PREMIUM QR ENGINE CONFIGURATION*
+  qrStyling = new QRCodeStyling({
+    width: 250,
+    height: 250,
+    type: "canvas",
+    data: txt,
+    dotsOptions: {
+      color: fg,
+      type: "rounded" // This creates the stylized dots look
+    },
+    backgroundOptions: {
+      color: bg,
+    },
+    cornersSquareOptions: {
+      type: "extra-rounded", // Smooths the main corner boxes
+      color: fg
+    },
+    cornersDotOptions: {
+      type: "dot",
+      color: fg
+    },
+    qrOptions: {
+      typeNumber: 0,
+      mode: "Byte",
+      errorCorrectionLevel: "Q" // Higher error correction for reliable scanning
+    },
+    imageOptions: {
+      hideBackgroundDots: true,
+      imageSize: 0.4,
+      margin: 5
+    }
+  });
+
+  // Render the modern QR inside the frame
+  qrStyling.append(document.getElementById("qrcode-canvas"));
+
+  // Bind Canvas output to download button (High Quality)
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    if (qrStyling) {
+        qrStyling.download({ name: "toolsphere-qr", extension: "png" });
+    }
+  });
+});
+</script>
 </body>
 </html>

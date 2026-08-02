@@ -12,28 +12,44 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact | ToolSphere</title>
-<meta name="description" content="Contact ToolSphere.online for support, bug reports, tool suggestions or advertising enquiries.">
-<meta name="keywords" content="contact toolsphere, toolsphere support email">
+<title>Color Palette Generator | ToolSphere</title>
+<meta name="description" content="Generate a random, harmonious 5-color palette with copyable hex codes.">
+<meta name="keywords" content="color palette generator, free color palette generator, online color palette generator, design tool, toolsphere">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<link rel="canonical" href="https://toolsphere.online/contact">
-<meta property="og:title" content="Contact | ToolSphere">
-<meta property="og:url" content="https://toolsphere.online/contact">
-<meta property="og:description" content="Contact ToolSphere.online for support, bug reports, tool suggestions or advertising enquiries.">
+<link rel="canonical" href="https://toolsphere.online/tools/color-palette-generator">
+<meta property="og:title" content="Color Palette Generator | ToolSphere">
+<meta property="og:url" content="https://toolsphere.online/tools/color-palette-generator">
+<meta property="og:description" content="Generate a random, harmonious 5-color palette with copyable hex codes.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ToolSphere">
 <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Contact | ToolSphere">
-<meta name="twitter:description" content="Contact ToolSphere.online for support, bug reports, tool suggestions or advertising enquiries.">
+<meta name="twitter:title" content="Color Palette Generator | ToolSphere">
+<meta name="twitter:description" content="Generate a random, harmonious 5-color palette with copyable hex codes.">
 <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Color Palette Generator",
+  "url": "https://toolsphere.online/tools/color-palette-generator",
+  "description": "Generate a random, harmonious 5-color palette with copyable hex codes.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -48,8 +64,30 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Contact",
-      "item": "https://toolsphere.online/contact"
+      "name": "Tools",
+      "item": "https://toolsphere.online/tools"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Color Palette Generator",
+      "item": "https://toolsphere.online/tools/color-palette-generator"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I lock a color and regenerate the rest?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not yet in this version — regenerate the full palette until you find a set you like, then copy the hex codes you want to keep."
+      }
     }
   ]
 }
@@ -73,7 +111,7 @@
           <a href="/tools/sip-calculator">SIP Calculator</a>
           <a href="/tools/password-generator">Password Generator</a>
           <a href="/tools/qr-code-generator">QR Code Generator</a>
-          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 28 tools &rarr;</a>
+          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 27 tools &rarr;</a>
         </div>
       </div>
       <a href="/blog">Blog</a>
@@ -89,29 +127,37 @@
 </header>
 
 <section class="tool-header">
-  <div class="wrap center">
-    <span class="eyebrow">Get in touch</span>
-    <h1>Contact us</h1>
-    <p style="max-width:56ch;margin:0 auto;">Questions, bug reports, tool suggestions or advertising enquiries &mdash;
-    we'd love to hear from you.</p>
+  <div class="wrap">
+    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / Color Palette Generator</div>
+    <span class="eyebrow">Design</span>
+    <h1>Color Palette Generator</h1>
+    <p style="max-width:60ch;">Generate a random, harmonious 5-color palette with copyable hex codes.</p>
+    <div class="tool-badges"><span class="badge">Free</span><span class="badge">Instant</span><span class="badge">No signup</span></div>
+  </div>
+</section>
+<section class="workspace">
+  <div class="wrap">
+    
+    <div class="panel" style="grid-column:1/-1;">
+      <h2>Generate a palette</h2>
+      <button class="btn btn-primary" id="genBtn">Generate new palette</button>
+      <div id="output" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:20px;"></div>
+    </div>
+    
+  </div>
+</section>
+<div class="wrap"><div class="ad-slot">Ad space &mdash; 728&times;90</div></div>
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>About this tool</h2>
+    <p>Generate a random, harmonious 5-color palette with hex codes, one click at a time &mdash; useful for
+    quick mockups, moodboards or picking an accent color for a project.</p>
   </div>
 </section>
 <section>
-  <div class="wrap" style="max-width:560px;">
-    <div class="panel">
-      <h2>Email us directly</h2>
-      <p>The fastest way to reach us is email. We aim to reply within 2-3 business days.</p>
-      <a href="mailto:toolsphereweb@gmail.com" class="btn btn-primary btn-block">toolsphereweb@gmail.com</a>
-    </div>
-    <div class="panel" style="margin-top:20px;">
-      <h2>Send a message</h2>
-      <form onsubmit="event.preventDefault(); window.location.href='mailto:toolsphereweb@gmail.com?subject=' + encodeURIComponent(document.getElementById('csubject').value) + '&body=' + encodeURIComponent(document.getElementById('cmessage').value);">
-        <div class="field"><label for="cname">Name</label><input type="text" id="cname" required></div>
-        <div class="field"><label for="csubject">Subject</label><input type="text" id="csubject" required></div>
-        <div class="field"><label for="cmessage">Message</label><textarea id="cmessage" required style="min-height:140px;"></textarea></div>
-        <button type="submit" class="btn btn-primary btn-block">Open in email app</button>
-      </form>
-    </div>
+  <div class="wrap" style="max-width:820px;">
+    <h2>Frequently asked questions</h2>
+    <details class="faq-item"><summary>Can I lock a color and regenerate the rest?</summary><p>Not yet in this version &mdash; regenerate the full palette until you find a set you like, then copy the hex codes you want to keep.</p></details>
   </div>
 </section>
 
@@ -160,7 +206,35 @@
   </div>
 </footer>
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
-<script src="assets/js/common.js"></script>
-
+<script src="../assets/js/common.js"></script>
+<script>
+function hsl(h,s,l){ return 'hsl(' + h + ',' + s + '%,' + l + '%)'; }
+function hslToHex(h,s,l){
+  s/=100; l/=100;
+  var c=(1-Math.abs(2*l-1))*s, x=c*(1-Math.abs((h/60)%2-1)), m=l-c/2, r=0,g=0,b=0;
+  if(h<60){r=c;g=x;b=0;} else if(h<120){r=x;g=c;b=0;} else if(h<180){r=0;g=c;b=x;}
+  else if(h<240){r=0;g=x;b=c;} else if(h<300){r=x;g=0;b=c;} else {r=c;g=0;b=x;}
+  var toHex=function(v){ return Math.round((v+m)*255).toString(16).padStart(2,'0'); };
+  return '#' + toHex(r)+toHex(g)+toHex(b);
+}
+function generate(){
+  var out = document.getElementById('output');
+  out.innerHTML = '';
+  var base = Math.floor(Math.random()*360);
+  for(var i=0;i<5;i++){
+    var h = (base + i*36) % 360;
+    var s = 55 + Math.random()*30;
+    var l = 35 + i*8;
+    var hex = hslToHex(h,s,l);
+    var div = document.createElement('div');
+    div.innerHTML = '<div style="height:90px;border-radius:10px;background:' + hex + ';border:1px solid var(--border-soft);"></div>' +
+      '<div class="mono" style="text-align:center;margin-top:8px;font-size:.85rem;">' + hex + '</div>' +
+      '<button class="copy-btn" type="button" data-copy="' + hex + '" style="width:100%;margin-top:6px;">Copy</button>';
+    out.appendChild(div);
+  }
+}
+document.getElementById('genBtn').addEventListener('click', generate);
+generate();
+</script>
 </body>
 </html>
