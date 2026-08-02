@@ -26,333 +26,231 @@
   <link rel="stylesheet" href="../assets/css/style.css">
 
   <style>
+    
     /* =========================================================
-       PRO-UI ENGINE STYLES (ISOLATED & RESPONSIVE)
-       ========================================================= */
-    :root {
-      --ts-bg: #070a13;
-      --ts-card-bg: #0e1326;
-      --ts-card-border: rgba(255, 255, 255, 0.08);
-      --ts-accent-pink: #d946ef;
-      --ts-accent-blue: #3b82f6;
-      --ts-accent-cyan: #06b6d4;
-      --ts-accent-gradient: linear-gradient(135deg, #06b6d4, #d946ef);
-      --ts-text-main: #f8fafc;
-      --ts-text-muted: #94a3b8;
-    }
+     FORCE ISOLATED STYLES (PREVENTS STYLE.CSS INTERFERENCE)
+     ========================================================= */
+  :root {
+    --ts-bg: #070a13;
+    --ts-card-bg: #0e1326;
+    --ts-card-border: rgba(255, 255, 255, 0.08);
+    --ts-accent-pink: #d946ef;
+    --ts-accent-cyan: #06b6d4;
+    --ts-accent-gradient: linear-gradient(135deg, #06b6d4, #d946ef);
+    --ts-text-main: #f8fafc;
+    --ts-text-muted: #94a3b8;
+  }
 
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--ts-bg);
-      color: var(--ts-text-main);
-      margin: 0;
-      padding: 0;
-    }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    background-color: var(--ts-bg) !important;
+    color: var(--ts-text-main) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
-    .ts-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 16px 60px 16px;
-      box-sizing: border-box;
-    }
+  .ts-container {
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    padding: 20px 16px 60px 16px !important;
+    box-sizing: border-box !important;
+  }
 
-    /* Badges & Headers */
-    .ts-tool-badge {
-      display: inline-block;
-      background: rgba(217, 70, 239, 0.15);
-      color: var(--ts-accent-pink);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(217, 70, 239, 0.3);
-      margin-bottom: 12px;
-    }
+  .ts-tool-badge {
+    display: inline-block !important;
+    background: rgba(217, 70, 239, 0.15) !important;
+    color: var(--ts-accent-pink) !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(217, 70, 239, 0.3) !important;
+    margin-bottom: 12px !important;
+  }
 
-    .ts-hero-title {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1.25;
-      margin: 0 0 10px 0;
-    }
-    .ts-hero-title span {
-      background: var(--ts-accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+  .ts-hero-title {
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    margin: 0 0 10px 0 !important;
+  }
+  .ts-hero-title span {
+    background: var(--ts-accent-gradient) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
 
-    .ts-hero-subtitle {
-      font-size: 14px;
-      color: var(--ts-text-muted);
-      margin: 0 0 24px 0;
-      line-height: 1.5;
-    }
+  .ts-hero-subtitle {
+    font-size: 13px !important;
+    color: var(--ts-text-muted) !important;
+    margin: 0 0 20px 0 !important;
+  }
 
-    /* Feature Pills Bar */
-    .ts-features-bar {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      background: var(--ts-card-bg);
-      border: 1px solid var(--ts-card-border);
-      padding: 12px;
-      border-radius: 14px;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    .ts-feat-item {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ts-text-muted);
-    }
-    .ts-feat-item strong {
-      display: block;
-      color: var(--ts-text-main);
-      font-size: 13px;
-    }
-
-    /* Main Grid Wrapper */
+  .ts-app-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  @media (min-width: 850px) {
     .ts-app-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
+      display: grid !important;
+      grid-template-columns: 360px 1fr !important;
     }
-    @media (min-width: 900px) {
-      .ts-app-grid {
-        grid-template-columns: 380px 1fr;
-      }
-    }
+  }
 
-    /* Card Panels */
-    .ts-panel {
-      background: var(--ts-card-bg);
-      border: 1px solid var(--ts-card-border);
-      border-radius: 20px;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+  .ts-panel {
+    background: var(--ts-card-bg) !important;
+    border: 1px solid var(--ts-card-border) !important;
+    border-radius: 20px !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
 
-    /* Compact Stage Canvas Box */
-    .ts-stage-container {
-      width: 100%;
-      max-width: 250px;
-      aspect-ratio: 1 / 1;
-      margin: 0 auto;
-      position: relative;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #050811;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      cursor: grab;
-      touch-action: none;
-      border: 2px dashed rgba(255, 255, 255, 0.2);
-    }
-    .ts-stage-container:active {
-      cursor: grabbing;
-    }
+  /* STAGE BOX OVERRIDE FIX */
+  .ts-stage-container {
+    width: 240px !important;
+    height: 240px !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: #050811 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+    cursor: grab !important;
+    touch-action: none !important;
+    border: 2px dashed rgba(255, 255, 255, 0.2) !important;
+    outline: none !important;
+  }
 
-    #dpCanvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block;
-      border-radius: 50%;
-    }
+  #dpCanvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
 
-    /* Upload Overlay Indicator */
-    .ts-upload-prompt {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .ts-upload-icon {
-      width: 42px;
-      height: 42px;
-      background: rgba(217, 70, 239, 0.2);
-      color: var(--ts-accent-pink);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 6px;
-    }
+  .ts-drag-hint {
+    text-align: center !important;
+    font-size: 12px !important;
+    color: var(--ts-accent-cyan) !important;
+    font-weight: 600 !important;
+    margin: 12px 0 !important;
+  }
 
-    .ts-drag-hint {
-      text-align: center;
-      font-size: 12px;
-      color: var(--ts-accent-cyan);
-      font-weight: 600;
-      margin: 12px 0;
-    }
+  .ts-control-group {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+  }
 
-    /* Controls (Zoom & Buttons) */
-    .ts-control-group {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 14px;
-    }
-    .ts-control-label {
-      font-size: 12px;
-      color: var(--ts-text-muted);
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: block;
-    }
+  .ts-zoom-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
 
-    .ts-zoom-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .ts-btn-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      color: #fff;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  .ts-btn-circle {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    color: #fff !important;
+    cursor: pointer !important;
+  }
 
-    .ts-range-slider {
-      flex: 1;
-      accent-color: var(--ts-accent-cyan);
-      cursor: pointer;
-    }
+  .ts-range-slider {
+    flex: 1 !important;
+    accent-color: var(--ts-accent-cyan) !important;
+  }
 
-    .ts-btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
+  .ts-btn-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 12px !important;
+  }
 
-    .ts-btn-secondary {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--ts-card-border);
-      color: var(--ts-text-main);
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .ts-btn-secondary:hover {
-      background: rgba(255,255,255,0.1);
-    }
+  .ts-btn-secondary {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--ts-card-border) !important;
+    color: var(--ts-text-main) !important;
+    padding: 10px !important;
+    border-radius: 10px !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+  }
 
-    .ts-btn-download {
-      width: 100%;
-      background: var(--ts-accent-gradient);
-      color: #ffffff;
-      font-size: 15px;
-      font-weight: 800;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(217, 70, 239, 0.3);
-      transition: 0.2s;
-    }
-    .ts-btn-download:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+  .ts-btn-download {
+    width: 100% !important;
+    background: var(--ts-accent-gradient) !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    padding: 14px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+  }
 
-    /* Category Tabs */
-    .ts-tabs-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-    .ts-tab-btn {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--ts-card-border);
-      color: var(--ts-text-muted);
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-    .ts-tab-btn.active {
-      background: var(--ts-accent-pink);
-      color: #fff;
-      border-color: var(--ts-accent-pink);
-    }
+  /* RIGHT PANEL TABS & GRID FIX */
+  .ts-tabs-row {
+    display: flex !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
+    overflow-x: auto !important;
+  }
 
-    /* SCROLLABLE COMPACT FRAME GRID */
-    .ts-frames-scroll-container {
-      max-height: 380px;
-      overflow-y: auto;
-      padding-right: 6px;
-    }
+  .ts-tab-btn {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--ts-card-border) !important;
+    color: var(--ts-text-muted) !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
 
-    .ts-frames-scroll-container::-webkit-scrollbar {
-      width: 5px;
-    }
-    .ts-frames-scroll-container::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.02);
-      border-radius: 10px;
-    }
-    .ts-frames-scroll-container::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
-    }
+  .ts-tab-btn.active {
+    background: var(--ts-accent-pink) !important;
+    color: #fff !important;
+  }
 
-    .ts-frames-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-      gap: 12px;
-    }
+  .ts-frames-scroll-container {
+    max-height: 350px !important;
+    overflow-y: auto !important;
+    padding-right: 4px !important;
+  }
 
-    .ts-frame-item {
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      background-size: cover;
-      background-position: center;
-      background-color: #050811;
-      transition: 0.2s;
-    }
-    .ts-frame-item:hover, .ts-frame-item.active {
-      border-color: var(--ts-accent-cyan);
-      transform: scale(1.05);
-      box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
-    }
+  .ts-frames-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+    gap: 10px !important;
+  }
 
-    .ts-upload-btn-main {
-      display: block;
-      background: rgba(217, 70, 239, 0.15);
-      border: 1px dashed var(--ts-accent-pink);
-      color: var(--ts-accent-pink);
-      text-align: center;
-      padding: 12px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 16px;
-    }
-  </style>
+  .ts-frame-item {
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
+    border: 2px solid transparent !important;
+    cursor: pointer !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-color: #050811 !important;
+  }
+
+  .ts-frame-item.active {
+    border-color: var(--ts-accent-cyan) !important;
+  }
+</style>
+
 </head>
 <body>
 
