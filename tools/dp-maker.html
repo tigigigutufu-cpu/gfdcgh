@@ -452,9 +452,9 @@
   // -------------------------------------------------------------
   const frameFiles = {
     country: [
-      toolsphere-nobg(1).png",
-      toolsphere-nobg(2).png",
-      toolsphere-nobg(3).png"
+      "toolsphere-nobg(1).png",
+      "toolsphere-nobg(2).png",
+      "toolsphere-nobg(3).png"
     ],
     style: [
       
@@ -497,11 +497,16 @@
     
     const list = frameFiles[cat] || [];
 
+    if (list.length === 0) {
+      grid.innerHTML = '<p style="grid-column:1/-1;color:#667085;font-size:0.8rem;padding:10px 0;">No frames added in this category yet.</p>';
+      return;
+    }
+
     list.forEach(fileName => {
       const imgPath = `/assets/frames/${cat}/${fileName}`;
       const thumb = document.createElement('div');
       thumb.className = 'ts-dp-frame-item';
-      thumb.style.backgroundImage = `url('${imgPath}')`;
+      thumb.style.backgroundImage = `url('${encodeURI(imgPath)}')`;
 
       thumb.onclick = () => {
         document.querySelectorAll('.ts-dp-frame-item').forEach(t => t.classList.remove('active'));
@@ -515,12 +520,14 @@
 
   function selectFrame(path) {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
     img.onload = () => {
       currentFrameImg = img;
       renderCanvas();
     };
-    img.src = path;
+    img.onerror = () => {
+      console.error('Frame failed to load:', path);
+    };
+    img.src = encodeURI(path);
   }
 
   function renderCanvas() {
@@ -641,6 +648,7 @@
 
   // DOWNLOAD ENGINE
   document.getElementById('downloadBtn').addEventListener('click', function() {
+    if (!userImage) return;
     const link = document.createElement('a');
     link.download = 'toolsphere-profile-picture-hd.png';
     link.href = canvas.toDataURL('image/png', 1.0);
@@ -652,4 +660,3 @@
 </script>
 </body>
 </html>
-
