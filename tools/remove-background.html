@@ -304,7 +304,28 @@
     return { transparent: false, rgb: namedBgToRgb(v) };
   }
 
-  // Pure local background removal without any watermark canvas drawing
+  // AI PNG result ko user ke selected Color ke sath blend karne wala function
+  function applyBgToTransparentImage(imageSrc, bgChoice, callback) {
+    if (bgChoice.transparent) {
+      callback(imageSrc);
+      return;
+    }
+    var img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      var ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgb(' + bgChoice.rgb.join(',') + ')';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      callback(canvas.toDataURL('image/png'));
+    };
+    img.src = imageSrc;
+  }
+
+  // Pure local background removal (Fallback)
   function localRemoveBackground(img, bgChoice){
     var w = img.width, h = img.height;
     var canvas = document.createElement('canvas');
@@ -381,6 +402,7 @@
     out.innerHTML = '<div class="empty-state">Removing background, please wait...</div>';
 
     var chosen = bgSelect.value === 'custom' ? 'custom color ' + customPicker.value : bgSelect.value;
+    var bgChoice = currentBgChoice();
 
     fetch('/api/remove-bg', {
       method: 'POST',
@@ -390,17 +412,19 @@
     .then(function(res){ return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
     .then(function(result){
       if(result.ok && result.data.image && !result.data.fallback){
-        showResult(result.data.image, 'Background removed using connected AI provider.');
-        btn.disabled = false; btn.classList.remove('is-loading');
+        applyBgToTransparentImage(result.data.image, bgChoice, function(coloredResult){
+          showResult(coloredResult, 'Background removed using connected AI provider.');
+          btn.disabled = false; btn.classList.remove('is-loading');
+        });
         return;
       }
-      var finalSrc = localRemoveBackground(selectedImg, currentBgChoice());
+      var finalSrc = localRemoveBackground(selectedImg, bgChoice);
       showResult(finalSrc, 'Background removed using free built-in browser tool.');
       btn.disabled = false; btn.classList.remove('is-loading');
     })
     .catch(function(){
       try{
-        var finalSrc = localRemoveBackground(selectedImg, currentBgChoice());
+        var finalSrc = localRemoveBackground(selectedImg, bgChoice);
         showResult(finalSrc, 'Background removed using free built-in browser tool.');
       } catch(err){
         out.innerHTML = '<div class="alert alert-error">Something went wrong. Please try a different photo.</div>';
