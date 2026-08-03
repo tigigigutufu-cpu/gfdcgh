@@ -1,24 +1,15 @@
 export const config = { maxDuration: 60 };
 
-// /api/remove-bg.js — tries multiple background-removal providers in order.
-// Priority: Cloudflare AI (3 Rotating Keys from Vercel ENV) -> remove.bg -> RapidAPI -> Google Gemini -> fallback (client-side).
-
 // 1. Cloudflare Workers AI with 3 Rotating Keys
 async function tryCloudflareAI(imageBuffer) {
   const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
-  
-  // Vercel Environment Variables se 3 Keys uthayega
   const API_KEYS = [
     process.env.CLOUDFLARE_TOKEN_1,
     process.env.CLOUDFLARE_TOKEN_2,
     process.env.CLOUDFLARE_TOKEN_3
-  ].filter(Boolean); // Only keeps valid/non-empty keys
+  ].filter(Boolean);
 
-  if (!ACCOUNT_ID || API_KEYS.length === 0) {
-    return null;
-  }
-
-  // Randomly select 1 key out of available keys (Key Rotation)
+  if (!ACCOUNT_ID || API_KEYS.length === 0) return null;
   const randomKey = API_KEYS[Math.floor(Math.random() * API_KEYS.length)];
 
   const response = await fetch(
@@ -34,23 +25,41 @@ async function tryCloudflareAI(imageBuffer) {
   );
 
   if (!response.ok) return null;
-
   const arrayBuffer = await response.arrayBuffer();
   return { base64: Buffer.from(arrayBuffer).toString('base64'), mime: 'image/png' };
 }
 
-// 2. Remove.bg Provider
+// 2. Remove.bg Provider with 10 Rotating Keys (500 Free Credits!)
 async function tryRemoveBg(imageBuffer, mimeType) {
-  const key = process.env.REMOVE_BG_API_KEY;
-  if (!key) return null;
+  // Vercel se 10 alag-alag accounts ki remove.bg keys uthayega
+  const REMOVE_BG_KEYS = [
+    process.env.REMOVE_BG_KEY_1,
+    process.env.REMOVE_BG_KEY_2,
+    process.env.REMOVE_BG_KEY_3,
+    process.env.REMOVE_BG_KEY_4,
+    process.env.REMOVE_BG_KEY_5,
+    process.env.REMOVE_BG_KEY_6,
+    process.env.REMOVE_BG_KEY_7,
+    process.env.REMOVE_BG_KEY_8,
+    process.env.REMOVE_BG_KEY_9,
+    process.env.REMOVE_BG_KEY_10,
+  ].filter(Boolean);
+
+  if (REMOVE_BG_KEYS.length === 0) return null;
+
+  // Har request par random key select hogi taaki load balance rahe
+  const randomKey = REMOVE_BG_KEYS[Math.floor(Math.random() * REMOVE_BG_KEYS.length)];
+
   const form = new FormData();
   form.append('image_file', new Blob([imageBuffer], { type: mimeType }), 'image.png');
   form.append('size', 'auto');
+
   const r = await fetch('https://api.remove.bg/v1.0/removebg', {
     method: 'POST',
-    headers: { 'X-Api-Key': key },
+    headers: { 'X-Api-Key': randomKey },
     body: form,
   });
+
   if (!r.ok) return null;
   const arrayBuffer = await r.arrayBuffer();
   return { base64: Buffer.from(arrayBuffer).toString('base64'), mime: 'image/png' };
@@ -124,10 +133,10 @@ export default async function handler(req, res) {
   const mime = mimeType || 'image/jpeg';
 
   try {
-    // Priority 1: Cloudflare AI (Fastest & HD)
+    // Priority 1: Cloudflare AI
     let result = await tryCloudflareAI(buffer).catch(() => null);
 
-    // Priority 2: Remove.bg API
+    // Priority 2: Remove.bg API (10 Rotating Keys)
     if (!result) result = await tryRemoveBg(buffer, mime).catch(() => null);
 
     // Priority 3: RapidAPI
@@ -136,11 +145,11 @@ export default async function handler(req, res) {
     // Priority 4: Gemini AI
     if (!result) result = await tryGemini(image, mime, bg).catch(() => null);
 
-    // Fallback trigger if no provider works
+    // Fallback trigger
     if (!result) {
       return res.status(200).json({ 
         fallback: true, 
-        reason: 'No background-removal provider is configured or all failed — use local browser fallback.' 
+        reason: 'All cloud providers failed — use browser fallback.' 
       });
     }
 
@@ -148,7 +157,7 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(200).json({ 
       fallback: true, 
-      reason: 'Provider error — use local browser fallback.' 
+      reason: 'Provider error — use browser fallback.' 
     });
   }
 }
