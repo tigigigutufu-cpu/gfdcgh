@@ -1,16 +1,45 @@
 export const config = { maxDuration: 60 };
 
-// /api/remove-bg.js — tries multiple background-removal providers in order, whichever
-// key is configured first. If NONE are configured (or all fail), it returns a clear
-// "fallback" flag so the browser can run a free, local, client-side removal instead.
-//
-// Supported providers (set ANY ONE OR MORE as Vercel Environment Variables):
-//   REMOVE_BG_API_KEY   -> https://www.remove.bg              (api.remove.bg)
-//   RAPIDAPI_KEY         -> any "Remove Background" API on RapidAPI (also set RAPIDAPI_HOST)
-//   GOOGLE_API_KEY        -> Gemini image model (generativelanguage.googleapis.com)
-//
-// Order tried: remove.bg -> RapidAPI -> Google Gemini -> fallback (client-side).
+// /api/remove-bg.js — tries multiple background-removal providers in order.
+// Priority: Cloudflare AI (3 Rotating Keys from Vercel ENV) -> remove.bg -> RapidAPI -> Google Gemini -> fallback (client-side).
 
+// 1. Cloudflare Workers AI with 3 Rotating Keys
+async function tryCloudflareAI(imageBuffer) {
+  const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
+  
+  // Vercel Environment Variables se 3 Keys uthayega
+  const API_KEYS = [
+    process.env.CLOUDFLARE_TOKEN_1,
+    process.env.CLOUDFLARE_TOKEN_2,
+    process.env.CLOUDFLARE_TOKEN_3
+  ].filter(Boolean); // Only keeps valid/non-empty keys
+
+  if (!ACCOUNT_ID || API_KEYS.length === 0) {
+    return null;
+  }
+
+  // Randomly select 1 key out of available keys (Key Rotation)
+  const randomKey = API_KEYS[Math.floor(Math.random() * API_KEYS.length)];
+
+  const response = await fetch(
+    `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/@cf/briaai/rmbg-1.4`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${randomKey}`,
+        "Content-Type": "application/octet-stream",
+      },
+      body: imageBuffer,
+    }
+  );
+
+  if (!response.ok) return null;
+
+  const arrayBuffer = await response.arrayBuffer();
+  return { base64: Buffer.from(arrayBuffer).toString('base64'), mime: 'image/png' };
+}
+
+// 2. Remove.bg Provider
 async function tryRemoveBg(imageBuffer, mimeType) {
   const key = process.env.REMOVE_BG_API_KEY;
   if (!key) return null;
@@ -27,9 +56,10 @@ async function tryRemoveBg(imageBuffer, mimeType) {
   return { base64: Buffer.from(arrayBuffer).toString('base64'), mime: 'image/png' };
 }
 
+// 3. RapidAPI Provider
 async function tryRapidApi(imageBuffer, mimeType) {
   const key = process.env.RAPIDAPI_KEY;
-  const host = process.env.RAPIDAPI_HOST; // e.g. "background-removal6.p.rapidapi.com" (set to match your subscribed API)
+  const host = process.env.RAPIDAPI_HOST;
   if (!key || !host) return null;
   const form = new FormData();
   form.append('image', new Blob([imageBuffer], { type: mimeType }), 'image.png');
@@ -50,6 +80,7 @@ async function tryRapidApi(imageBuffer, mimeType) {
   return { base64: Buffer.from(arrayBuffer).toString('base64'), mime: contentType || 'image/png' };
 }
 
+// 4. Gemini Image Provider
 async function tryGemini(base64Image, mimeType, bg) {
   const key = process.env.GOOGLE_API_KEY;
   if (!key) return null;
@@ -73,6 +104,7 @@ async function tryGemini(base64Image, mimeType, bg) {
   return { base64: inline.data, mime: inline.mime_type || inline.mimeType || 'image/png' };
 }
 
+// Main Handler
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -92,16 +124,31 @@ export default async function handler(req, res) {
   const mime = mimeType || 'image/jpeg';
 
   try {
-    let result = await tryRemoveBg(buffer, mime).catch(() => null);
+    // Priority 1: Cloudflare AI (Fastest & HD)
+    let result = await tryCloudflareAI(buffer).catch(() => null);
+
+    // Priority 2: Remove.bg API
+    if (!result) result = await tryRemoveBg(buffer, mime).catch(() => null);
+
+    // Priority 3: RapidAPI
     if (!result) result = await tryRapidApi(buffer, mime).catch(() => null);
+
+    // Priority 4: Gemini AI
     if (!result) result = await tryGemini(image, mime, bg).catch(() => null);
 
+    // Fallback trigger if no provider works
     if (!result) {
-      return res.status(200).json({ fallback: true, reason: 'No background-removal provider is configured or all failed — use local browser fallback.' });
+      return res.status(200).json({ 
+        fallback: true, 
+        reason: 'No background-removal provider is configured or all failed — use local browser fallback.' 
+      });
     }
 
     return res.status(200).json({ image: `data:${result.mime};base64,${result.base64}` });
   } catch (err) {
-    return res.status(200).json({ fallback: true, reason: 'Provider error — use local browser fallback.' });
+    return res.status(200).json({ 
+      fallback: true, 
+      reason: 'Provider error — use local browser fallback.' 
+    });
   }
 }
