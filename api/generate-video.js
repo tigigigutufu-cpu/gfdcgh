@@ -1,7 +1,6 @@
 export const config = { maxDuration: 60 };
 
-// Same restricted-content blocklist used by generate-image.js, kept
-// consistent across all AI generation tools on the site.
+// Same restricted-content blocklist used by generate-image.js
 const BLOCKLIST = [
   'nude', 'naked', 'nsfw', 'porn', 'sex', 'sexy', 'seductive', 'topless',
   'bikini', 'lingerie', 'underwear', 'cleavage', 'erotic', 'fetish',
@@ -25,16 +24,50 @@ function sleep(ms) {
 }
 
 // ---------------------------------------------------------------
-// Each provider function returns { videoUrl, provider } on success,
-// throws an Error on failure, or returns null if that provider's
-// API key isn't configured (so auto-rotate can skip it silently).
+// Provider Functions
 // ---------------------------------------------------------------
+
+async function generateWithHuggingFace(prompt) {
+  if (!process.env.HUGGINGFACE_API_KEY) return null;
+
+  // Default model: Stable Video Diffusion or LTX-Video
+  const model = process.env.HUGGINGFACE_VIDEO_MODEL || 'stabilityai/stable-video-diffusion-img2vid-xt';
+
+  const res = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ inputs: prompt })
+  });
+
+  if (!res.ok) {
+    throw new Error(`Hugging Face: ${await res.text()}`);
+  }
+
+  // Hugging Face inference for media usually returns a blob or direct data URL / JSON
+  const contentType = res.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    const data = await res.json();
+    if (data.error) throw new Error(`Hugging Face: ${data.error}`);
+  }
+
+  const blob = await res.blob();
+  if (blob.size < 1000) {
+    throw new Error('Hugging Face: Invalid or empty video response returned.');
+  }
+
+  // Convert blob to base64 data url for direct frontend playback
+  const buffer = Buffer.from(await blob.arrayBuffer());
+  const base64Video = `data:video/mp4;base64,${buffer.toString('base64')}`;
+
+  return { videoUrl: base64Video, provider: 'Hugging Face' };
+}
 
 async function generateWithReplicate(prompt, deadline) {
   if (!process.env.REPLICATE_API_TOKEN) return null;
 
-  // Override with your preferred Replicate video model via env var.
-  // Default is a commonly used open text-to-video model on Replicate.
   const model = process.env.REPLICATE_VIDEO_MODEL || 'wavespeedai/wan-2.1-t2v-480p';
 
   const createRes = await fetch(`https://api.replicate.com/v1/models/${model}/predictions`, {
@@ -78,7 +111,6 @@ async function generateWithReplicate(prompt, deadline) {
 async function generateWithAlibaba(prompt, deadline) {
   if (!process.env.DASHSCOPE_API_KEY) return null;
 
-  // Override with your Model Studio Wan model name/region if different.
   const model = process.env.ALIBABA_VIDEO_MODEL || 'wan2.2-t2v-plus';
   const baseUrl = process.env.ALIBABA_DASHSCOPE_URL || 'https://dashscope-intl.aliyuncs.com/api/v1';
 
@@ -127,9 +159,6 @@ async function generateWithAlibaba(prompt, deadline) {
 async function generateWithDeepInfra(prompt) {
   if (!process.env.DEEPINFRA_API_KEY) return null;
   if (!process.env.DEEPINFRA_VIDEO_MODEL) {
-    // No safe default here -- DeepInfra's text-to-video model catalog
-    // changes over time. Set DEEPINFRA_VIDEO_MODEL in your environment
-    // to the exact model slug you enabled on your DeepInfra dashboard.
     throw new Error('DeepInfra: set DEEPINFRA_VIDEO_MODEL in your environment variables.');
   }
 
@@ -200,6 +229,7 @@ async function generateWithPiapi(prompt, deadline) {
 }
 
 const PROVIDERS = {
+  huggingface: generateWithHuggingFace,
   replicate: generateWithReplicate,
   alibaba: generateWithAlibaba,
   deepinfra: generateWithDeepInfra,
@@ -222,14 +252,13 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Restricted keywords detected in prompt.' });
   }
 
-  // Leave a small buffer before Vercel's own function timeout kills us.
   const deadline = Date.now() + 50000;
   const cleanPrompt = prompt.trim();
 
   const order =
     engine && engine !== 'auto' && PROVIDERS[engine]
       ? [engine]
-      : ['replicate', 'alibaba', 'deepinfra', 'piapi'];
+      : ['huggingface', 'replicate', 'alibaba', 'deepinfra', 'piapi'];
 
   const errors = [];
 
@@ -239,7 +268,6 @@ export default async function handler(req, res) {
       if (result) {
         return res.status(200).json({ success: true, videoUrl: result.videoUrl, provider: result.provider });
       }
-      // result === null means that provider's API key isn't configured; try the next one.
     } catch (err) {
       errors.push(`${name}: ${err.message}`);
       if (Date.now() >= deadline) break;
@@ -248,7 +276,7 @@ export default async function handler(req, res) {
 
   if (errors.length === 0) {
     return res.status(500).json({
-      error: 'No video provider API keys are configured. Set REPLICATE_API_TOKEN, DASHSCOPE_API_KEY, DEEPINFRA_API_KEY, and/or PIAPI_API_KEY in your Vercel Environment Variables.'
+      error: 'No video provider API keys are configured. Set HUGGINGFACE_API_KEY, REPLICATE_API_TOKEN, DASHSCOPE_API_KEY, DEEPINFRA_API_KEY, and/or PIAPI_API_KEY in your Vercel Environment Variables.'
     });
   }
 
