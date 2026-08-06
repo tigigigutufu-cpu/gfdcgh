@@ -49,12 +49,14 @@
     .wp-action-btn { background: rgba(10,14,31,0.85); border: 1px solid var(--border-soft); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: background 0.2s, color 0.2s; }
     .wp-action-btn:hover { background: var(--accent); color: #0A0E1F; border-color: var(--accent); }
     .wp-empty { grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 0.9rem; }
-    .wp-lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5,8,16,0.95); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 24px; box-sizing: border-box; }
+    
+    /* Fixed Lightbox CSS */
+    .wp-lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5,8,16,0.92); display: none; align-items: center; justify-content: center; z-index: 99999; padding: 20px; box-sizing: border-box; overflow-y: auto; }
     .wp-lightbox.active { display: flex; }
-    .wp-lightbox-inner { max-width: 420px; width: 100%; text-align: center; position: relative; }
-    .wp-lightbox-inner img { max-width: 100%; max-height: 65vh; border-radius: 12px; border: 1px solid var(--border-soft); object-fit: contain; }
+    .wp-lightbox-inner { max-width: 400px; width: 100%; text-align: center; position: relative; margin: auto; }
+    .wp-lightbox-inner img { width: 100%; max-height: 70vh; border-radius: 12px; border: 1px solid var(--border-soft); object-fit: contain; display: block; margin: 0 auto; }
     .wp-lightbox-actions { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-    .wp-lightbox-close { position: fixed; top: 20px; right: 24px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-soft); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10000; }
+    .wp-lightbox-close { position: fixed; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: 1px solid var(--border-soft); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100000; }
   </style>
 </head>
 <body>
@@ -172,7 +174,6 @@
   let activeCat = 'all';
   let searchQuery = '';
   let currentActiveWp = null;
-  let scrollPos = 0;
 
   function imgPath(file) {
     return encodeURI(`/assets/wallpapers/${file}`);
@@ -215,21 +216,16 @@
 
   function openLightbox(w) {
     currentActiveWp = w;
-    scrollPos = window.pageYOffset || document.documentElement.scrollTop;
-    
     lightboxImg.src = imgPath(w.file);
     lightboxImg.alt = w.title || 'Wallpaper preview';
     downloadBtn.href = imgPath(w.file);
     downloadBtn.setAttribute('download', w.file);
     
     lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
   }
 
   function closeLightbox() {
     lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-    window.scrollTo(0, scrollPos);
   }
 
   function shareWallpaper(w) {
