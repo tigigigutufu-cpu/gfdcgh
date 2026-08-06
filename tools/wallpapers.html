@@ -168,7 +168,7 @@
       gap: 6px;
     }
     .wp-action-btn {
-      background: rgba(10,14,31,0.8);
+      background: rgba(10,14,31,0.85);
       border: 1px solid var(--border-soft);
       color: #fff;
       padding: 6px 10px;
@@ -178,11 +178,17 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
+    }
+    .wp-action-btn.liked {
+      background: #ef4444;
+      border-color: #ef4444;
+      color: #fff;
     }
     .wp-action-btn:hover {
       background: var(--accent);
       color: #0A0E1F;
+      border-color: var(--accent);
     }
     .wp-empty {
       grid-column: 1/-1;
@@ -409,25 +415,82 @@
   let searchQuery = '';
   let currentActiveWp = null;
 
-  function getLikesData() {
+  // LocalStorage storage structures:
+  // ts_wp_likes_counts = { "wp1": 5, "wp2": 0, ... }
+  // ts_wp_user_liked = { "wp1": true, "wp2": false, ... }
+
+  function getLikesCounts() {
     try {
-      return JSON.parse(localStorage.getItem('ts_wp_likes') || '{}');
-    } catch(e) {
-      return {};
-    }
+      return JSON.parse(localStorage.getItem('ts_wp_likes_counts') || '{}');
+    } catch(e) { return {}; }
   }
 
-  function saveLikesData(data) {
-    localStorage.setItem('ts_wp_likes', JSON.stringify(data));
+  function saveLikesCounts(data) {
+    localStorage.setItem('ts_wp_likes_counts', JSON.stringify(data));
+  }
+
+  function getUserLikes() {
+    try {
+      return JSON.parse(localStorage.getItem('ts_wp_user_liked') || '{}');
+    } catch(e) { return {}; }
+  }
+
+  function saveUserLikes(data) {
+    localStorage.setItem('ts_wp_user_liked', JSON.stringify(data));
   }
 
   function imgPath(file) {
     return encodeURI(`/assets/wallpapers/${file}`);
   }
 
+  function toggleLike(wpId) {
+    let counts = getLikesCounts();
+    let userLiked = getUserLikes();
+
+    let currentCount = counts[wpId] || 0;
+    let isLiked = !!userLiked[wpId];
+
+    if (isLiked) {
+      // Unlike it
+      userLiked[wpId] = false;
+      counts[wpId] = Math.max(0, currentCount - 1);
+    } else {
+      // Like it
+      userLiked[wpId] = true;
+      counts[wpId] = currentCount + 1;
+    }
+
+    saveLikesCounts(counts);
+    saveUserLikes(userLiked);
+    renderGrid();
+
+    if (currentActiveWp && currentActiveWp.id === wpId) {
+      updateModalLikeState(currentActiveWp);
+    }
+  }
+
+  function updateModalLikeState(w) {
+    let counts = getLikesCounts();
+    let userLiked = getUserLikes();
+    let count = counts[w.id] || 0;
+    let isLiked = !!userLiked[w.id];
+
+    modalLikeCount.textContent = count;
+    if (isLiked) {
+      modalLikeBtn.classList.add('liked');
+      modalLikeBtn.style.background = "#ef4444";
+      modalLikeBtn.style.color = "#fff";
+    } else {
+      modalLikeBtn.classList.remove('liked');
+      modalLikeBtn.style.background = "";
+      modalLikeBtn.style.color = "";
+    }
+  }
+
   function renderGrid() {
     grid.innerHTML = '';
-    const likesData = getLikesData();
+    let counts = getLikesCounts();
+    let userLiked = getUserLikes();
 
     let list = wallpapers.filter(w => {
       let matchesCat = (activeCat === 'all' || w.cat === activeCat);
@@ -441,34 +504,27 @@
     }
 
     list.forEach(w => {
-      let likes = likesData[w.id] || 12; // Default base likes count
+      let likes = counts[w.id] || 0;
+      let isLiked = !!userLiked[w.id];
+
       const card = document.createElement('div');
       card.className = 'wp-card';
       card.innerHTML = `
         <span class="wp-badge">${w.cat}</span>
         <img src="${imgPath(w.file)}" alt="${w.title || 'Free HD wallpaper'}" loading="lazy">
         <div class="wp-card-actions">
-          <button class="wp-action-btn like-btn" data-id="${w.id}">❤️ ${likes}</button>
+          <button class="wp-action-btn like-btn ${isLiked ? 'liked' : ''}" data-id="${w.id}">❤️ ${likes}</button>
           <button class="wp-action-btn share-btn" data-file="${w.file}" data-title="${w.title}">🔗</button>
         </div>
       `;
 
-      // Image or card click opens lightbox
       card.querySelector('img').addEventListener('click', () => openLightbox(w));
 
-      // Like Button Event
       card.querySelector('.like-btn').addEventListener('click', (e) => {
         e.stopPropagation();
-        let currentLikes = getLikesData();
-        currentLikes[w.id] = (currentLikes[w.id] || 12) + 1;
-        saveLikesData(currentLikes);
-        renderGrid();
-        if(currentActiveWp && currentActiveWp.id === w.id) {
-          modalLikeCount.textContent = currentLikes[w.id];
-        }
+        toggleLike(w.id);
       });
 
-      // Share Button Event
       card.querySelector('.share-btn').addEventListener('click', (e) => {
         e.stopPropagation();
         shareWallpaper(w);
@@ -485,8 +541,7 @@
     downloadBtn.href = imgPath(w.file);
     downloadBtn.setAttribute('download', w.file);
     
-    let likesData = getLikesData();
-    modalLikeCount.textContent = likesData[w.id] || 12;
+    updateModalLikeState(w);
     lightbox.classList.add('active');
   }
 
@@ -506,11 +561,7 @@
 
   modalLikeBtn.addEventListener('click', () => {
     if(!currentActiveWp) return;
-    let currentLikes = getLikesData();
-    currentLikes[currentActiveWp.id] = (currentLikes[currentActiveWp.id] || 12) + 1;
-    saveLikesData(currentLikes);
-    modalLikeCount.textContent = currentLikes[currentActiveWp.id];
-    renderGrid();
+    toggleLike(currentActiveWp.id);
   });
 
   modalShareBtn.addEventListener('click', () => {
