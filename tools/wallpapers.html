@@ -42,21 +42,12 @@
     .wp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     @media (min-width: 768px) { .wp-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
     .wp-card { position: relative; border-radius: 12px; overflow: hidden; background: #0f172a; border: 1px solid var(--border-soft); aspect-ratio: 9 / 16; }
-    .wp-card img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; transition: transform 0.25s ease; }
-    .wp-card:hover img { transform: scale(1.03); }
+    .wp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .wp-card .wp-badge { position: absolute; top: 8px; left: 8px; background: rgba(10,14,31,0.75); color: var(--accent); font-size: 0.7rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; pointer-events: none; }
-    .wp-card-actions { position: absolute; bottom: 8px; right: 8px; display: flex; gap: 6px; }
-    .wp-action-btn { background: rgba(10,14,31,0.85); border: 1px solid var(--border-soft); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: background 0.2s, color 0.2s; }
+    .wp-card-actions { position: absolute; bottom: 8px; left: 8px; right: 8px; display: flex; gap: 6px; justify-content: center; }
+    .wp-action-btn { background: rgba(10,14,31,0.9); border: 1px solid var(--border-soft); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 4px; text-decoration: none; transition: background 0.2s, color 0.2s; white-space: nowrap; }
     .wp-action-btn:hover { background: var(--accent); color: #0A0E1F; border-color: var(--accent); }
     .wp-empty { grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 0.9rem; }
-    
-    /* Ultimate Rock-Solid Lightbox Fix */
-    .wp-lightbox { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5,8,16,0.96); display: none; align-items: center; justify-content: center; z-index: 99999; box-sizing: border-box; }
-    .wp-lightbox.active { display: flex; }
-    .wp-lightbox-inner { width: 90%; max-width: 360px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-    .wp-lightbox-inner img { width: 100%; max-height: 65vh; border-radius: 12px; border: 1px solid var(--border-soft); object-fit: contain; display: block; background: #000; }
-    .wp-lightbox-actions { margin-top: 14px; display: flex; gap: 10px; justify-content: center; width: 100%; }
-    .wp-lightbox-close { position: absolute; top: -45px; right: 0; background: rgba(255,255,255,0.1); border: 1px solid var(--border-soft); color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100000; }
   </style>
 </head>
 <body>
@@ -126,19 +117,34 @@
   </div>
 </section>
 
-<div class="wp-lightbox" id="wpLightbox">
-  <div class="wp-lightbox-inner">
-    <button class="wp-lightbox-close" id="wpLightboxClose">&times;</button>
-    <img id="wpLightboxImg" src="" alt="Wallpaper preview">
-    <div class="wp-lightbox-actions">
-      <a id="wpDownloadBtn" class="btn btn-primary btn-sm" href="#" download>📥 Download Wallpaper</a>
-      <button id="wpModalShareBtn" class="btn btn-ghost btn-sm">🔗 Share</button>
-    </div>
-  </div>
-</div>
-
 <footer class="site-footer">
   <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>ToolSphere</h3>
+        <p>Your ultimate platform for free web tools, generators, and converters. Fast, secure, and easy to use.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Popular Tools</h4>
+        <a href="/tools/dp-maker">Profile Picture Maker</a>
+        <a href="/tools/wallpapers">HD Wallpapers</a>
+        <a href="/tools/image-generator">AI Image Generator</a>
+        <a href="/tools/remove-background">Background Remover</a>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="/tools">All Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/faq">FAQ</a>
+        <a href="/about">About Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/contact">Contact Us</a>
+      </div>
+    </div>
     <div class="footer-bottom">
       <span>&copy; <span class="ts-year">2026</span> ToolSphere.online &mdash; All rights reserved.</span>
     </div>
@@ -165,16 +171,9 @@
   const grid = document.getElementById('wpGrid');
   const tabs = document.getElementById('wpTabs');
   const searchInput = document.getElementById('wpSearchInput');
-  const lightbox = document.getElementById('wpLightbox');
-  const lightboxImg = document.getElementById('wpLightboxImg');
-  const lightboxClose = document.getElementById('wpLightboxClose');
-  const downloadBtn = document.getElementById('wpDownloadBtn');
-  const modalShareBtn = document.getElementById('wpModalShareBtn');
 
   let activeCat = 'all';
   let searchQuery = '';
-  let currentActiveWp = null;
-  let scrollYPos = 0;
 
   function imgPath(file) {
     return encodeURI(`/assets/wallpapers/${file}`);
@@ -201,43 +200,17 @@
         <span class="wp-badge">${w.cat}</span>
         <img src="${imgPath(w.file)}" alt="${w.title || 'Free HD wallpaper'}" loading="lazy">
         <div class="wp-card-actions">
+          <a class="wp-action-btn" href="${imgPath(w.file)}" download>📥 Download</a>
           <button class="wp-action-btn share-btn" data-file="${w.file}" data-title="${w.title}">🔗 Share</button>
         </div>
       `;
 
-      card.querySelector('img').addEventListener('click', () => openLightbox(w));
-      card.querySelector('.share-btn').addEventListener('click', (e) => {
-        e.stopPropagation();
+      card.querySelector('.share-btn').addEventListener('click', () => {
         shareWallpaper(w);
       });
 
       grid.appendChild(card);
     });
-  }
-
-  function openLightbox(w) {
-    currentActiveWp = w;
-    scrollYPos = window.pageYOffset;
-    
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollYPos}px`;
-    document.body.style.width = '100%';
-
-    lightboxImg.src = imgPath(w.file);
-    lightboxImg.alt = w.title || 'Wallpaper preview';
-    downloadBtn.href = imgPath(w.file);
-    downloadBtn.setAttribute('download', w.file);
-    
-    lightbox.classList.add('active');
-  }
-
-  function closeLightbox() {
-    lightbox.classList.remove('active');
-    
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, scrollYPos);
   }
 
   function shareWallpaper(w) {
@@ -253,15 +226,6 @@
       alert('Wallpaper link copied to clipboard!');
     }
   }
-
-  modalShareBtn.addEventListener('click', () => {
-    if(currentActiveWp) shareWallpaper(currentActiveWp);
-  });
-
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
 
   searchInput.addEventListener('input', function() {
     searchQuery = this.value.trim().toLowerCase();
