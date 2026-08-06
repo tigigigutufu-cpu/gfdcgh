@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-KV0PV8JKTD');</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-KV0PV8JKTD');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Image Generator | ToolSphere</title>
@@ -22,21 +28,79 @@
 <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"AI Image Generator","url":"https://toolsphere.online/tools/image-generator","description":"Generate high quality images from text prompts effortlessly with custom ratio and negative prompts.","applicationCategory":"UtilitiesApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://toolsphere.online/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://toolsphere.online/tools"},{"@type":"ListItem","position":3,"name":"AI Image Generator","item":"https://toolsphere.online/tools/image-generator"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why was my prompt blocked?","acceptedAnswer":{"@type":"Answer","text":"Inappropriate, explicit, or restricted words are automatically blocked by our safety system."}},{"@type":"Question","name":"What is a Negative Prompt?","acceptedAnswer":{"@type":"Answer","text":"A negative prompt tells the AI what to exclude from your image (e.g., blur, extra fingers, dark lighting)."}},{"@type":"Question","name":"Are there any watermarks on generated images?","acceptedAnswer":{"@type":"Answer","text":"No. Images are completely clean and free of watermarks or logos."}}]}</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "AI Image Generator",
+  "url": "https://toolsphere.online/tools/image-generator",
+  "description": "Generate high quality images from text prompts effortlessly with custom ratio and negative prompts.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "All",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsphere.online/" },
+    { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsphere.online/tools" },
+    { "@type": "ListItem", "position": 3, "name": "AI Image Generator", "item": "https://toolsphere.online/tools/image-generator" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Why was my prompt blocked?", "acceptedAnswer": { "@type": "Answer", "text": "Inappropriate, explicit, or restricted words are automatically blocked by our safety system." } },
+    { "@type": "Question", "name": "What is a Negative Prompt?", "acceptedAnswer": { "@type": "Answer", "text": "A negative prompt tells the AI what to exclude from your image (e.g., blur, extra fingers, dark lighting)." } },
+    { "@type": "Question", "name": "Are there any watermarks on generated images?", "acceptedAnswer": { "@type": "Answer", "text": "No. Images are completely clean and free of watermarks or logos." } }
+  ]
+}
+</script>
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
     <a href="/" class="brand">ToolSphere</a>
     <nav class="main-nav" aria-label="Primary">
-      <div class="has-dropdown"><a href="/tools">Tools &#9662;</a><div class="dropdown"><a href="/tools/image-generator">AI Image Generator</a><a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 32 tools &rarr;</a></div></div>
-      <a href="/blog">Blog</a><a href="/faq">FAQ</a><a href="/about">About</a><a href="/contact">Contact</a>
+      <div class="has-dropdown">
+        <a href="/tools">Tools &#9662;</a>
+        <div class="dropdown">
+          <a href="/tools/dp-maker">Profile Picture Maker</a>
+          <a href="/tools/wallpapers">HD Wallpapers</a>
+          <a href="/tools/yt-seo-tag-generator">YouTube SEO Tag Generator</a>
+          <a href="/tools/insta-caption-generator">Instagram Caption Generator</a>
+          <a href="/tools/image-generator">AI Image Generator</a>
+          <a href="/tools/ai-video-generator">AI Video Generator</a>
+          <a href="/tools/image-enhancer">AI Image Enhancer</a>
+          <a href="/tools/remove-background">Background Remover</a>
+          <a href="/tools/image-resizer">Image Resizer</a>
+          <a href="/tools/image-to-pdf">Image to PDF</a>
+          <a href="/tools/resume-maker">Resume Maker</a>
+          <a href="/tools/gst-calculator">GST Calculator</a>
+          <a href="/tools/sip-calculator">SIP Calculator</a>
+          <a href="/tools/password-generator">Password Generator</a>
+          <a href="/tools/qr-code-generator">QR Code Generator</a>
+          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 32 tools &rarr;</a>
+        </div>
+      </div>
+      <a href="/blog">Blog</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
     </nav>
-    <div class="header-cta"><a href="/tools" class="btn btn-ghost btn-sm">All Tools</a><button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button></div>
+    <div class="header-cta">
+      <a href="/tools" class="btn btn-ghost btn-sm">All Tools</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    </div>
   </div>
 </header>
 
@@ -46,7 +110,7 @@
     <span class="eyebrow">AI</span>
     <h1>AI Image Generator</h1>
     <p style="max-width:60ch;">Generate stunning images from text prompts in seconds with custom styles and dimensions.</p>
-    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No Watermark</span><span class="badge">HD Quality</span></div>
+    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No Watermark</span><span class="badge">Advanced Controls</span></div>
   </div>
 </section>
 
@@ -55,13 +119,13 @@
     <div class="panel">
       <h2>Describe your image</h2>
       <div class="field"><label for="prompt">Prompt</label><textarea id="prompt" placeholder="e.g. a high detail supercar on mountain road, cinematic lighting"></textarea></div>
-      <div class="field"><label for="negativePrompt">Negative Prompt (Optional)</label><input type="text" id="negativePrompt" placeholder="e.g. blur, low quality, distorted face" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-card); color:var(--text);" /></div>
+      <div class="field"><label for="negativePrompt">Negative Prompt (Optional)</label><input type="text" id="negativePrompt" placeholder="e.g. blur, low quality, distorted face, extra limbs" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border); background:var(--bg-card); color:var(--text);" /></div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <div class="field"><label for="style">Style</label><select id="style"><option value="digital art">Digital art</option><option value="realistic photo">Realistic photo</option><option value="watercolor painting">Watercolor painting</option><option value="anime style">Anime style</option><option value="3d render">3D render</option></select></div>
         <div class="field"><label for="aspectRatio">Aspect Ratio</label><select id="aspectRatio"><option value="1:1">Square (1:1)</option><option value="9:16">Portrait (9:16)</option><option value="16:9">Landscape (16:9)</option></select></div>
       </div>
-      <div id="warnBox" style="margin-top:10px;"></div>
-      <button class="btn btn-primary btn-block" id="genBtn" type="button" style="margin-top:15px;">Generate image</button>
+      <div id="warnBox"></div>
+      <button class="btn btn-primary btn-block" id="genBtn">Generate image</button>
       <p class="hint" style="margin-top:12px;">Free to use, clean HD outputs with zero watermarks.</p>
     </div>
     <div class="panel center">
@@ -72,31 +136,60 @@
 </section>
 
 <div class="wrap"><div class="ad-slot">Ad space &mdash; 728&times;90</div></div>
-<section><div class="wrap" style="max-width:820px;"><h2>About this tool</h2><p>Describe a scene, select aspect ratios, add negative prompts to remove unwanted details, and generate high-quality images powered by advanced AI models.</p></div></section>
-<section><div class="wrap" style="max-width:820px;"><h2>Frequently asked questions</h2><details class="faq-item"><summary>Why was my prompt blocked?</summary><p>Inappropriate, explicit, or restricted words are automatically blocked by our safety system.</p></details><details class="faq-item"><summary>What is a Negative Prompt?</summary><p>A negative prompt tells the AI what to exclude from your image (e.g., blur, extra fingers, dark lighting).</p></details><details class="faq-item"><summary>Are there any watermarks on generated images?</summary><p>No. Images are completely clean and free of watermarks or logos.</p></details></div></section>
 
-<footer class="site-footer"><div class="wrap"><div class="footer-bottom"><span>&copy; <span class="ts-year">2026</span> ToolSphere.online &mdash; All rights reserved.</span><span>Made for creators, students & small businesses in India</span></div></div></footer>
-<script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent=new Date().getFullYear();});</script>
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>About this tool</h2>
+    <p>Describe a scene, select aspect ratios, add negative prompts to remove unwanted details, and generate high-quality images powered by advanced AI models.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>Frequently asked questions</h2>
+    <details class="faq-item"><summary>Why was my prompt blocked?</summary><p>Inappropriate, explicit, or restricted words are automatically blocked by our safety system.</p></details>
+    <details class="faq-item"><summary>What is a Negative Prompt?</summary><p>A negative prompt tells the AI what to exclude from your image (e.g., blur, extra fingers, dark lighting).</p></details>
+    <details class="faq-item"><summary>Are there any watermarks on generated images?</summary><p>No. Images are completely clean and free of watermarks or logos.</p></details>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px;">ToolSphere</div>
+        <p style="max-width:34ch;font-size:.88rem;">32+ free daily-use tools for creators, students and small businesses &mdash; YouTube, Instagram, finance, learning and more, all in one place.</p>
+        <p style="font-size:.82rem;">Contact: <a href="mailto:toolsphereweb@gmail.com" style="color:var(--accent)">toolsphereweb@gmail.com</a></p>
+      </div>
+      <div><h5>Popular Tools</h5><ul><li><a href="/tools/image-enhancer">AI Image Enhancer</a></li><li><a href="/tools/resume-maker">Resume Maker</a></li><li><a href="/tools/insta-caption-generator">Insta Caption Generator</a></li><li><a href="/tools/gst-calculator">GST Calculator</a></li><li><a href="/tools">View all tools &rarr;</a></li></ul></div>
+      <div><h5>Company</h5><ul><li><a href="/about">About Us</a></li><li><a href="/blog">Blog</a></li><li><a href="/faq">FAQ</a></li><li><a href="/contact">Contact</a></li></ul></div>
+      <div><h5>Legal</h5><ul><li><a href="/legal/privacy">Privacy Policy</a></li><li><a href="/legal/terms">Terms of Service</a></li><li><a href="/legal/disclaimer">Disclaimer</a></li><li><a href="/legal/cookies">Cookie Policy</a></li><li><a href="/legal/refund">Refund Policy</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>&copy; <span class="ts-year">2026</span> ToolSphere.online &mdash; All rights reserved.</span><span>Made for creators, students &amp; small businesses in India</span></div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
 <script src="../assets/js/safe-prompt.js"></script>
 <script>
-function validateAndCheckBan(t){
-  var banKey='ts_user_banned_until';
-  var now=Date.now();
-  var bannedUntil=localStorage.getItem(banKey);
-  if(bannedUntil && now < parseInt(bannedUntil,10)){
-    var m=Math.ceil((parseInt(bannedUntil,10)-now)/60000);
-    return {allowed:false,message:'Blocked for '+m+' min due to restricted words'};
+function validateAndCheckBan(promptText) {
+  var banTimeKey = 'ts_user_banned_until';
+  var strikeKey = 'ts_user_strikes';
+  var now = Date.now();
+  var bannedUntil = localStorage.getItem(banTimeKey);
+  if (bannedUntil && now < parseInt(bannedUntil, 10)) {
+    var remainingMinutes = Math.ceil((parseInt(bannedUntil, 10) - now) / (1000 * 60));
+    return { allowed: false, banned: true, message: 'You have been temporarily blocked for entering restricted content. Please try again in ' + remainingMinutes + ' minutes.' };
   }
-  var dirty=['nude','naked','nsfw','sex','porn','breast','dick','pussy','vagina','penis','boobs','erotic','strip','undress','hentai','fuck','kill','gore','blood','choot','gand','lund','bhosda','chut','muth','randi'];
-  var low=t.toLowerCase();
-  if(dirty.some(function(w){return new RegExp('\\b'+w+'\\b','i').test(low);})){
-    return {allowed:false,message:'Restricted keyword detected!'};
-  }
+  var dirtyWords = ['nude','naked','nsfw','sex','porn','breast','dick','pussy','vagina','penis','boobs','erotic','strip','undress','hentai','xrated','fuck','bitch','asshole','kill','gore','blood','choot','gand','lund','bhosda','chut','muth','randi','gaand','girl','girls','woman','women','lady','hot'];
+  var lowerPrompt = promptText.toLowerCase();
+  var isDirty = dirtyWords.some(function(word){var regex=new RegExp('\\b'+word+'\\b','i');return regex.test(lowerPrompt);});
+  if(isDirty){return {allowed:false,banned:false,message:'Warning (1/2): Inappropriate or restricted keywords detected!'};}
   return {allowed:true};
 }
 
-function executeGeneration(){
+function executeGeneration() {
   var raw=document.getElementById('prompt').value.trim();
   var style=document.getElementById('style').value;
   var aspectRatio=document.getElementById('aspectRatio').value;
@@ -104,22 +197,22 @@ function executeGeneration(){
   var warnBox=document.getElementById('warnBox');
   var genBtn=document.getElementById('genBtn');
   warnBox.innerHTML='';
-  if(!raw){warnBox.innerHTML='<div class="alert alert-error">Please enter a prompt.</div>';return;}
-  var chk=validateAndCheckBan(raw);
-  if(!chk.allowed){warnBox.innerHTML='<div class="alert alert-error">'+chk.message+'</div>';return;}
+  if(!raw){warnBox.innerHTML='<div class="alert alert-error">Please enter a prompt to generate an image.</div>';return;}
+  var safetyCheck=validateAndCheckBan(raw);
+  if(!safetyCheck.allowed){warnBox.innerHTML='<div class="alert alert-error">'+safetyCheck.message+'</div>';return;}
 
   genBtn.disabled=true;
   genBtn.textContent='Generating...';
-  out.innerHTML='<div class="empty-state">Generating your image... 2-3 sec</div>';
+  out.innerHTML='<div class="empty-state">Generating your clean image, please wait...</div>';
 
-  // AUTOMATIC MODEL = flux-schnell (0.002 wala - 500 img / 1 pollen)
+  // AUTOMATIC FLUX-SCHNELL MODEL (500 img / 1 pollen) - USER KO NAHI DIKHEGA
   var width=1024,height=1024;
-  if(aspectRatio==='9:16'){width=768;height=1365;}
-  if(aspectRatio==='16:9'){width=1365;height=768;}
-
-  var cleanPrompt=`raw photo, ${raw}, ${style}, highly detailed, sharp focus, 8k`;
-  var seed=Math.floor(Math.random()*99999999);
-  var imageUrl=`https://gen.pollinations.ai/image/${encodeURIComponent(cleanPrompt)}?model=flux&width=${width}&height=${height}&nologo=true&enhance=true&seed=${seed}`;
+  if(aspectRatio==='9:16'){width=768;height=1280;}
+  if(aspectRatio==='16:9'){width=1280;height=768;}
+  var cleanPrompt=`raw photo, ${raw}, ${style}, highly detailed, sharp focus, 8k, professional lighting`;
+  var seed=Math.floor(Math.random()*9999999);
+  // FREE ENDPOINT - NO API KEY NEEDED
+  var imageUrl=`https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?model=flux&width=${width}&height=${height}&seed=${seed}&nologo=true&enhance=true`;
 
   var img=new Image();
   img.crossOrigin="anonymous";
@@ -132,16 +225,13 @@ function executeGeneration(){
     d.innerHTML='<a class="btn btn-ghost btn-sm" href="'+imageUrl+'" target="_blank">Save image</a><button class="btn btn-primary btn-sm" id="regenBtn">🔄 Regenerate</button>';
     out.appendChild(d);
     document.getElementById('regenBtn').addEventListener('click',executeGeneration);
-    genBtn.disabled=false;
-    genBtn.textContent='Generate image';
+    genBtn.disabled=false; genBtn.textContent='Generate image';
   };
   img.onerror=function(){
-    out.innerHTML='<div class="alert alert-error">Failed to load image. Try again with different prompt.</div>';
-    genBtn.disabled=false;
-    genBtn.textContent='Generate image';
+    out.innerHTML='<div class="alert alert-error">Failed to generate. Please try again with different prompt.</div>';
+    genBtn.disabled=false; genBtn.textContent='Generate image';
   };
   img.src=imageUrl;
-  img.alt="AI Generated Image";
 }
 document.getElementById('genBtn').addEventListener('click',executeGeneration);
 </script>
