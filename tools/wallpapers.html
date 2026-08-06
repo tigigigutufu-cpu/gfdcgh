@@ -78,6 +78,23 @@
   </script>
 
   <style>
+    .wp-search-bar {
+      margin-bottom: 16px;
+    }
+    .wp-search-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      background: #0f172a;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .wp-search-input:focus {
+      border-color: var(--accent);
+    }
     .wp-tabs {
       display: flex;
       gap: 8px;
@@ -104,8 +121,13 @@
     }
     .wp-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
+    }
+    @media (min-width: 768px) {
+      .wp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
     }
     .wp-card {
       position: relative;
@@ -113,7 +135,6 @@
       overflow: hidden;
       background: #0f172a;
       border: 1px solid var(--border-soft);
-      cursor: pointer;
       aspect-ratio: 9 / 16;
     }
     .wp-card img {
@@ -121,10 +142,11 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      cursor: pointer;
       transition: transform 0.25s ease;
     }
     .wp-card:hover img {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
     .wp-card .wp-badge {
       position: absolute;
@@ -136,6 +158,31 @@
       font-weight: 700;
       padding: 3px 9px;
       border-radius: 20px;
+      pointer-events: none;
+    }
+    .wp-card-actions {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      display: flex;
+      gap: 6px;
+    }
+    .wp-action-btn {
+      background: rgba(10,14,31,0.8);
+      border: 1px solid var(--border-soft);
+      color: #fff;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+    .wp-action-btn:hover {
+      background: var(--accent);
+      color: #0A0E1F;
     }
     .wp-empty {
       grid-column: 1/-1;
@@ -147,7 +194,7 @@
     .wp-lightbox {
       position: fixed;
       inset: 0;
-      background: rgba(5,8,16,0.92);
+      background: rgba(5,8,16,0.95);
       display: none;
       align-items: center;
       justify-content: center;
@@ -162,15 +209,17 @@
     }
     .wp-lightbox-inner img {
       max-width: 100%;
-      max-height: 70vh;
+      max-height: 65vh;
       border-radius: 12px;
       border: 1px solid var(--border-soft);
+      object-fit: contain;
     }
     .wp-lightbox-actions {
       margin-top: 16px;
       display: flex;
       gap: 10px;
       justify-content: center;
+      flex-wrap: wrap;
     }
     .wp-lightbox-close {
       position: absolute;
@@ -235,6 +284,10 @@
 
 <section class="workspace">
   <div class="wrap" style="display:block;">
+    <div class="wp-search-bar">
+      <input type="text" id="wpSearchInput" class="wp-search-input" placeholder="🔍 Search wallpapers by name or category...">
+    </div>
+
     <div class="wp-tabs" id="wpTabs">
       <button class="wp-tab-btn active" data-cat="all">All</button>
       <button class="wp-tab-btn" data-cat="nature">Nature</button>
@@ -272,7 +325,9 @@
   <div class="wp-lightbox-inner">
     <img id="wpLightboxImg" src="" alt="Wallpaper preview">
     <div class="wp-lightbox-actions">
-      <a id="wpDownloadBtn" class="btn btn-primary btn-sm" href="#" download>Download Wallpaper</a>
+      <a id="wpDownloadBtn" class="btn btn-primary btn-sm" href="#" download>📥 Download Wallpaper</a>
+      <button id="wpModalLikeBtn" class="btn btn-ghost btn-sm">❤️ <span id="wpModalLikeCount">0</span></button>
+      <button id="wpModalShareBtn" class="btn btn-ghost btn-sm">🔗 Share</button>
     </div>
   </div>
 </div>
@@ -326,44 +381,45 @@
 <script src="../assets/js/common.js"></script>
 <script>
 (function(){
-  // -----------------------------------------------------------------
-  // ADD NEW WALLPAPERS HERE.
-  //
-  // Steps to add a wallpaper:
-  //   1. Upload the image file into the  assets/wallpapers/  folder
-  //      (same folder this file sits next to, one level up).
-  //   2. Add one line below with the EXACT filename (case-sensitive,
-  //      include the extension: .jpg / .jpeg / .png / .webp).
-  //   3. "cat" must be one of: nature, abstract, anime, space, minimal, dark
-  //      (matches the filter tabs above). Use whichever fits best.
-  //   4. "title" is just for the alt text / SEO -- keep it short.
-  //
-  // Example:
-  //   { file: "sunset-mountains-01.jpg", title: "Sunset Mountains", cat: "nature" },
-  //
-  // That's it -- no other code needs to change.
-  // -----------------------------------------------------------------
   const wallpapers = [
-     { file: "floating_island_sunrise.webp", title: "floating island", cat: "nature" },
-    { file: "cherry_blossom_sunset_street.webp", title: "cherry blossom", cat: "nature" },
-    { file: "astronaut_cosmic_vista.webp", title: "cosmic", cat: "space" },
-    { file: "futuristic_hypercar_sunset.webp", title: "hypercar", cat: "cars" },
-    { file: "frozen_crystal_kingdom.webp", title: "frozen kingdom", cat: "nature" },
-    { file: "cliffside_city_sunrise.webp", title: "cliffside city", cat: "mix" },
-     { file: "alpine_valley_dawn.webp", title: "alpine vally", cat: "nature" },
-     { file: "celestial_marble_observatory.webp", title: "celestil observatory", cat: "space" },
-    { file: "tropical_island_sunset.webp", title: "tropical island", cat: "nature" },
-    { file: "crystal_cavern_mirror_lake.webp", title: "crystal mirror lake", cat: "nature" },
+    { id: "wp1", file: "floating_island_sunrise.webp", title: "floating island sunrise", cat: "nature" },
+    { id: "wp2", file: "cherry_blossom_sunset_street.webp", title: "cherry blossom sunset", cat: "nature" },
+    { id: "wp3", file: "astronaut_cosmic_vista.webp", title: "astronaut cosmic vista", cat: "space" },
+    { id: "wp4", file: "futuristic_hypercar_sunset.webp", title: "futuristic hypercar", cat: "cars" },
+    { id: "wp5", file: "frozen_crystal_kingdom.webp", title: "frozen crystal kingdom", cat: "nature" },
+    { id: "wp6", file: "cliffside_city_sunrise.webp", title: "cliffside city sunrise", cat: "mix" },
+    { id: "wp7", file: "alpine_valley_dawn.webp", title: "alpine valley dawn", cat: "nature" },
+    { id: "wp8", file: "celestial_marble_observatory.webp", title: "celestial observatory", cat: "space" },
+    { id: "wp9", file: "tropical_island_sunset.webp", title: "tropical island sunset", cat: "nature" },
+    { id: "wp10", file: "crystal_cavern_mirror_lake.webp", title: "crystal mirror lake", cat: "nature" }
   ];
 
   const grid = document.getElementById('wpGrid');
   const tabs = document.getElementById('wpTabs');
+  const searchInput = document.getElementById('wpSearchInput');
   const lightbox = document.getElementById('wpLightbox');
   const lightboxImg = document.getElementById('wpLightboxImg');
   const lightboxClose = document.getElementById('wpLightboxClose');
   const downloadBtn = document.getElementById('wpDownloadBtn');
+  const modalLikeBtn = document.getElementById('wpModalLikeBtn');
+  const modalLikeCount = document.getElementById('wpModalLikeCount');
+  const modalShareBtn = document.getElementById('wpModalShareBtn');
 
   let activeCat = 'all';
+  let searchQuery = '';
+  let currentActiveWp = null;
+
+  function getLikesData() {
+    try {
+      return JSON.parse(localStorage.getItem('ts_wp_likes') || '{}');
+    } catch(e) {
+      return {};
+    }
+  }
+
+  function saveLikesData(data) {
+    localStorage.setItem('ts_wp_likes', JSON.stringify(data));
+  }
 
   function imgPath(file) {
     return encodeURI(`/assets/wallpapers/${file}`);
@@ -371,36 +427,104 @@
 
   function renderGrid() {
     grid.innerHTML = '';
-    const list = activeCat === 'all' ? wallpapers : wallpapers.filter(w => w.cat === activeCat);
+    const likesData = getLikesData();
+
+    let list = wallpapers.filter(w => {
+      let matchesCat = (activeCat === 'all' || w.cat === activeCat);
+      let matchesSearch = (w.title.toLowerCase().includes(searchQuery) || w.cat.toLowerCase().includes(searchQuery));
+      return matchesCat && matchesSearch;
+    });
 
     if (list.length === 0) {
-      grid.innerHTML = '<p class="wp-empty">No wallpapers in this category yet -- check back soon!</p>';
+      grid.innerHTML = '<p class="wp-empty">No wallpapers found matching your search. Check back soon!</p>';
       return;
     }
 
     list.forEach(w => {
+      let likes = likesData[w.id] || 12; // Default base likes count
       const card = document.createElement('div');
       card.className = 'wp-card';
       card.innerHTML = `
         <span class="wp-badge">${w.cat}</span>
         <img src="${imgPath(w.file)}" alt="${w.title || 'Free HD wallpaper'}" loading="lazy">
+        <div class="wp-card-actions">
+          <button class="wp-action-btn like-btn" data-id="${w.id}">❤️ ${likes}</button>
+          <button class="wp-action-btn share-btn" data-file="${w.file}" data-title="${w.title}">🔗</button>
+        </div>
       `;
-      card.addEventListener('click', () => openLightbox(w));
+
+      // Image or card click opens lightbox
+      card.querySelector('img').addEventListener('click', () => openLightbox(w));
+
+      // Like Button Event
+      card.querySelector('.like-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        let currentLikes = getLikesData();
+        currentLikes[w.id] = (currentLikes[w.id] || 12) + 1;
+        saveLikesData(currentLikes);
+        renderGrid();
+        if(currentActiveWp && currentActiveWp.id === w.id) {
+          modalLikeCount.textContent = currentLikes[w.id];
+        }
+      });
+
+      // Share Button Event
+      card.querySelector('.share-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        shareWallpaper(w);
+      });
+
       grid.appendChild(card);
     });
   }
 
   function openLightbox(w) {
+    currentActiveWp = w;
     lightboxImg.src = imgPath(w.file);
     lightboxImg.alt = w.title || 'Wallpaper preview';
     downloadBtn.href = imgPath(w.file);
     downloadBtn.setAttribute('download', w.file);
+    
+    let likesData = getLikesData();
+    modalLikeCount.textContent = likesData[w.id] || 12;
     lightbox.classList.add('active');
   }
+
+  function shareWallpaper(w) {
+    const shareData = {
+      title: 'Free HD Wallpaper - ' + w.title,
+      text: 'Check out this amazing free HD/4K wallpaper on ToolSphere!',
+      url: window.location.origin + imgPath(w.file)
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(shareData.url);
+      alert('Wallpaper link copied to clipboard!');
+    }
+  }
+
+  modalLikeBtn.addEventListener('click', () => {
+    if(!currentActiveWp) return;
+    let currentLikes = getLikesData();
+    currentLikes[currentActiveWp.id] = (currentLikes[currentActiveWp.id] || 12) + 1;
+    saveLikesData(currentLikes);
+    modalLikeCount.textContent = currentLikes[currentActiveWp.id];
+    renderGrid();
+  });
+
+  modalShareBtn.addEventListener('click', () => {
+    if(currentActiveWp) shareWallpaper(currentActiveWp);
+  });
 
   lightboxClose.addEventListener('click', () => lightbox.classList.remove('active'));
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) lightbox.classList.remove('active');
+  });
+
+  searchInput.addEventListener('input', function() {
+    searchQuery = this.value.trim().toLowerCase();
+    renderGrid();
   });
 
   tabs.querySelectorAll('.wp-tab-btn').forEach(btn => {
