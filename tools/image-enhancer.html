@@ -33,6 +33,68 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
+<style>
+  /* Before/After Comparison Slider Styles */
+  .img-compare-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    user-select: none;
+    margin: 0 auto 14px;
+  }
+  .img-compare-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .img-compare-after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    width: 50%;
+  }
+  .img-compare-after img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    max-width: none;
+  }
+  .img-compare-slider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: #43E8D8;
+    cursor: ew-resize;
+    z-index: 10;
+  }
+  .img-compare-slider::after {
+    content: '↔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #0A0E1F;
+    color: #43E8D8;
+    border: 2px solid #43E8D8;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+</style>
 
 <script type="application/ld+json">
 {
@@ -242,12 +304,12 @@
   var btn = document.getElementById('enhanceBtn');
   var out = document.getElementById('output');
   var warnBox = document.getElementById('warnBox');
-  var selectedImg = null, selectedBase64 = null, selectedMime = null;
+  var selectedImg = null, selectedBase64 = null, selectedMime = null, originalDataUrl = null;
 
   fileInput.addEventListener('change', function(){
     var file = fileInput.files[0];
     warnBox.innerHTML = '';
-    selectedImg = null; selectedBase64 = null;
+    selectedImg = null; selectedBase64 = null; originalDataUrl = null;
     if(!file){ btn.disabled = true; return; }
     if(file.size > 8 * 1024 * 1024){
       warnBox.innerHTML = '<div class="alert alert-warn">Please choose an image under 8MB.</div>';
@@ -256,6 +318,7 @@
     selectedMime = file.type || 'image/jpeg';
     var reader = new FileReader();
     reader.onload = function(){
+      originalDataUrl = reader.result;
       selectedBase64 = reader.result.split(',')[1];
       var img = new Image();
       img.onload = function(){
@@ -268,7 +331,7 @@
     reader.readAsDataURL(file);
   });
 
-  // Balanced & Smooth Sharpening Filter (Removes blur without harsh artifacts)
+  // Balanced & Smooth Sharpening Filter
   function sharpen(ctx, w, h, amount){
     var src = ctx.getImageData(0, 0, w, h);
     var srcData = src.data;
@@ -304,7 +367,7 @@
     ctx.putImageData(outImg, 0, 0);
   }
 
-  // Soft & Clean Color & Clarity Boost (No blur/pixelation)
+  // Soft & Clean Color & Clarity Boost
   function autoEnhanceColors(ctx, w, h){
     var imgData = ctx.getImageData(0, 0, w, h);
     var d = imgData.data;
@@ -326,7 +389,7 @@
     ctx.putImageData(imgData, 0, 0);
   }
 
-  // Pure local enhancement (Optimized for sharpness and clarity)
+  // Pure local enhancement
   function runLocalEnhance(){
     var canvas = document.createElement('canvas');
     var scale = selectedImg.width < 1200 ? 1.5 : 1.2;
@@ -344,10 +407,68 @@
     return canvas.toDataURL('image/png', 1.0);
   }
 
+  // Initialize Before/After Interactive Slider Logic
+  function initCompareSlider(){
+    var container = document.getElementById('compareContainer');
+    if(!container) return;
+    var slider = container.querySelector('.img-compare-slider');
+    var afterDiv = container.querySelector('.img-compare-after');
+    var isDragging = false;
+
+    function trackLocation(e){
+      var rect = container.getBoundingClientRect();
+      var position = 0;
+      var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      position = clientX - rect.left;
+      
+      if(position < 0) position = 0;
+      if(position > rect.width) position = rect.width;
+      
+      var percent = (position / rect.width) * 100;
+      slider.style.left = percent + '%';
+      afterDiv.style.width = percent + '%';
+    }
+
+    slider.addEventListener('mousedown', function(e){ isDragging = true; e.preventDefault(); });
+    window.addEventListener('mouseup', function(){ isDragging = false; });
+    window.addEventListener('mousemove', function(e){ if(!isDragging) return; trackLocation(e); });
+
+    slider.addEventListener('touchstart', function(e){ isDragging = true; e.preventDefault(); });
+    window.addEventListener('touchend', function(){ isDragging = false; });
+    window.addEventListener('touchmove', function(e){ if(!isDragging) return; trackLocation(e); });
+
+    container.addEventListener('click', function(e){
+      trackLocation(e);
+    });
+
+    // Make sure after image width matches container width proportionally
+    var afterImg = afterDiv.querySelector('img');
+    var beforeImg = container.querySelector('.img-compare-before');
+    function resizeImages(){
+      afterImg.style.width = container.offsetWidth + 'px';
+    }
+    window.addEventListener('resize', resizeImages);
+    setTimeout(resizeImages, 100);
+  }
+
   function showResult(finalSrc, note){
-    out.innerHTML = '<img src="' + finalSrc + '" alt="Enhanced photo" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;max-width:100%;">' +
-      '<a class="btn btn-ghost btn-sm" href="' + finalSrc + '" download="toolsphere-enhanced.png">Save image</a>' +
-      (note ? '<p class="hint" style="margin-top:10px;">' + note + '</p>' : '');
+    out.innerHTML = `
+      <div class="img-compare-container" id="compareContainer">
+        <div class="img-compare-before">
+          <img src="${originalDataUrl}" alt="Original photo">
+        </div>
+        <div class="img-compare-after" style="width: 50%;">
+          <img src="${finalSrc}" alt="Enhanced photo">
+        </div>
+        <div class="img-compare-slider" style="left: 50%;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <a class="btn btn-ghost btn-sm" href="${finalSrc}" download="toolsphere-enhanced.png">Save image</a>
+        <span style="font-size:12px;color:var(--text-muted);">&larr; Drag slider to compare &rarr;</span>
+      </div>
+      ${note ? '<p class="hint" style="margin-top:8px;">' + note + '</p>' : ''}
+    `;
+    initCompareSlider();
   }
 
   btn.addEventListener('click', function(){
