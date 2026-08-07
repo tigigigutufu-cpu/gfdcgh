@@ -1,4 +1,4 @@
-export const config = { maxDuration: 30 };
+export const config = { maxDuration: 40 };
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
       throw new Error('Gemini returned an empty response.');
     }
 
-    return res.status(200).json({ success: true, prompt: text.trim(), provider: 'Gemini 1.5 Flash' });
+    return res.status(200).json({ success: true, prompt: text.trim(), provider: 'gemini-2.5-flash' });
 
   } catch (err) {
     return res.status(502).json({
