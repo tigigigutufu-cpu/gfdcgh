@@ -268,13 +268,17 @@
     reader.readAsDataURL(file);
   });
 
-  // Sharpening convolution filter
+  // Balanced & Smooth Sharpening Filter (Removes blur without harsh artifacts)
   function sharpen(ctx, w, h, amount){
     var src = ctx.getImageData(0, 0, w, h);
     var srcData = src.data;
     var outImg = ctx.createImageData(w, h);
     var outData = outImg.data;
-    var kernel = [0, -1, 0, -1, 5, -1, 0, -1, 0];
+    var kernel = [
+      -1, -1, -1,
+      -1,  9, -1,
+      -1, -1, -1
+    ];
     var mix = amount;
     for(var y = 0; y < h; y++){
       for(var x = 0; x < w; x++){
@@ -300,22 +304,17 @@
     ctx.putImageData(outImg, 0, 0);
   }
 
-  // Auto contrast & brightness boost
+  // Soft & Clean Color & Clarity Boost (No blur/pixelation)
   function autoEnhanceColors(ctx, w, h){
     var imgData = ctx.getImageData(0, 0, w, h);
     var d = imgData.data;
-    var min = 255, max = 0;
-    for(var i = 0; i < d.length; i += 4){
-      var lum = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
-      if(lum < min) min = lum;
-      if(lum > max) max = lum;
-    }
-    var range = Math.max(1, max - min);
-    var contrastBoost = 1.12, saturationBoost = 1.12, brightnessLift = 6;
+    var contrastBoost = 1.08; 
+    var saturationBoost = 1.10; 
+    var brightnessLift = 3;
+
     for(var j = 0; j < d.length; j += 4){
       for(var c = 0; c < 3; c++){
         var v = d[j + c];
-        v = ((v - min) / range) * 255;
         v = (v - 128) * contrastBoost + 128 + brightnessLift;
         d[j + c] = Math.max(0, Math.min(255, v));
       }
@@ -327,20 +326,22 @@
     ctx.putImageData(imgData, 0, 0);
   }
 
-  // Pure local enhancement (No watermark appended)
+  // Pure local enhancement (Optimized for sharpness and clarity)
   function runLocalEnhance(){
     var canvas = document.createElement('canvas');
-    var scale = selectedImg.width < 900 ? 1.4 : 1;
+    var scale = selectedImg.width < 1200 ? 1.5 : 1.2;
     var w = Math.round(selectedImg.width * scale);
     var h = Math.round(selectedImg.height * scale);
     canvas.width = w; canvas.height = h;
     var ctx = canvas.getContext('2d');
+    
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
+    
     ctx.drawImage(selectedImg, 0, 0, w, h);
     autoEnhanceColors(ctx, w, h);
-    sharpen(ctx, w, h, 0.55);
-    return canvas.toDataURL('image/png');
+    sharpen(ctx, w, h, 0.35);
+    return canvas.toDataURL('image/png', 1.0);
   }
 
   function showResult(finalSrc, note){
