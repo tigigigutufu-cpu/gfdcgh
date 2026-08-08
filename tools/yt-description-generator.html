@@ -13,20 +13,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YouTube Description Generator | ToolSphere</title>
-<meta name="description" content="Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action.">
+<meta name="description" content="Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action using AI.">
 <meta name="keywords" content="youtube description generator, free youtube description generator, online youtube description generator, youtube tool, toolsphere">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="https://toolsphere.online/tools/yt-description-generator">
 <meta property="og:title" content="YouTube Description Generator | ToolSphere">
 <meta property="og:url" content="https://toolsphere.online/tools/yt-description-generator">
-<meta property="og:description" content="Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action.">
+<meta property="og:description" content="Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action using AI.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ToolSphere">
 <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="YouTube Description Generator | ToolSphere">
-<meta name="twitter:description" content="Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action.">
+<meta name="twitter:description" content="Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action using AI.">
 <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
@@ -145,8 +145,8 @@
     <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / YouTube Description Generator</div>
     <span class="eyebrow">YouTube</span>
     <h1>YouTube Description Generator</h1>
-    <p style="max-width:60ch;">Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action.</p>
-    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No signup</span><span class="badge">Instant</span></div>
+    <p style="max-width:60ch;">Auto-build an SEO-friendly YouTube video description with timestamps, hashtags and a call to action using AI.</p>
+    <div class="tool-badges"><span class="badge">AI Powered</span><span class="badge">No signup</span><span class="badge">Instant</span></div>
   </div>
 </section>
 <section class="workspace">
@@ -198,7 +198,7 @@
           <li><a href="/tools/resume-maker">Resume Maker</a></li>
           <li><a href="/tools/insta-caption-generator">Insta Caption Generator</a></li>
           <li><a href="/tools/gst-calculator">GST Calculator</a></li>
-          <li><a href="/tools">View all tools &rarr;</a></li>
+          <li><a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all tools &rarr;</a></li>
         </ul>
       </div>
       <div>
@@ -230,26 +230,61 @@
 <script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
 <script src="../assets/js/common.js"></script>
 <script>
-document.getElementById('genBtn').addEventListener('click', function(){
+document.getElementById('genBtn').addEventListener('click', async function(){
   var topic = document.getElementById('topic').value.trim();
   var summary = document.getElementById('summary').value.trim();
-  var hashtags = document.getElementById('hashtags').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
+  var hashtagsStr = document.getElementById('hashtags').value.trim();
   var social = document.getElementById('social').value.trim();
   var out = document.getElementById('output');
-  if(!topic){ out.innerHTML = '<div class="alert alert-warn">Please enter a video topic first.</div>'; return; }
-  var lines = [];
-  lines.push((summary || ('In this video, we cover ' + topic + '.')));
-  lines.push('');
-  lines.push('Timestamps:');
-  lines.push('00:00 Intro');
-  lines.push('00:30 ' + topic);
-  lines.push('05:00 Key takeaways');
-  lines.push('');
-  if(social) lines.push('Follow us: ' + social);
-  lines.push('');
-  if(hashtags.length) lines.push(hashtags.map(function(h){return '#' + h.replace(/\s+/g,'');}).join(' '));
-  var text = lines.join('\n');
-  out.innerHTML = '<div class="output-item"><div class="txt" style="white-space:pre-wrap;">' + text.replace(/</g,'&lt;') + '</div><button class="copy-btn" type="button" data-copy="' + text.replace(/"/g,'&quot;') + '">Copy</button></div>';
+  
+  if(!topic){ 
+    out.innerHTML = '<div class="alert alert-warn">Please enter a video topic first.</div>'; 
+    return; 
+  }
+
+  out.innerHTML = '<div class="empty-state">Generating SEO YouTube description with AI...</div>';
+
+  // Fallback builder function (purana logic)
+  function getFallbackDescription() {
+    var hashtags = hashtagsStr.split(',').map(function(s){return s.trim();}).filter(Boolean);
+    var lines = [];
+    lines.push((summary || ('In this video, we cover ' + topic + '.')));
+    lines.push('');
+    lines.push('Timestamps:');
+    lines.push('00:00 Intro');
+    lines.push('00:30 ' + topic);
+    lines.push('05:00 Key takeaways');
+    lines.push('');
+    if(social) lines.push('Follow us: ' + social);
+    lines.push('');
+    if(hashtags.length) lines.push(hashtags.map(function(h){return '#' + h.replace(/\s+/g,'');}).join(' '));
+    return lines.join('\n');
+  }
+
+  // API keys list support (GEMINI_API_KEY and GEMINI_API_KEY_1)
+  // Backend env variables ko client par fetch karne ke liye aap apna API endpoint ya environment pass kar sakte hain.
+  // Yahan hum direct check kar rahe hain agar backend API route available ho ya keys config ho.
+  try {
+    var response = await fetch('/api/generate-yt-description', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: topic, summary: summary, hashtags: hashtagsStr, social: social })
+    });
+    
+    if (response.ok) {
+      var data = await response.json();
+      if (data && data.description) {
+        var text = data.description;
+        out.innerHTML = '<div class="output-item"><div class="txt" style="white-space:pre-wrap;">' + text.replace(/</g,'&lt;') + '</div><button class="copy-btn" type="button" data-copy="' + text.replace(/"/g,'&quot;') + '">Copy</button></div>';
+        return;
+      }
+    }
+    throw new Error('API fallback');
+  } catch (err) {
+    // Agar serverless API route nahi hai, toh direct browser fallback use hoga
+    var text = getFallbackDescription();
+    out.innerHTML = '<div class="output-item"><div class="txt" style="white-space:pre-wrap;">' + text.replace(/</g,'&lt;') + '</div><button class="copy-btn" type="button" data-copy="' + text.replace(/"/g,'&quot;') + '">Copy</button></div>';
+  }
 });
 </script>
 </body>
