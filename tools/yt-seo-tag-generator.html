@@ -13,20 +13,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YouTube SEO Tag Generator | ToolSphere</title>
-<meta name="description" content="Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche.">
+<meta name="description" content="Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche using AI.">
 <meta name="keywords" content="youtube seo tag generator, free youtube seo tag generator, online youtube seo tag generator, youtube tool, toolsphere">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="https://toolsphere.online/tools/yt-seo-tag-generator">
 <meta property="og:title" content="YouTube SEO Tag Generator | ToolSphere">
 <meta property="og:url" content="https://toolsphere.online/tools/yt-seo-tag-generator">
-<meta property="og:description" content="Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche.">
+<meta property="og:description" content="Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche using AI.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ToolSphere">
 <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="YouTube SEO Tag Generator | ToolSphere">
-<meta name="twitter:description" content="Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche.">
+<meta name="twitter:description" content="Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche using AI.">
 <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
 <meta name="theme-color" content="#0A0E1F">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
@@ -153,8 +153,8 @@
     <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / YouTube SEO Tag Generator</div>
     <span class="eyebrow">YouTube</span>
     <h1>YouTube SEO Tag Generator</h1>
-    <p style="max-width:60ch;">Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche.</p>
-    <div class="tool-badges"><span class="badge">Free</span><span class="badge">No signup</span><span class="badge">Instant</span></div>
+    <p style="max-width:60ch;">Generate a ready-to-paste list of SEO-friendly YouTube tags from your video topic and niche using AI.</p>
+    <div class="tool-badges"><span class="badge">AI Powered</span><span class="badge">No signup</span><span class="badge">Instant</span></div>
   </div>
 </section>
 <section class="workspace">
@@ -269,18 +269,47 @@
     "Beauty": ["makeup tutorial", "skincare", "beauty tips"],
     "Music": ["music video", "new song", "cover"]
   };
-  document.getElementById('genBtn').addEventListener('click', function(){
+
+  document.getElementById('genBtn').addEventListener('click', async function(){
     var topic = document.getElementById('topic').value.trim();
     var niche = document.getElementById('niche').value;
     var extra = document.getElementById('extra').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
     var out = document.getElementById('output');
+    
     if(!topic){ out.innerHTML = '<div class="alert alert-warn">Please enter a video topic first.</div>'; return; }
-    var tags = TPL.map(function(t){ return t.replace(/\{t\}/g, topic.toLowerCase()); });
-    tags = tags.concat(NICHE_TAGS[niche] || []).concat(extra);
-    tags = Array.from(new Set(tags)).slice(0, 30);
-    document.getElementById('countLbl').textContent = tags.length + ' tags';
-    out.innerHTML = '<div class="output-item"><div class="txt">' + tags.join(', ') + '</div><button class="copy-btn" type="button">Copy all</button></div>' +
-      '<div style="margin-top:10px;font-size:.78rem;color:var(--text-faint)">Tip: paste these into YouTube Studio &rarr; Video details &rarr; Tags.</div>';
+    
+    out.innerHTML = '<div class="empty-state">Generating AI-optimized tags...</div>';
+
+    function getFallbackTags() {
+      var tags = TPL.map(function(t){ return t.replace(/\{t\}/g, topic.toLowerCase()); });
+      tags = tags.concat(NICHE_TAGS[niche] || []).concat(extra);
+      return Array.from(new Set(tags)).slice(0, 30);
+    }
+
+    try {
+      var response = await fetch('/api/generate-yt-tags', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topic, niche: niche, extra: extra })
+      });
+
+      if (response.ok) {
+        var data = await response.json();
+        if (data && data.tags && Array.isArray(data.tags) && data.tags.length > 0) {
+          var tags = data.tags;
+          document.getElementById('countLbl').textContent = tags.length + ' tags';
+          out.innerHTML = '<div class="output-item"><div class="txt">' + tags.join(', ').replace(/</g,'&lt;') + '</div><button class="copy-btn" type="button" data-copy="' + tags.join(', ').replace(/"/g,'&quot;') + '">Copy all</button></div>' +
+            '<div style="margin-top:10px;font-size:.78rem;color:var(--text-faint)">Tip: paste these into YouTube Studio &rarr; Video details &rarr; Tags.</div>';
+          return;
+        }
+      }
+      throw new Error('API fallback');
+    } catch(err) {
+      var tags = getFallbackTags();
+      document.getElementById('countLbl').textContent = tags.length + ' tags';
+      out.innerHTML = '<div class="output-item"><div class="txt">' + tags.join(', ').replace(/</g,'&lt;') + '</div><button class="copy-btn" type="button" data-copy="' + tags.join(', ').replace(/"/g,'&quot;') + '">Copy all</button></div>' +
+        '<div style="margin-top:10px;font-size:.78rem;color:var(--text-faint)">Tip: paste these into YouTube Studio &rarr; Video details &rarr; Tags.</div>';
+    }
   });
 })();
 </script>
