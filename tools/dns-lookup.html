@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KV0PV8JKTD');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free DNS Lookup Tool - Check A, MX, TXT, CNAME Records | ToolSphere</title>
+  <meta name="description" content="Look up A, AAAA, MX, TXT, CNAME, NS and other DNS records for any domain instantly. Free online DNS lookup tool with no signup and no API key required.">
+  <meta name="keywords" content="dns lookup, dns lookup tool, check dns records, mx record checker, a record lookup, txt record checker, cname lookup, dns propagation checker, free dns lookup online, domain dns checker, nameserver lookup, dns query tool, toolsphere">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://toolsphere.online/tools/dns-lookup">
+  <meta property="og:title" content="Free DNS Lookup Tool - Check A, MX, TXT, CNAME Records | ToolSphere">
+  <meta property="og:url" content="https://toolsphere.online/tools/dns-lookup">
+  <meta property="og:description" content="Look up A, AAAA, MX, TXT, CNAME, NS and other DNS records for any domain instantly.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ToolSphere">
+  <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free DNS Lookup Tool - Check A, MX, TXT, CNAME Records | ToolSphere">
+  <meta name="twitter:description" content="Look up A, AAAA, MX, TXT, CNAME, NS and other DNS records for any domain instantly.">
+  <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="theme-color" content="#0A0E1F">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DNS Lookup",
+    "url": "https://toolsphere.online/tools/dns-lookup",
+    "description": "Look up A, AAAA, MX, TXT, CNAME, NS and other DNS records for any domain instantly.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsphere.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsphere.online/tools" },
+      { "@type": "ListItem", "position": 3, "name": "DNS Lookup", "item": "https://toolsphere.online/tools/dns-lookup" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a DNS lookup tool used for?",
+        "acceptedAnswer": { "@type": "Answer", "text": "It shows you the DNS records a domain currently publishes -- useful for verifying website hosting, email (MX) setup, domain verification (TXT) records, and troubleshooting DNS changes." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which DNS record types can I check?",
+        "acceptedAnswer": { "@type": "Answer", "text": "You can look up A, AAAA, MX, TXT, CNAME, NS, and SOA records by selecting the record type before searching." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this DNS lookup tool free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, it's completely free with unlimited lookups and no signup required." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .dns-search-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dns-search-row input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .dns-search-row select {
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+    }
+    .dns-record-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.88rem;
+    }
+    .dns-record-table th, .dns-record-table td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dns-record-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .dns-record-table td { color: #e2e8f0; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="brand">ToolSphere</a>
+    <nav class="main-nav" aria-label="Primary">
+      <div class="has-dropdown">
+        <a href="/tools">Tools &#9662;</a>
+        <div class="dropdown">
+          <a href="/tools/dp-maker">Profile Picture Maker</a>
+          <a href="/tools/wallpapers">HD Wallpapers</a>
+          <a href="/tools/yt-seo-tag-generator">YouTube SEO Tag Generator</a>
+          <a href="/tools/insta-caption-generator">Instagram Caption Generator</a>
+          <a href="/tools/image-generator">AI Image Generator</a>
+          <a href="/tools/ai-video-generator">AI Video Generator</a>
+          <a href="/tools/prompt-extractor">AI Prompt Extractor</a>
+          <a href="/tools/image-enhancer">AI Image Enhancer</a>
+          <a href="/tools/remove-background">Background Remover</a>
+          <a href="/tools/image-resizer">Image Resizer</a>
+          <a href="/tools/image-to-pdf">Image to PDF</a>
+          <a href="/tools/pdf-to-jpg">PDF to JPG Converter</a>
+          <a href="/tools/ip-checker">IP Address Checker</a>
+          <a href="/tools/dns-lookup">DNS Lookup</a>
+          <a href="/tools/resume-maker">Resume Maker</a>
+          <a href="/tools/gst-calculator">GST Calculator</a>
+          <a href="/tools/sip-calculator">SIP Calculator</a>
+          <a href="/tools/password-generator">Password Generator</a>
+          <a href="/tools/qr-code-generator">QR Code Generator</a>
+          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 36 tools &rarr;</a>
+        </div>
+      </div>
+      <a href="/blog">Blog</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="header-cta">
+      <a href="/tools" class="btn btn-ghost btn-sm">All Tools</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<section class="tool-header">
+  <div class="wrap">
+    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / DNS Lookup</div>
+    <span class="eyebrow">Network Utility</span>
+    <h1>DNS Lookup Tool</h1>
+    <p style="max-width:60ch;">Check A, AAAA, MX, TXT, CNAME, NS and SOA records for any domain, instantly and for free.</p>
+    <div class="tool-badges"><span class="badge">All Record Types</span><span class="badge">Instant</span><span class="badge">100% Free</span></div>
+  </div>
+</section>
+
+<section class="workspace">
+  <div class="wrap">
+    <div class="panel" style="grid-column:1/-1;">
+      <h2>Lookup DNS Records</h2>
+      <div class="dns-search-row">
+        <input type="text" id="domainInput" placeholder="e.g. example.com" value="">
+        <select id="typeSelect">
+          <option value="A">A</option>
+          <option value="AAAA">AAAA</option>
+          <option value="MX">MX</option>
+          <option value="TXT">TXT</option>
+          <option value="CNAME">CNAME</option>
+          <option value="NS">NS</option>
+          <option value="SOA">SOA</option>
+        </select>
+        <button class="btn btn-primary btn-sm" id="lookupBtn" type="button">Lookup</button>
+      </div>
+
+      <div id="statusBox" style="margin-top:14px;"></div>
+
+      <div id="resultWrap" style="display:none;">
+        <table class="dns-record-table">
+          <thead>
+            <tr><th>Name</th><th>Type</th><th>TTL</th><th>Data</th></tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="ad-slot">Ad space &mdash; 728&times;90</div></div>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>About this DNS Lookup Tool</h2>
+    <p>This free DNS lookup tool queries Google's public DNS-over-HTTPS resolver directly from your browser to fetch the current DNS records for any domain. Check A and AAAA records to see hosting IPs, MX records for email routing, TXT records for domain verification (like SPF, DKIM, or Google Search Console), and more -- all in real time, with no signup and no rate limits.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>Frequently Asked Questions</h2>
+    <details class="faq-item"><summary>What is a DNS lookup tool used for?</summary><p>It shows you the DNS records a domain currently publishes -- useful for verifying website hosting, email (MX) setup, domain verification (TXT) records, and troubleshooting DNS changes.</p></details>
+    <details class="faq-item"><summary>Which DNS record types can I check?</summary><p>You can look up A, AAAA, MX, TXT, CNAME, NS, and SOA records by selecting the record type before searching.</p></details>
+    <details class="faq-item"><summary>Is this DNS lookup tool free?</summary><p>Yes, it's completely free with unlimited lookups and no signup required.</p></details>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px;">ToolSphere</div>
+        <p style="max-width:34ch;font-size:.88rem;">36+ free daily-use tools for creators, students and small businesses &mdash; YouTube, Instagram, finance, learning and more, all in one place.</p>
+        <p style="font-size:.82rem;">Contact: <a href="mailto:toolsphereweb@gmail.com" style="color:var(--accent)">toolsphereweb@gmail.com</a></p>
+      </div>
+      <div>
+        <h5>Popular Tools</h5>
+        <ul>
+          <li><a href="/tools/dns-lookup">DNS Lookup</a></li>
+          <li><a href="/tools/ip-checker">IP Address Checker</a></li>
+          <li><a href="/tools/pdf-to-jpg">PDF to JPG Converter</a></li>
+          <li><a href="/tools/prompt-extractor">AI Prompt Extractor</a></li>
+          <li><a href="/tools">View all tools &rarr;</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="/legal/privacy">Privacy Policy</a></li>
+          <li><a href="/legal/terms">Terms of Service</a></li>
+          <li><a href="/legal/disclaimer">Disclaimer</a></li>
+          <li><a href="/legal/cookies">Cookie Policy</a></li>
+          <li><a href="/legal/refund">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span class="ts-year">2026</span> ToolSphere.online &mdash; All rights reserved.</span>
+      <span>Made for creators, students &amp; small businesses in India</span>
+    </div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
+<script src="../assets/js/common.js"></script>
+<script>
+(function(){
+  const domainInput = document.getElementById('domainInput');
+  const typeSelect = document.getElementById('typeSelect');
+  const lookupBtn = document.getElementById('lookupBtn');
+  const statusBox = document.getElementById('statusBox');
+  const resultWrap = document.getElementById('resultWrap');
+  const resultBody = document.getElementById('resultBody');
+
+  const DNS_TYPE_MAP = { A: 1, AAAA: 28, MX: 15, TXT: 16, CNAME: 5, NS: 2, SOA: 6 };
+
+  function cleanDomain(input) {
+    return input
+      .trim()
+      .replace(/^https?:\/\//i, '')
+      .replace(/\/.*$/, '');
+  }
+
+  async function runLookup() {
+    const domain = cleanDomain(domainInput.value);
+    const type = typeSelect.value;
+
+    if (!domain || !domain.includes('.')) {
+      statusBox.innerHTML = '<div class="alert alert-warn">Please enter a valid domain, e.g. example.com</div>';
+      resultWrap.style.display = 'none';
+      return;
+    }
+
+    statusBox.innerHTML = '<p class="hint">Looking up records...</p>';
+    resultWrap.style.display = 'none';
+
+    try {
+      const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${DNS_TYPE_MAP[type]}`);
+      const data = await res.json();
+
+      if (data.Status !== 0) {
+        statusBox.innerHTML = `<div class="alert alert-warn">No ${type} records found for "${domain}" (or the domain doesn't exist).</div>`;
+        return;
+      }
+
+      const answers = data.Answer || [];
+      if (answers.length === 0) {
+        statusBox.innerHTML = `<div class="alert alert-warn">No ${type} records found for "${domain}".</div>`;
+        return;
+      }
+
+      resultBody.innerHTML = '';
+      answers.forEach((rec) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${rec.name}</td><td>${type}</td><td>${rec.TTL}</td><td>${rec.data}</td>`;
+        resultBody.appendChild(tr);
+      });
+
+      statusBox.innerHTML = `<p class="hint">Found ${answers.length} record(s) for "${domain}".</p>`;
+      resultWrap.style.display = 'block';
+    } catch (err) {
+      statusBox.innerHTML = '<div class="alert alert-error">DNS lookup failed. Please try again.</div>';
+    }
+  }
+
+  lookupBtn.addEventListener('click', runLookup);
+  domainInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') runLookup(); });
+})();
+</script>
+</body>
+</html>

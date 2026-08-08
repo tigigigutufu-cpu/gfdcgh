@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KV0PV8JKTD');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free IP Address Checker - Find My IP, ISP & Tor Detection | ToolSphere</title>
+  <meta name="description" content="Instantly check your public IP address, city, country, ISP, and whether it's a Tor exit node. Look up any IP address for free -- no signup, no API key required.">
+  <meta name="keywords" content="ip address checker, what is my ip, find my ip address, ip lookup tool, my ip location, tor exit node checker, ip address finder free, check ip country, isp lookup online, ip geolocation tool, whats my ip address, toolsphere">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://toolsphere.online/tools/ip-checker">
+  <meta property="og:title" content="Free IP Address Checker - Find My IP, ISP & Tor Detection | ToolSphere">
+  <meta property="og:url" content="https://toolsphere.online/tools/ip-checker">
+  <meta property="og:description" content="Instantly check your public IP address, city, country, ISP, and whether it's a Tor exit node.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ToolSphere">
+  <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free IP Address Checker - Find My IP, ISP & Tor Detection | ToolSphere">
+  <meta name="twitter:description" content="Instantly check your public IP address, city, country, ISP, and whether it's a Tor exit node.">
+  <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="theme-color" content="#0A0E1F">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "IP Address Checker",
+    "url": "https://toolsphere.online/tools/ip-checker",
+    "description": "Instantly check your public IP address, city, country, ISP, and whether it's a Tor exit node.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsphere.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsphere.online/tools" },
+      { "@type": "ListItem", "position": 3, "name": "IP Address Checker", "item": "https://toolsphere.online/tools/ip-checker" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I find my IP address?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Just open this page -- your public IP address, along with your approximate city, country and ISP, is detected and shown automatically." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I look up someone else's IP address?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, enter any public IP address in the search box to see its approximate location and network provider." }
+      },
+      {
+        "@type": "Question",
+        "name": "What does the Tor exit node check mean?",
+        "acceptedAnswer": { "@type": "Answer", "text": "We compare the IP address against the official Tor Project exit node list. If it matches, the traffic from that IP is likely exiting the Tor anonymity network." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .ipc-result-card {
+      background: rgba(67, 232, 216, 0.06);
+      border: 1px solid rgba(67, 232, 216, 0.25);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+    .ipc-ip-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      word-break: break-all;
+      margin-bottom: 12px;
+    }
+    .ipc-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.9rem;
+    }
+    .ipc-detail-row:last-child { border-bottom: none; }
+    .ipc-detail-label { color: var(--text-muted); }
+    .ipc-detail-value { color: #e2e8f0; font-weight: 600; text-align: right; }
+    .ipc-tor-safe { color: #4ade80; }
+    .ipc-tor-flag { color: #fb923c; }
+    .ipc-search-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .ipc-search-row input {
+      flex: 1;
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="brand">ToolSphere</a>
+    <nav class="main-nav" aria-label="Primary">
+      <div class="has-dropdown">
+        <a href="/tools">Tools &#9662;</a>
+        <div class="dropdown">
+          <a href="/tools/dp-maker">Profile Picture Maker</a>
+          <a href="/tools/wallpapers">HD Wallpapers</a>
+          <a href="/tools/yt-seo-tag-generator">YouTube SEO Tag Generator</a>
+          <a href="/tools/insta-caption-generator">Instagram Caption Generator</a>
+          <a href="/tools/image-generator">AI Image Generator</a>
+          <a href="/tools/ai-video-generator">AI Video Generator</a>
+          <a href="/tools/prompt-extractor">AI Prompt Extractor</a>
+          <a href="/tools/image-enhancer">AI Image Enhancer</a>
+          <a href="/tools/remove-background">Background Remover</a>
+          <a href="/tools/image-resizer">Image Resizer</a>
+          <a href="/tools/image-to-pdf">Image to PDF</a>
+          <a href="/tools/pdf-to-jpg">PDF to JPG Converter</a>
+          <a href="/tools/ip-checker">IP Address Checker</a>
+          <a href="/tools/dns-lookup">DNS Lookup</a>
+          <a href="/tools/resume-maker">Resume Maker</a>
+          <a href="/tools/gst-calculator">GST Calculator</a>
+          <a href="/tools/sip-calculator">SIP Calculator</a>
+          <a href="/tools/password-generator">Password Generator</a>
+          <a href="/tools/qr-code-generator">QR Code Generator</a>
+          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 36 tools &rarr;</a>
+        </div>
+      </div>
+      <a href="/blog">Blog</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="header-cta">
+      <a href="/tools" class="btn btn-ghost btn-sm">All Tools</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<section class="tool-header">
+  <div class="wrap">
+    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / IP Address Checker</div>
+    <span class="eyebrow">Network Utility</span>
+    <h1>IP Address Checker &amp; Tor Detector</h1>
+    <p style="max-width:60ch;">See your public IP address, location, and ISP instantly -- plus a built-in check for whether an IP is a known Tor exit node.</p>
+    <div class="tool-badges"><span class="badge">Instant</span><span class="badge">Tor Detection</span><span class="badge">100% Free</span></div>
+  </div>
+</section>
+
+<section class="workspace">
+  <div class="wrap">
+    <div class="panel">
+      <h2>Your IP Address</h2>
+      <div id="loadingState" style="text-align:center;padding:20px;color:var(--text-muted);">Detecting your IP address...</div>
+      <div id="resultCard" class="ipc-result-card" style="display:none;">
+        <div class="ipc-ip-display" id="ipDisplay">--</div>
+        <div class="ipc-detail-row"><span class="ipc-detail-label">Country</span><span class="ipc-detail-value" id="valCountry">--</span></div>
+        <div class="ipc-detail-row"><span class="ipc-detail-label">Region</span><span class="ipc-detail-value" id="valRegion">--</span></div>
+        <div class="ipc-detail-row"><span class="ipc-detail-label">City</span><span class="ipc-detail-value" id="valCity">--</span></div>
+        <div class="ipc-detail-row"><span class="ipc-detail-label">ISP / Org</span><span class="ipc-detail-value" id="valIsp">--</span></div>
+        <div class="ipc-detail-row"><span class="ipc-detail-label">ASN</span><span class="ipc-detail-value" id="valAsn">--</span></div>
+        <div class="ipc-detail-row"><span class="ipc-detail-label">Tor Exit Node</span><span class="ipc-detail-value" id="valTor">--</span></div>
+      </div>
+      <div id="errorBox"></div>
+
+      <div class="ipc-search-row">
+        <input type="text" id="ipInput" placeholder="Enter any IP address to look it up, e.g. 8.8.8.8">
+        <button class="btn btn-primary btn-sm" id="lookupBtn" type="button">Lookup</button>
+      </div>
+      <p class="hint" style="margin-top:12px;">Leave the box empty and click Lookup to check your own IP again.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="ad-slot">Ad space &mdash; 728&times;90</div></div>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>About this IP Address Checker</h2>
+    <p>This free tool detects your public-facing IP address the moment you load the page, along with its approximate country, region, city, and internet service provider. You can also look up any other public IP address, and every result is checked against the official Tor Project exit node list so you can tell if traffic from that IP is likely coming through the Tor anonymity network.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>Frequently Asked Questions</h2>
+    <details class="faq-item"><summary>How do I find my IP address?</summary><p>Just open this page -- your public IP address, along with your approximate city, country and ISP, is detected and shown automatically.</p></details>
+    <details class="faq-item"><summary>Can I look up someone else's IP address?</summary><p>Yes, enter any public IP address in the search box to see its approximate location and network provider.</p></details>
+    <details class="faq-item"><summary>What does the Tor exit node check mean?</summary><p>We compare the IP address against the official Tor Project exit node list. If it matches, the traffic from that IP is likely exiting the Tor anonymity network.</p></details>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px;">ToolSphere</div>
+        <p style="max-width:34ch;font-size:.88rem;">36+ free daily-use tools for creators, students and small businesses &mdash; YouTube, Instagram, finance, learning and more, all in one place.</p>
+        <p style="font-size:.82rem;">Contact: <a href="mailto:toolsphereweb@gmail.com" style="color:var(--accent)">toolsphereweb@gmail.com</a></p>
+      </div>
+      <div>
+        <h5>Popular Tools</h5>
+        <ul>
+          <li><a href="/tools/ip-checker">IP Address Checker</a></li>
+          <li><a href="/tools/dns-lookup">DNS Lookup</a></li>
+          <li><a href="/tools/pdf-to-jpg">PDF to JPG Converter</a></li>
+          <li><a href="/tools/prompt-extractor">AI Prompt Extractor</a></li>
+          <li><a href="/tools">View all tools &rarr;</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="/legal/privacy">Privacy Policy</a></li>
+          <li><a href="/legal/terms">Terms of Service</a></li>
+          <li><a href="/legal/disclaimer">Disclaimer</a></li>
+          <li><a href="/legal/cookies">Cookie Policy</a></li>
+          <li><a href="/legal/refund">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span class="ts-year">2026</span> ToolSphere.online &mdash; All rights reserved.</span>
+      <span>Made for creators, students &amp; small businesses in India</span>
+    </div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
+<script src="../assets/js/common.js"></script>
+<script>
+(function(){
+  const loadingState = document.getElementById('loadingState');
+  const resultCard = document.getElementById('resultCard');
+  const errorBox = document.getElementById('errorBox');
+  const ipInput = document.getElementById('ipInput');
+  const lookupBtn = document.getElementById('lookupBtn');
+
+  const ipDisplay = document.getElementById('ipDisplay');
+  const valCountry = document.getElementById('valCountry');
+  const valRegion = document.getElementById('valRegion');
+  const valCity = document.getElementById('valCity');
+  const valIsp = document.getElementById('valIsp');
+  const valAsn = document.getElementById('valAsn');
+  const valTor = document.getElementById('valTor');
+
+  async function runLookup(ip) {
+    loadingState.style.display = 'block';
+    loadingState.textContent = ip ? `Looking up ${ip}...` : 'Detecting your IP address...';
+    resultCard.style.display = 'none';
+    errorBox.innerHTML = '';
+
+    try {
+      const url = ip ? `/api/ip-info?ip=${encodeURIComponent(ip)}` : '/api/ip-info';
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Could not look up this IP address.');
+      }
+
+      ipDisplay.textContent = data.ip;
+      valCountry.textContent = data.country || 'Unknown';
+      valRegion.textContent = data.region || 'Unknown';
+      valCity.textContent = data.city || 'Unknown';
+      valIsp.textContent = data.isp || data.org || 'Unknown';
+      valAsn.textContent = data.asn || 'Unknown';
+
+      if (data.isTorExitNode === null) {
+        valTor.textContent = 'Unable to check';
+      } else if (data.isTorExitNode) {
+        valTor.textContent = 'Yes -- known Tor exit node';
+        valTor.className = 'ipc-detail-value ipc-tor-flag';
+      } else {
+        valTor.textContent = 'No';
+        valTor.className = 'ipc-detail-value ipc-tor-safe';
+      }
+
+      resultCard.style.display = 'block';
+    } catch (err) {
+      errorBox.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+    } finally {
+      loadingState.style.display = 'none';
+    }
+  }
+
+  lookupBtn.addEventListener('click', () => runLookup(ipInput.value.trim()));
+  ipInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') runLookup(ipInput.value.trim());
+  });
+
+  runLookup(null);
+})();
+</script>
+</body>
+</html>
