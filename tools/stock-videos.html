@@ -37,9 +37,15 @@
 <style>
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
   margin-top: 20px;
+}
+@media (min-width: 768px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 }
 .video-card {
   background: var(--bg-card, #131836);
@@ -66,27 +72,65 @@
   object-fit: cover;
 }
 .video-info {
-  padding: 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex-grow: 1;
   justify-content: space-between;
 }
+@media (min-width: 768px) {
+  .video-info {
+    padding: 16px;
+    gap: 10px;
+  }
+}
 .video-title {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-main, #fff);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (min-width: 768px) {
+  .video-title {
+    font-size: 0.95rem;
+    white-space: normal;
+  }
 }
 .video-category-tag {
   display: inline-block;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   background: rgba(67, 232, 216, 0.1);
   color: var(--accent, #43E8D8);
-  padding: 2px 8px;
+  padding: 2px 6px;
   border-radius: 4px;
   align-self: flex-start;
+}
+@media (min-width: 768px) {
+  .video-category-tag {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+  }
+}
+.search-bar-wrap {
+  margin-bottom: 15px;
+}
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-card, #131836);
+  border: 1px solid var(--border-soft, #1e2548);
+  border-radius: 30px;
+  color: var(--text-main, #fff);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.search-input:focus {
+  border-color: var(--accent, #43E8D8);
 }
 .filter-bar {
   display: flex;
@@ -162,9 +206,6 @@
           <a href="/tools/remove-background">Background Remover</a>
           <a href="/tools/image-resizer">Image Resizer</a>
           <a href="/tools/image-to-pdf">Image to PDF</a>
-          <a href="/tools/pdf-to-jpg">PDF to JPG Converter</a>
-          <a href="/tools/ip-checker">IP Address Checker</a>
-          <a href="/tools/dns-lookup">DNS Lookup</a>
           <a href="/tools/resume-maker">Resume Maker</a>
           <a href="/tools/gst-calculator">GST Calculator</a>
           <a href="/tools/sip-calculator">SIP Calculator</a>
@@ -198,13 +239,18 @@
 <section class="workspace" style="padding-top:10px;">
   <div class="wrap">
     
+    <!-- Search Bar -->
+    <div class="search-bar-wrap">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search videos by name (e.g. nature, ocean, mountain)...">
+    </div>
+
     <!-- Filter Categories Bar -->
     <div class="filter-bar" id="filterBar">
-      <button class="filter-chip active" data-cat="all">all Videos</button>
-      <button class="filter-chip" data-cat="nature">nature</button>
-      <button class="filter-chip" data-cat="mix">mix</button>
-      <button class="filter-chip" data-cat="cinematic">cinematic</button>
-      <button class="filter-chip" data-cat="background">background Loops</button>
+      <button class="filter-chip active" data-cat="all">All Videos</button>
+      <button class="filter-chip" data-cat="nature">Nature</button>
+      <button class="filter-chip" data-cat="mix">Mix</button>
+      <button class="filter-chip" data-cat="cinematic">Cinematic</button>
+      <button class="filter-chip" data-cat="background">Background Loops</button>
     </div>
 
     <!-- Video Grid Container -->
@@ -273,13 +319,11 @@
 <script src="../assets/js/common.js"></script>
 <script>
 (function(){
-  // Yahan aap apne folder ke videos ke naam aur categories add karte jaana
   var VIDEOS = [
     {
       title: "sailboat-ocean",
       category: "nature",
       file: "../assets/videos/sailboat-ocean.mp4"
-      
     },
     {
       title: "airplane-window-view",
@@ -320,22 +364,29 @@
       title: "desert-sunset",
       category: "nature",
       file: "../assets/videos/desert-sunset.mp4"
-    } 
-       ];
+    }   
+  ];
 
   var grid = document.getElementById('videoGrid');
   var filterBar = document.getElementById('filterBar');
+  var searchInput = document.getElementById('searchInput');
   var currentCategory = 'all';
 
-  function renderVideos(cat) {
-    var filtered = cat === 'all' ? VIDEOS : VIDEOS.filter(function(v){ return v.category === cat; });
+  function renderVideos() {
+    var query = searchInput.value.toLowerCase().trim();
+    
+    var filtered = VIDEOS.filter(function(v){
+      var matchesCat = (currentCategory === 'all' || v.category.toLowerCase() === currentCategory.toLowerCase());
+      var matchesSearch = v.title.toLowerCase().includes(query);
+      return matchesCat && matchesSearch;
+    });
     
     if (filtered.length === 0) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-faint);">No videos found in this category yet. Upload videos to your folder!</div>';
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-faint);">No videos found matching your search.</div>';
       return;
     }
 
-    grid.innerHTML = filtered.map(function(item, index) {
+    grid.innerHTML = filtered.map(function(item) {
       return '<div class="video-card">' +
         '<div class="video-wrapper">' +
           '<video src="' + item.file + '" controls preload="metadata" muted playsinline></video>' +
@@ -357,11 +408,15 @@
     filterBar.querySelectorAll('.filter-chip').forEach(function(c){ c.classList.remove('active'); });
     chip.classList.add('active');
     currentCategory = chip.dataset.cat;
-    renderVideos(currentCategory);
+    renderVideos();
+  });
+
+  searchInput.addEventListener('input', function(){
+    renderVideos();
   });
 
   // Initial render
-  renderVideos('all');
+  renderVideos();
 })();
 </script>
 </body>
