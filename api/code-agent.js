@@ -21,23 +21,26 @@ STRICT OUTPUT RULES -- follow exactly, the app parses your response programmatic
 
 If the user has set a personalization note (given below), follow it for style/tech preferences unless it conflicts with a direct instruction in the latest message.`;
 
-// Free-tier model availability on OpenRouter rotates without notice.
-// We try the configured/default model first, then fall back through a
-// short list of other historically-available free models, and finally
-// OpenRouter's own "openrouter/free" auto-router which always resolves
-// to *some* currently-available free model.
+// OpenRouter allows a maximum of 3 models in the 'models' array.
 function getModelList() {
   const configured = process.env.OPENROUTER_MODEL;
   const list = [];
   if (configured) list.push(configured);
-  list.push(
+  
+  // Add fallback free models up to a total of 3 items max
+  const fallbacks = [
     'deepseek/deepseek-chat-v3-0324:free',
     'deepseek/deepseek-r1:free',
-    'qwen/qwen3-coder:free',
-    'meta-llama/llama-3.3-70b-instruct:free',
     'openrouter/free'
-  );
-  return [...new Set(list)];
+  ];
+
+  for (const model of fallbacks) {
+    if (list.length < 3 && !list.includes(model)) {
+      list.push(model);
+    }
+  }
+
+  return list;
 }
 
 export default async function handler(req, res) {
