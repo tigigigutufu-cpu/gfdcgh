@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google Analytics Tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KV0PV8JKTD');
+  </script>
+
+  <!-- Google AdSense Verification -->
   <meta name="google-adsense-account" content="ca-pub-6663388358758435">
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- High-Traffic SEO Title & Meta -->
   <title>ToolSphere — 37+ Free Online AI Tools, YouTube SEO & Calculators</title>
   <meta name="description" content="Use 37+ free online tools for creators, students & small businesses. Best YouTube SEO tag generator, Instagram caption creator, AI image generator & EMI calculators. No login required.">
-  <meta name="keywords" content="free online tools, youtube seo tag generator, instagram caption generator, ai image generator, resume maker free, gst calculator, sip calculator, dp maker, profile picture maker, bg remove, text to speeech , hd wallpeprs   toolsphere online">
+  <meta name="keywords" content="free online tools, youtube seo tag generator, instagram caption generator, ai image generator, resume maker free, gst calculator, sip calculator, dp maker, profile picture maker, bg remove, text to speech, hd wallpapers, toolsphere online">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <link rel="canonical" href="https://toolsphere.online/">
   
@@ -60,15 +71,6 @@
           .catch(err => console.log('Service Worker Failed:', err));
       });
     }
-  </script>
-
-  <!-- Google Tag Manager (Analytics) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-KV0PV8JKTD');
   </script>
 
   <!-- Google Search Console Verification -->
@@ -390,7 +392,6 @@
 
   function getToolIdFromHref(href) {
     if (!href) return null;
-    // /tools/image-enhancer -> image-enhancer
     const parts = href.split('/').filter(Boolean);
     return parts[parts.length - 1] || null;
   }
@@ -401,7 +402,6 @@
     const usage = getUsage();
     const cards = Array.from(grid.querySelectorAll('.tool-card'));
 
-    // save original order for tie-breaker
     cards.forEach((card, idx) => {
       if (!card.dataset.originalIndex) {
         card.dataset.originalIndex = idx;
@@ -417,7 +417,6 @@
       return parseInt(a.dataset.originalIndex) - parseInt(b.dataset.originalIndex);
     });
 
-    // re-append in sorted order
     cards.forEach(card => grid.appendChild(card));
   }
 
@@ -426,20 +425,16 @@
     if (!card) return;
     const href = card.getAttribute('href');
     const toolId = card.dataset.toolId || getToolIdFromHref(href);
-    if (!toolId || toolId === 'tools') return; // ignore /tools page
+    if (!toolId || toolId === 'tools') return;
 
     const usage = getUsage();
     usage[toolId] = (usage[toolId] || 0) + 1;
     saveUsage(usage);
   }
 
-  // Run on load
   document.addEventListener('DOMContentLoaded', sortToolsByUsage);
-
-  // Track clicks anywhere (home grid + header dropdown + footer)
   document.addEventListener('click', trackClick);
 
-  // Also sort immediately if DOM already loaded
   if (document.readyState !== 'loading') {
     sortToolsByUsage();
   }
