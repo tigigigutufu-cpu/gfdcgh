@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KV0PV8JKTD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KV0PV8JKTD');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free AI Coding Agent - Build Websites by Chatting | ToolSphere</title>
+  <meta name="description" content="Chat with a free AI coding agent to build real websites -- live preview, multi-file support, ZIP download, and smart suggestions. No signup, 15 free builds a day.">
+  <meta name="keywords" content="ai coding agent, ai website builder chat, ai code generator free, build website with ai, ai web developer tool, chat to build website, free ai coding assistant, ai agent website builder, generate html css js ai, ai code preview tool, toolsphere">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://toolsphere.online/tools/ai-code-agent">
+  <meta property="og:title" content="Free AI Coding Agent - Build Websites by Chatting | ToolSphere">
+  <meta property="og:url" content="https://toolsphere.online/tools/ai-code-agent">
+  <meta property="og:description" content="Chat with a free AI coding agent to build real websites -- live preview, multi-file support, and ZIP download.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ToolSphere">
+  <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free AI Coding Agent - Build Websites by Chatting | ToolSphere">
+  <meta name="twitter:description" content="Chat with a free AI coding agent to build real websites -- live preview, multi-file support, and ZIP download.">
+  <meta name="twitter:image" content="https://toolsphere.online/icon-192.png.jpg">
+  <meta name="theme-color" content="#0A0E1F">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2343E8D8'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AI Coding Agent",
+    "url": "https://toolsphere.online/tools/ai-code-agent",
+    "description": "Chat with a free AI coding agent to build real websites, with live preview and ZIP download.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsphere.online/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsphere.online/tools" },
+      { "@type": "ListItem", "position": 3, "name": "AI Coding Agent", "item": "https://toolsphere.online/tools/ai-code-agent" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the AI Coding Agent work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Describe the website or feature you want in the chat box. The agent writes real HTML, CSS and JavaScript, shows a live preview when possible, and suggests further improvements you can ask for next." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a limit on how many times I can use it?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, every visitor gets 15 free messages per day. The counter resets 24 hours after your first message." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I download the code it builds?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, click Download ZIP at any time to get every generated file. Live preview only works for single-file HTML projects; multi-file projects can still be browsed by tab and downloaded." }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .agent-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 960px) {
+      .agent-layout { grid-template-columns: 400px 1fr; align-items: start; }
+    }
+    .agent-chat-panel {
+      display: flex;
+      flex-direction: column;
+      height: 640px;
+    }
+    .agent-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .agent-msg {
+      max-width: 92%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+    .agent-msg.user {
+      align-self: flex-end;
+      background: rgba(67,232,216,0.14);
+      border: 1px solid rgba(67,232,216,0.3);
+    }
+    .agent-msg.agent {
+      align-self: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+    }
+    .agent-msg.system-note {
+      align-self: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+    }
+    .agent-input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .agent-input-row textarea {
+      flex: 1;
+      resize: none;
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.88rem;
+    }
+    .agent-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .agent-usage-badge {
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .agent-files-panel {
+      height: 640px;
+      display: flex;
+      flex-direction: column;
+    }
+    .agent-file-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-bottom: 10px;
+    }
+    .agent-file-tab {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-soft);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .agent-file-tab.active { background: var(--accent); color: #0A0E1F; border-color: var(--accent); font-weight: 600; }
+    .agent-code-view {
+      flex: 1;
+      overflow: auto;
+      background: #050814;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      white-space: pre;
+      color: #e2e8f0;
+      display: none;
+    }
+    .agent-preview-frame {
+      flex: 1;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      background: #fff;
+      display: none;
+    }
+    .agent-empty-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      text-align: center;
+      padding: 20px;
+    }
+    .agent-view-toggle {
+      display: flex;
+      gap: 6px;
+    }
+    .agent-view-toggle button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-soft);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .agent-view-toggle button.active { background: var(--accent); color: #0A0E1F; border-color: var(--accent); }
+    .agent-settings-box {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+    }
+    .agent-settings-box textarea {
+      width: 100%;
+      padding: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.82rem;
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a href="/" class="brand">ToolSphere</a>
+    <nav class="main-nav" aria-label="Primary">
+      <div class="has-dropdown">
+        <a href="/tools">Tools &#9662;</a>
+        <div class="dropdown">
+          <a href="/tools/dp-maker">Profile Picture Maker</a>
+          <a href="/tools/wallpapers">HD Wallpapers</a>
+          <a href="/tools/yt-seo-tag-generator">YouTube SEO Tag Generator</a>
+          <a href="/tools/insta-caption-generator">Instagram Caption Generator</a>
+          <a href="/tools/image-generator">AI Image Generator</a>
+          <a href="/tools/ai-video-generator">AI Video Generator</a>
+          <a href="/tools/prompt-extractor">AI Prompt Extractor</a>
+          <a href="/tools/ai-code-agent">AI Coding Agent</a>
+          <a href="/tools/bug-fixer">AI Bug Fixer</a>
+          <a href="/tools/image-enhancer">AI Image Enhancer</a>
+          <a href="/tools/remove-background">Background Remover</a>
+          <a href="/tools/image-resizer">Image Resizer</a>
+          <a href="/tools/image-to-pdf">Image to PDF</a>
+          <a href="/tools/pdf-to-jpg">PDF to JPG Converter</a>
+          <a href="/tools/ip-checker">IP Address Checker</a>
+          <a href="/tools/dns-lookup">DNS Lookup</a>
+          <a href="/tools/resume-maker">Resume Maker</a>
+          <a href="/tools/gst-calculator">GST Calculator</a>
+          <a href="/tools/sip-calculator">SIP Calculator</a>
+          <a href="/tools/password-generator">Password Generator</a>
+          <a href="/tools/qr-code-generator">QR Code Generator</a>
+          <a href="/tools" style="grid-column:1/-1;text-align:center;color:var(--accent);font-weight:600;border-top:1px solid var(--border-soft);margin-top:4px;padding-top:10px;">View all 38 tools &rarr;</a>
+        </div>
+      </div>
+      <a href="/blog">Blog</a>
+      <a href="/faq">FAQ</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="header-cta">
+      <a href="/tools" class="btn btn-ghost btn-sm">All Tools</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<section class="tool-header">
+  <div class="wrap">
+    <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / AI Coding Agent</div>
+    <span class="eyebrow">AI Agent</span>
+    <h1>AI Coding Agent</h1>
+    <p style="max-width:65ch;">Describe the website you want and chat with an AI agent that writes real code, shows a live preview, remembers your project, and suggests what to build next.</p>
+    <div class="tool-badges">
+      <span class="badge">Live Preview</span>
+      <span class="badge">ZIP Download</span>
+      <span class="badge">15 Free Msgs/Day</span>
+    </div>
+  </div>
+</section>
+
+<section class="workspace">
+  <div class="wrap">
+    <div class="agent-layout" style="grid-column:1/-1;">
+
+      <div class="panel agent-chat-panel">
+        <div class="agent-toolbar">
+          <span class="agent-usage-badge" id="usageBadge">15 / 15 messages left today</span>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" id="settingsToggleBtn" type="button">Personalize</button>
+            <button class="btn btn-ghost btn-sm" id="newProjectBtn" type="button">New Project</button>
+          </div>
+        </div>
+
+        <div class="agent-settings-box" id="settingsBox">
+          <label class="hint" for="personalizationInput" style="display:block;margin-bottom:6px;">Tell the agent how you like your code (style, framework preferences, tone). Saved on this device.</label>
+          <textarea id="personalizationInput" rows="3" placeholder="e.g. I prefer minimal, dark-themed designs with big bold typography."></textarea>
+          <button class="btn btn-primary btn-sm" id="savePersonalizationBtn" type="button" style="margin-top:8px;">Save</button>
+        </div>
+
+        <div class="agent-messages" id="messagesBox"></div>
+
+        <div class="agent-input-row">
+          <textarea id="chatInput" rows="2" placeholder="e.g. Build me a landing page for a coffee shop with a photo gallery"></textarea>
+          <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+        </div>
+      </div>
+
+      <div class="panel agent-files-panel">
+        <div class="agent-toolbar">
+          <div class="agent-file-tabs" id="fileTabs"></div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div class="agent-view-toggle" id="viewToggle">
+              <button data-view="preview" class="active" type="button">Preview</button>
+              <button data-view="code" type="button">Code</button>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="downloadZipBtn" type="button" disabled>Download ZIP</button>
+          </div>
+        </div>
+        <div class="agent-empty-panel" id="emptyPanel">Your generated website will appear here once you send your first message.</div>
+        <iframe class="agent-preview-frame" id="previewFrame" title="Live preview"></iframe>
+        <div class="agent-code-view" id="codeView"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="ad-slot">Ad space &mdash; 728&times;90</div></div>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>About this AI Coding Agent</h2>
+    <p>This tool acts like a junior developer you can chat with. Describe what you want to build -- a landing page, a portfolio, a 3D animated hero section, a photo gallery -- and the agent writes the actual code, explains its choices, and suggests what to add next. It remembers your current project on this device, so you can keep refining it across visits. When a project is a single self-contained HTML file, you get an instant live preview; larger multi-file projects can still be browsed file-by-file and downloaded as a ZIP.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap" style="max-width:820px;">
+    <h2>Frequently Asked Questions</h2>
+    <details class="faq-item"><summary>How does the AI Coding Agent work?</summary><p>Describe the website or feature you want in the chat box. The agent writes real HTML, CSS and JavaScript, shows a live preview when possible, and suggests further improvements you can ask for next.</p></details>
+    <details class="faq-item"><summary>Is there a limit on how many times I can use it?</summary><p>Yes, every visitor gets 15 free messages per day. The counter resets 24 hours after your first message.</p></details>
+    <details class="faq-item"><summary>Can I download the code it builds?</summary><p>Yes, click Download ZIP at any time to get every generated file. Live preview only works for single-file HTML projects; multi-file projects can still be browsed by tab and downloaded.</p></details>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px;">ToolSphere</div>
+        <p style="max-width:34ch;font-size:.88rem;">38+ free daily-use tools for creators, students and small businesses &mdash; YouTube, Instagram, finance, learning and more, all in one place.</p>
+        <p style="font-size:.82rem;">Contact: <a href="mailto:toolsphereweb@gmail.com" style="color:var(--accent)">toolsphereweb@gmail.com</a></p>
+      </div>
+      <div>
+        <h5>Popular Tools</h5>
+        <ul>
+          <li><a href="/tools/ai-code-agent">AI Coding Agent</a></li>
+          <li><a href="/tools/bug-fixer">AI Bug Fixer</a></li>
+          <li><a href="/tools/prompt-extractor">AI Prompt Extractor</a></li>
+          <li><a href="/tools/ai-video-generator">AI Video Generator</a></li>
+          <li><a href="/tools">View all tools &rarr;</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="/legal/privacy">Privacy Policy</a></li>
+          <li><a href="/legal/terms">Terms of Service</a></li>
+          <li><a href="/legal/disclaimer">Disclaimer</a></li>
+          <li><a href="/legal/cookies">Cookie Policy</a></li>
+          <li><a href="/legal/refund">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span class="ts-year">2026</span> ToolSphere.online &mdash; All rights reserved.</span>
+      <span>Made for creators, students &amp; small businesses in India</span>
+    </div>
+  </div>
+</footer>
+
+<script>document.querySelectorAll('.ts-year').forEach(function(e){e.textContent = new Date().getFullYear();});</script>
+<script src="../assets/js/common.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+(function(){
+  const MAX_LIMIT = 15;
+  const STORAGE_KEY = 'ts_agent_project_v1';
+  const USAGE_KEY = 'ts_agent_usage_v1';
+  const PERSONALIZATION_KEY = 'ts_agent_personalization_v1';
+
+  const messagesBox = document.getElementById('messagesBox');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const usageBadge = document.getElementById('usageBadge');
+  const newProjectBtn = document.getElementById('newProjectBtn');
+  const settingsToggleBtn = document.getElementById('settingsToggleBtn');
+  const settingsBox = document.getElementById('settingsBox');
+  const personalizationInput = document.getElementById('personalizationInput');
+  const savePersonalizationBtn = document.getElementById('savePersonalizationBtn');
+
+  const fileTabs = document.getElementById('fileTabs');
+  const emptyPanel = document.getElementById('emptyPanel');
+  const previewFrame = document.getElementById('previewFrame');
+  const codeView = document.getElementById('codeView');
+  const viewToggle = document.getElementById('viewToggle');
+  const downloadZipBtn = document.getElementById('downloadZipBtn');
+
+  let chatHistory = [];   // [{role:'user'|'assistant', content:string}]
+  let files = {};         // { 'index.html': '...content...' }
+  let activeFile = null;
+  let currentView = 'preview';
+
+  // ---------- Usage limit ----------
+  function getUsage() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(USAGE_KEY) || 'null');
+      if (!raw || Date.now() - raw.since > 24 * 60 * 60 * 1000) {
+        return { count: 0, since: Date.now() };
+      }
+      return raw;
+    } catch (e) { return { count: 0, since: Date.now() }; }
+  }
+  function bumpUsage() {
+    const u = getUsage();
+    u.count++;
+    localStorage.setItem(USAGE_KEY, JSON.stringify(u));
+    renderUsage();
+  }
+  function renderUsage() {
+    const u = getUsage();
+    const remaining = Math.max(0, MAX_LIMIT - u.count);
+    usageBadge.textContent = `${remaining} / ${MAX_LIMIT} messages left today`;
+    sendBtn.disabled = remaining <= 0;
+    if (remaining <= 0) sendBtn.textContent = 'Limit reached';
+  }
+
+  // ---------- Persistence (project memory) ----------
+  function saveProject() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ chatHistory, files }));
+  }
+  function loadProject() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (raw) {
+        chatHistory = raw.chatHistory || [];
+        files = raw.files || {};
+      }
+    } catch (e) {}
+  }
+  function loadPersonalization() {
+    return localStorage.getItem(PERSONALIZATION_KEY) || '';
+  }
+
+  // ---------- Chat rendering ----------
+  function addMessageBubble(role, text) {
+    const div = document.createElement('div');
+    div.className = 'agent-msg ' + (role === 'user' ? 'user' : 'agent');
+    div.textContent = text;
+    messagesBox.appendChild(div);
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+  }
+
+  function renderAllMessages() {
+    messagesBox.innerHTML = '';
+    if (chatHistory.length === 0) {
+      addMessageBubble('agent', "Hi! Tell me what you'd like to build -- e.g. \"a portfolio site with a 3D hero section\" or \"a bakery landing page with a photo gallery\".");
+      return;
+    }
+    chatHistory.forEach(function (m) {
+      addMessageBubble(m.role === 'user' ? 'user' : 'agent', stripFileBlocks(m.content));
+    });
+  }
+
+  // ---------- Parsing agent output into files + chat text ----------
+  function parseAgentReply(raw) {
+    const fileRegex = /### FILE: (.+?)\n([\s\S]*?)### END FILE/g;
+    const newFiles = {};
+    let match;
+    while ((match = fileRegex.exec(raw)) !== null) {
+      const name = match[1].trim();
+      const content = match[2].replace(/\n$/, '');
+      newFiles[name] = content;
+    }
+    return newFiles;
+  }
+
+  function stripFileBlocks(raw) {
+    return raw.replace(/### FILE: .+?\n[\s\S]*?### END FILE/g, '').trim() || '(code updated -- see the panel on the right)';
+  }
+
+  // ---------- Files panel ----------
+  function renderFileTabs() {
+    fileTabs.innerHTML = '';
+    const names = Object.keys(files);
+    if (names.length === 0) {
+      emptyPanel.style.display = 'flex';
+      previewFrame.style.display = 'none';
+      codeView.style.display = 'none';
+      downloadZipBtn.disabled = true;
+      return;
+    }
+    emptyPanel.style.display = 'none';
+    downloadZipBtn.disabled = false;
+
+    if (!activeFile || !files[activeFile]) activeFile = names[0];
+
+    names.forEach(function (name) {
+      const tab = document.createElement('button');
+      tab.className = 'agent-file-tab' + (name === activeFile ? ' active' : '');
+      tab.textContent = name;
+      tab.addEventListener('click', function () { activeFile = name; renderFileTabs(); renderActiveView(); });
+      fileTabs.appendChild(tab);
+    });
+
+    renderActiveView();
+  }
+
+  function isSingleHtmlProject() {
+    const names = Object.keys(files);
+    return names.length === 1 && names[0].toLowerCase().endsWith('.html');
+  }
+
+  function renderActiveView() {
+    if (currentView === 'preview') {
+      codeView.style.display = 'none';
+      if (isSingleHtmlProject()) {
+        previewFrame.style.display = 'block';
+        previewFrame.srcdoc = files[Object.keys(files)[0]];
+      } else {
+        previewFrame.style.display = 'none';
+        emptyPanel.style.display = 'flex';
+        emptyPanel.textContent = 'Live preview is only available for single-file HTML projects. Switch to Code view to browse all files, or download the ZIP.';
+      }
+    } else {
+      previewFrame.style.display = 'none';
+      emptyPanel.style.display = 'none';
+      codeView.style.display = 'block';
+      codeView.textContent = files[activeFile] || '';
+    }
+  }
+
+  viewToggle.addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    viewToggle.querySelectorAll('button').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentView = btn.dataset.view;
+    if (Object.keys(files).length > 0) renderActiveView();
+  });
+
+  downloadZipBtn.addEventListener('click', async function () {
+    const names = Object.keys(files);
+    if (names.length === 0) return;
+    const zip = new JSZip();
+    names.forEach(function (name) { zip.file(name, files[name]); });
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'toolsphere-ai-project.zip';
+    link.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- Settings ----------
+  settingsToggleBtn.addEventListener('click', function () {
+    settingsBox.style.display = settingsBox.style.display === 'block' ? 'none' : 'block';
+    personalizationInput.value = loadPersonalization();
+  });
+  savePersonalizationBtn.addEventListener('click', function () {
+    localStorage.setItem(PERSONALIZATION_KEY, personalizationInput.value.trim());
+    settingsBox.style.display = 'none';
+  });
+
+  newProjectBtn.addEventListener('click', function () {
+    if (!confirm('Start a new project? This clears the current chat and files on this device.')) return;
+    chatHistory = [];
+    files = {};
+    activeFile = null;
+    saveProject();
+    renderAllMessages();
+    renderFileTabs();
+  });
+
+  // ---------- Sending messages ----------
+  async function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    const usage = getUsage();
+    if (usage.count >= MAX_LIMIT) {
+      alert('You have used all 15 free messages for today. Please come back tomorrow!');
+      return;
+    }
+
+    chatInput.value = '';
+    chatHistory.push({ role: 'user', content: text });
+    addMessageBubble('user', text);
+    saveProject();
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Thinking...';
+
+    const thinkingBubble = document.createElement('div');
+    thinkingBubble.className = 'agent-msg agent';
+    thinkingBubble.textContent = 'Working on it...';
+    messagesBox.appendChild(thinkingBubble);
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+
+    try {
+      const res = await fetch('/api/code-agent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: chatHistory.map(function (m) { return { role: m.role, content: m.content }; }),
+          personalization: loadPersonalization()
+        })
+      });
+      const data = await res.json();
+
+      thinkingBubble.remove();
+
+      if (!res.ok || !data.success) {
+        addMessageBubble('agent', 'Error: ' + (data.error || 'Something went wrong. Please try again.'));
+        return;
+      }
+
+      chatHistory.push({ role: 'assistant', content: data.reply });
+      addMessageBubble('agent', stripFileBlocks(data.reply));
+
+      const newFiles = parseAgentReply(data.reply);
+      if (Object.keys(newFiles).length > 0) {
+        files = { ...files, ...newFiles };
+        activeFile = Object.keys(newFiles)[0];
+      }
+
+      saveProject();
+      renderFileTabs();
+      bumpUsage();
+    } catch (err) {
+      thinkingBubble.remove();
+      addMessageBubble('agent', 'Network error -- please try again.');
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'Send';
+      renderUsage();
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  // ---------- Init ----------
+  loadProject();
+  renderAllMessages();
+  renderFileTabs();
+  renderUsage();
+})();
+</script>
+</body>
+</html>
