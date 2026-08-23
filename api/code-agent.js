@@ -1,4 +1,4 @@
-export const config = { maxDuration: 600 };
+export const config = { maxDuration: 299 };
 
 const SYSTEM_PROMPT = `You are "ToolSphere Agent", an AI web-building agent embedded in a browser tool. You chat with the user to design and build real, working websites (HTML/CSS/JS, including single-page apps, 3D/animated pages with Three.js, and multi-file projects).
 
