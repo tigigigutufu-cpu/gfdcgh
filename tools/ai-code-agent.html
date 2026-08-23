@@ -80,30 +80,49 @@
   </script>
 
   <style>
-    .agent-layout { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media (min-width: 960px) { .agent-layout { grid-template-columns: 400px 1fr; align-items: start; } }
-    .agent-chat-panel { display: flex; flex-direction: column; height: 640px; }
-    .agent-messages { flex: 1; overflow-y: auto; padding: 4px; display: flex; flex-direction: column; gap: 12px; }
-    .agent-msg { max-width: 92%; padding: 10px 14px; border-radius: 12px; font-size: 0.88rem; line-height: 1.55; white-space: pre-wrap; }
-    .agent-msg.user { align-self: flex-end; background: rgba(67,232,216,0.14); border: 1px solid rgba(67,232,216,0.3); }
-    .agent-msg.agent { align-self: flex-start; background: var(--bg-card); border: 1px solid var(--border-soft); }
-    .agent-msg.system-note { align-self: center; font-size: 0.75rem; color: var(--text-muted); background: none; border: none; }
-    .agent-input-row { display: flex; gap: 8px; margin-top: 12px; }
-    .agent-input-row textarea { flex: 1; resize: none; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-family: inherit; font-size: 0.88rem; }
-    .agent-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap; }
-    .agent-usage-badge { font-size: 0.78rem; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
-    .agent-files-panel { height: 640px; display: flex; flex-direction: column; }
-    .agent-file-tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; }
-    .agent-file-tab { background: rgba(255,255,255,0.05); border: 1px solid var(--border-soft); color: var(--text-muted); padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; white-space: nowrap; cursor: pointer; }
-    .agent-file-tab.active { background: var(--accent); color: #0A0E1F; border-color: var(--accent); font-weight: 600; }
-    .agent-code-view { flex: 1; overflow: auto; background: #050814; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; white-space: pre; color: #e2e8f0; display: none; }
-    .agent-preview-frame { flex: 1; border: 1px solid var(--border-soft); border-radius: 10px; background: #fff; display: none; }
-    .agent-empty-panel { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px; }
-    .agent-view-toggle { display: flex; gap: 6px; }
-    .agent-view-toggle button { background: rgba(255,255,255,0.05); border: 1px solid var(--border-soft); color: var(--text-muted); padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; cursor: pointer; }
-    .agent-view-toggle button.active { background: var(--accent); color: #0A0E1F; border-color: var(--accent); }
-    .agent-settings-box { display: none; margin-top: 10px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border-soft); border-radius: 8px; }
-    .agent-settings-box textarea { width: 100%; padding: 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.82rem; resize: vertical; }
+    .agent-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 960px) { .agent-layout { grid-template-columns: 420px 1fr; align-items: start; } }
+    
+    .panel { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    
+    .agent-chat-panel { display: flex; flex-direction: column; height: 680px; }
+    .agent-messages { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth; }
+    
+    .agent-msg { max-width: 88%; padding: 12px 16px; border-radius: 14px; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; font-family: 'Inter', sans-serif; }
+    .agent-msg.user { align-self: flex-end; background: linear-gradient(135deg, rgba(67,232,216,0.2), rgba(67,232,216,0.05)); border: 1px solid rgba(67,232,216,0.35); color: #fff; border-bottom-right-radius: 4px; }
+    .agent-msg.agent { align-self: flex-start; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1; border-bottom-left-radius: 4px; }
+    
+    .agent-input-row { display: flex; gap: 10px; margin-top: 14px; background: rgba(5, 8, 20, 0.5); padding: 8px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; align-items: flex-end; }
+    .agent-input-row textarea { flex: 1; resize: none; padding: 8px 10px; background: transparent; border: none; color: #fff; font-family: inherit; font-size: 0.9rem; outline: none; max-height: 120px; }
+    .agent-input-row textarea::placeholder { color: #64748b; }
+    
+    .agent-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid rgba(255, 255, 255, 0.06); padding-bottom: 10px; }
+    .agent-usage-badge { font-size: 0.8rem; color: #43E8D8; font-family: 'JetBrains Mono', monospace; background: rgba(67,232,216,0.1); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(67,232,216,0.2); }
+    
+    .agent-files-panel { height: 680px; display: flex; flex-direction: column; }
+    .agent-file-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .agent-file-tab { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #94a3b8; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; white-space: nowrap; cursor: pointer; transition: all 0.2s ease; }
+    .agent-file-tab:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .agent-file-tab.active { background: #43E8D8; color: #0A0E1F; border-color: #43E8D8; font-weight: 700; box-shadow: 0 0 12px rgba(67,232,216,0.3); }
+    
+    .agent-code-view { flex: 1; overflow: auto; background: #030712; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; white-space: pre; color: #e2e8f0; display: none; line-height: 1.5; }
+    .agent-preview-frame { flex: 1; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; background: #fff; display: none; width: 100%; }
+    .agent-empty-panel { flex: 1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.95rem; text-align: center; padding: 30px; background: rgba(3, 7, 18, 0.3); border: 1px dashed rgba(255, 255, 255, 0.08); border-radius: 12px; }
+    
+    .agent-view-toggle { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); }
+    .agent-view-toggle button { background: transparent; border: none; color: #94a3b8; padding: 5px 12px; border-radius: 7px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+    .agent-view-toggle button.active { background: #43E8D8; color: #0A0E1F; font-weight: 600; box-shadow: 0 2px 8px rgba(0,255,200,0.2); }
+    
+    .agent-settings-box { display: none; margin-bottom: 12px; padding: 14px; background: rgba(3, 7, 18, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; }
+    .agent-settings-box textarea { width: 100%; padding: 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #fff; font-size: 0.85rem; resize: vertical; outline: none; }
+    
+    /* Clean Enhanced Buttons */
+    .btn-custom-action { background: #43E8D8; color: #0A0E1F; font-weight: 600; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+    .btn-custom-action:hover { background: #2dd4bf; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(67,232,216,0.3); }
+    .btn-custom-action:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+    
+    .btn-ghost-custom { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+    .btn-ghost-custom:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2); }
   </style>
 </head>
 <body>
@@ -171,24 +190,24 @@
 
       <div class="panel agent-chat-panel">
         <div class="agent-toolbar">
-          <span class="agent-usage-badge" id="usageBadge">15 / 15 messages left today</span>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-ghost btn-sm" id="settingsToggleBtn" type="button">Personalize</button>
-            <button class="btn btn-ghost btn-sm" id="newProjectBtn" type="button">New Project</button>
+          <span class="agent-usage-badge" id="usageBadge">15 / 15 left today</span>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-ghost-custom" id="settingsToggleBtn" type="button">Personalize</button>
+            <button class="btn-ghost-custom" id="newProjectBtn" type="button">New Project</button>
           </div>
         </div>
 
         <div class="agent-settings-box" id="settingsBox">
-          <label class="hint" for="personalizationInput" style="display:block;margin-bottom:6px;">Tell the agent how you like your code (style, framework preferences, tone). Saved on this device.</label>
-          <textarea id="personalizationInput" rows="3" placeholder="e.g. I prefer minimal, dark-themed designs with big bold typography."></textarea>
-          <button class="btn btn-primary btn-sm" id="savePersonalizationBtn" type="button" style="margin-top:8px;">Save</button>
+          <label class="hint" for="personalizationInput" style="display:block;margin-bottom:6px;color:#94a3b8;font-size:0.8rem;">Tell the agent your style preferences. Saved on this device.</label>
+          <textarea id="personalizationInput" rows="3" placeholder="e.g. I prefer clean dark themes with minimal layouts."></textarea>
+          <button class="btn-custom-action" id="savePersonalizationBtn" type="button" style="margin-top:8px;padding:6px 12px;font-size:0.8rem;">Save Preferences</button>
         </div>
 
         <div class="agent-messages" id="messagesBox"></div>
 
         <div class="agent-input-row">
-          <textarea id="chatInput" rows="2" placeholder="e.g. Build me a landing page for a coffee shop with a photo gallery"></textarea>
-          <button class="btn btn-primary" id="sendBtn" type="button">Send</button>
+          <textarea id="chatInput" rows="2" placeholder="Describe the website or feature you want..."></textarea>
+          <button class="btn-custom-action" id="sendBtn" type="button" style="padding:10px 18px;">Send</button>
         </div>
       </div>
 
@@ -200,10 +219,10 @@
               <button data-view="preview" class="active" type="button">Preview</button>
               <button data-view="code" type="button">Code</button>
             </div>
-            <button class="btn btn-ghost btn-sm" id="downloadZipBtn" type="button" disabled>Download ZIP</button>
+            <button class="btn-ghost-custom" id="downloadZipBtn" type="button" disabled>Download ZIP</button>
           </div>
         </div>
-        <div class="agent-empty-panel" id="emptyPanel">Your generated website will appear here once you send your first message.</div>
+        <div class="agent-empty-panel" id="emptyPanel">Your generated website or project files will appear here instantly.</div>
         <iframe class="agent-preview-frame" id="previewFrame" title="Live preview"></iframe>
         <div class="agent-code-view" id="codeView"></div>
       </div>
@@ -326,9 +345,9 @@
   function renderUsage() {
     const u = getUsage();
     const remaining = Math.max(0, MAX_LIMIT - u.count);
-    usageBadge.textContent = `${remaining} / ${MAX_LIMIT} messages left today`;
+    usageBadge.textContent = `${remaining} / ${MAX_LIMIT} left today`;
     sendBtn.disabled = remaining <= 0;
-    if (remaining <= 0) sendBtn.textContent = 'Limit reached';
+    if (remaining <= 0) sendBtn.textContent = 'Limit Reached';
   }
 
   function saveProject() {
@@ -465,7 +484,7 @@
   });
 
   newProjectBtn.addEventListener('click', function () {
-    if (!confirm('Start a new project? This clears the current chat and files on this device.')) return;
+    if (!confirm('Start a new project? This clears current chat and files on this device.')) return;
     chatHistory = [];
     files = {};
     activeFile = null;
