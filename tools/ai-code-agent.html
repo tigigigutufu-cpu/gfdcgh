@@ -80,7 +80,6 @@
   </script>
 
   <style>
-    /* Premium Responsive Workspace Layout & Overflow Protection */
     .agent-layout { 
       display: grid; 
       grid-template-columns: 1fr; 
@@ -289,7 +288,7 @@
     <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / AI Coding Agent</div>
     <span class="eyebrow">AI Agent</span>
     <h1>AI Coding Agent</h1>
-    <p style="max-width:65ch;">Describe the website or feature you want in any language (English, Hinglish, etc.). The AI agent writes real code, shows a live preview, remembers your project, and responds in your preferred language.</p>
+    <p style="max-width:65ch;">Describe the website or feature you want in any language. The AI agent writes real code, shows a live preview, remembers your project, and responds in your preferred language.</p>
     <div class="tool-badges">
       <span class="badge">Live Preview</span>
       <span class="badge">ZIP Download</span>
@@ -313,7 +312,7 @@
 
         <div class="agent-settings-box" id="settingsBox">
           <label class="hint" for="personalizationInput" style="display:block;margin-bottom:6px;color:#94a3b8;font-size:0.8rem;">Set style or language preferences. Saved on this device.</label>
-          <textarea id="personalizationInput" rows="3" placeholder="e.g. Reply in the same language I use (English or Hinglish) and keep designs clean."></textarea>
+          <textarea id="personalizationInput" rows="3" placeholder="e.g. Reply in the same language I use and keep designs clean."></textarea>
           <button class="btn-custom-action" id="savePersonalizationBtn" type="button" style="margin-top:8px;padding:6px 12px;font-size:0.8rem;">Save Preferences</button>
         </div>
 
@@ -350,16 +349,16 @@
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>About this AI Coding Agent</h2>
-    <p>This tool acts like a junior developer you can chat with in any language. Describe what you want to build -- a landing page, a portfolio, a 3D animated hero section, a photo gallery -- and the agent writes the actual code, explains its choices, and suggests what to add next. It remembers your current project on this device, so you can keep refining it across visits. When a project is a single self-contained HTML file, you get an instant live preview; larger multi-file projects can still be browsed file-by-file and downloaded as a ZIP.</p>
+    <p>This tool acts like a junior developer you can chat with in any language. Describe what you want to build and the agent writes the actual code, explains its choices, and suggests what to add next.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>Frequently Asked Questions</h2>
-    <details class="faq-item"><summary>How does the AI Coding Agent work?</summary><p>Describe the website or feature you want in the chat box. The agent writes real HTML, CSS and JavaScript, shows a live preview when possible, and suggests further improvements you can ask for next.</p></details>
-    <details class="faq-item"><summary>Is there a limit on how many times I can use it?</summary><p>Yes, every visitor gets 15 free messages per day. The counter resets 24 hours after your first message.</p></details>
-    <details class="faq-item"><summary>Can I download the code it builds?</summary><p>Yes, click Download ZIP at any time to get every generated file. Live preview only works for single-file HTML projects; multi-file projects can still be browsed by tab and downloaded.</p></details>
+    <details class="faq-item"><summary>How does the AI Coding Agent work?</summary><p>Describe the website or feature you want in the chat box. The agent writes real HTML, CSS and JavaScript, shows a live preview when possible, and suggests further improvements.</p></details>
+    <details class="faq-item"><summary>Is there a limit on how many times I can use it?</summary><p>Yes, every visitor gets 15 free messages per day.</p></details>
+    <details class="faq-item"><summary>Can I download the code it builds?</summary><p>Yes, click Download ZIP at any time to get every generated file.</p></details>
   </div>
 </section>
 
@@ -368,7 +367,7 @@
     <div class="footer-grid">
       <div>
         <div class="brand" style="margin-bottom:12px;">ToolSphere</div>
-        <p style="max-width:34ch;font-size:.88rem;">39+ free daily-use tools for creators, students and small businesses &mdash; YouTube, Instagram, finance, learning and more, all in one place.</p>
+        <p style="max-width:34ch;font-size:.88rem;">39+ free daily-use tools for creators, students and small businesses.</p>
         <p style="font-size:.82rem;">Contact: <a href="mailto:toolsphereweb@gmail.com" style="color:var(--accent)">toolsphereweb@gmail.com</a></p>
       </div>
       <div>
@@ -415,9 +414,9 @@
 <script>
 (function(){
   const MAX_LIMIT = 15;
-  const STORAGE_KEY = 'ts_agent_project_v3';
-  const USAGE_KEY = 'ts_agent_usage_v3';
-  const PERSONALIZATION_KEY = 'ts_agent_personalization_v3';
+  const STORAGE_KEY = 'ts_agent_project_v4';
+  const USAGE_KEY = 'ts_agent_usage_v4';
+  const PERSONALIZATION_KEY = 'ts_agent_personalization_v4';
 
   const messagesBox = document.getElementById('messagesBox');
   const chatInput = document.getElementById('chatInput');
@@ -480,10 +479,10 @@
     return localStorage.getItem(PERSONALIZATION_KEY) || '';
   }
 
-  // Clean raw AI markdown/stars formatting for neat text display
   function cleanMessageText(text) {
     if (!text) return '';
     return text
+      .replace(/### FILE: [\s\S]*?### END FILE/g, '')
       .replace(/\*\*(.*?)\*\*/g, '$1')
       .replace(/\*(.*?)\*/g, '$1')
       .replace(/#{1,6}\s?/g, '')
@@ -491,9 +490,11 @@
   }
 
   function addMessageBubble(role, text) {
+    const cleaned = cleanMessageText(text);
+    if (!cleaned && role === 'agent') return;
     const div = document.createElement('div');
     div.className = 'agent-msg ' + (role === 'user' ? 'user' : 'agent');
-    div.textContent = cleanMessageText(text);
+    div.textContent = cleaned || '(Code generated successfully)';
     messagesBox.appendChild(div);
     messagesBox.scrollTop = messagesBox.scrollHeight;
   }
@@ -501,29 +502,26 @@
   function renderAllMessages() {
     messagesBox.innerHTML = '';
     if (chatHistory.length === 0) {
-      addMessageBubble('agent', "Hi! Tell me what you'd like to build -- e.g. \"a portfolio site with a 3D hero section\" or \"a bakery landing page with a photo gallery\". (You can chat in English, Hinglish, or any language you prefer).");
+      addMessageBubble('agent', "Hi! Tell me what you'd like to build -- e.g. \"a portfolio site with a hero section\" or \"a landing page with a photo gallery\".");
       return;
     }
     chatHistory.forEach(function (m) {
-      addMessageBubble(m.role === 'user' ? 'user' : 'agent', stripFileBlocks(m.content));
+      addMessageBubble(m.role === 'user' ? 'user' : 'agent', m.content);
     });
   }
 
   function parseAgentReply(raw) {
-    const fileRegex = /### FILE: (.+?)\n([\s\S]*?)### END FILE/g;
+    const fileRegex = /### FILE:\s*([^\n]+)\n([\s\S]*?)### END FILE/g;
     const newFiles = {};
     let match;
     while ((match = fileRegex.exec(raw)) !== null) {
       const name = match[1].trim();
       const content = match[2].replace(/\n$/, '');
-      newFiles[name] = content;
+      if (name) {
+        newFiles[name] = content;
+      }
     }
     return newFiles;
-  }
-
-  function stripFileBlocks(raw) {
-    const cleaned = raw.replace(/### FILE: .+?\n[\s\S]*?### END FILE/g, '').trim();
-    return cleaned || '(Code generated successfully -- check the panel on the right)';
   }
 
   function renderFileTabs() {
@@ -566,7 +564,7 @@
       } else {
         previewFrame.style.display = 'none';
         emptyPanel.style.display = 'flex';
-        emptyPanel.textContent = 'Live preview is only available for single-file HTML projects. Switch to Code view to browse all files, or download the ZIP.';
+        emptyPanel.textContent = 'Live preview is only available for single-file HTML projects. Switch to Code view to browse files or download ZIP.';
       }
     } else {
       previewFrame.style.display = 'none';
@@ -661,7 +659,7 @@
       }
 
       chatHistory.push({ role: 'assistant', content: data.reply });
-      addMessageBubble('agent', stripFileBlocks(data.reply));
+      addMessageBubble('agent', data.reply);
 
       const newFiles = parseAgentReply(data.reply);
       if (Object.keys(newFiles).length > 0) {
