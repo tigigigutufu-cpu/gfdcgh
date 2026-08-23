@@ -1,3 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /*?product*
+Disallow: /*?callback*
+Disallow: /*?safe_search*
+Disallow: /*?return_url*
+Disallow: /*?pcmypage*
+
 Sitemap: https://toolsphere.online/sitemap.xml
