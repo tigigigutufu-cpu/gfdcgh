@@ -80,6 +80,23 @@
   </script>
 
   <style>
+    .workspace .wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    @media (min-width: 1024px) {
+      .workspace .wrap {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .panel {
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
     .bf-textarea {
       width: 100%;
       min-height: 220px;
@@ -91,6 +108,7 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.82rem;
       resize: vertical;
+      box-sizing: border-box;
     }
     .bf-result-box {
       background: rgba(67, 232, 216, 0.06);
@@ -100,8 +118,11 @@
       font-size: 0.88rem;
       line-height: 1.7;
       white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
       color: #e2e8f0;
       min-height: 60px;
+      box-sizing: border-box;
     }
     .bf-code-output {
       background: #050814;
@@ -110,11 +131,22 @@
       padding: 14px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.8rem;
-      white-space: pre;
+      white-space: pre-wrap;
+      word-break: break-all;
       overflow-x: auto;
       color: #e2e8f0;
       max-height: 400px;
       overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .field select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      background: #050814;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
     }
   </style>
 </head>
@@ -177,8 +209,8 @@
   <div class="wrap">
     <div class="panel">
       <h2>Paste Your Code</h2>
-      <div class="field">
-        <label for="languageSelect">Language (optional -- leave on Auto if unsure)</label>
+      <div class="field" style="margin-bottom:12px;">
+        <label for="languageSelect" style="display:block;margin-bottom:6px;font-size:0.85rem;color:#94a3b8;">Language (optional -- leave on Auto if unsure)</label>
         <select id="languageSelect">
           <option value="">Auto-detect</option>
           <option value="JavaScript">JavaScript</option>
@@ -195,8 +227,8 @@
       </div>
       <textarea class="bf-textarea" id="codeInput" placeholder="Paste your code here..."></textarea>
       <div id="warnBox" style="margin-top:10px;"></div>
-      <button class="btn btn-primary btn-block" id="checkBtn" type="button" style="margin-top:14px;">Find &amp; Fix Bugs</button>
-      <p class="hint" style="margin-top:10px;" id="usageHint">15 free checks per day.</p>
+      <button class="btn btn-primary btn-block" id="checkBtn" type="button" style="margin-top:14px;width:100%;">Find &amp; Fix Bugs</button>
+      <p class="hint" style="margin-top:10px;color:#64748b;font-size:0.82rem;" id="usageHint">15 free checks per day.</p>
     </div>
 
     <div class="panel">
