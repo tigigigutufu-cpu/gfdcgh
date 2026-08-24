@@ -12,8 +12,8 @@ const BLOCKLIST = [
 
 // Vercel Environment Variables se keys uthayega
 const POLLINATION_KEYS = [
+  process.env.POLLINATION_API_KEY,
   process.env.POLLINATION_API_KEY_1,
-  process.env.POLLINATION_API_KEY_2
 ].filter(Boolean);
 
 let currentKeyIndex = 0;
