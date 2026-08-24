@@ -274,6 +274,40 @@
   </div>
 </section>
 
+<!-- Report a Problem Section (FormSubmit Integration) -->
+<section style="padding: 40px 0; background: rgba(15, 21, 48, 0.6); border-top: 1px solid rgba(255,255,255,0.08);">
+  <div class="wrap" style="max-width: 600px;">
+    <div class="section-head" style="text-align: center; margin-bottom: 24px;">
+      <span class="section-tag">Support</span>
+      <h2>Report a Problem</h2>
+      <p>Kisi tool mein koi gadbad ya bug mila? Humein seedha yahan se batayein!</p>
+    </div>
+    
+    <form action="https://formsubmit.co/toolsphereweb@gmail.com" method="POST" style="background: var(--bg-card); padding: 30px; border-radius: 12px; border: 1px solid var(--border);">
+      <!-- Disable Captcha & Redirect option setup -->
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_subject" value="New Bug/Problem Report from ToolSphere!">
+      
+      <div class="field" style="margin-bottom: 16px;">
+        <label for="reporterEmail" style="display: block; margin-bottom: 6px; font-weight: 500;">Aapki Email (Optional)</label>
+        <input type="email" id="reporterEmail" name="email" placeholder="e.g. yourname@gmail.com" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+      </div>
+
+      <div class="field" style="margin-bottom: 16px;">
+        <label for="toolName" style="display: block; margin-bottom: 6px; font-weight: 500;">Kis Tool mein problem hai?</label>
+        <input type="text" id="toolName" name="tool_name" placeholder="e.g. AI Image Generator / Resume Maker" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
+      </div>
+
+      <div class="field" style="margin-bottom: 20px;">
+        <label for="problemDesc" style="display: block; margin-bottom: 6px; font-weight: 500;">Problem Details</label>
+        <textarea id="problemDesc" name="message" rows="4" placeholder="Describe what went wrong..." required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text);"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">Submit Problem Report</button>
+    </form>
+  </div>
+</section>
+
 </main>
 
 <footer class="site-footer">
@@ -400,7 +434,7 @@
 
   function sortToolsByUsage() {
     const grid = document.getElementById(GRID_ID);
-    if (!grid) return;
+    | if (!grid) return;
     const usage = getUsage();
     const cards = Array.from(grid.querySelectorAll('.tool-card'));
 
