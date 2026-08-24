@@ -10,6 +10,20 @@ const BLOCKLIST = [
   'girl', 'girls', 'woman', 'women', 'lady', 'hot'
 ];
 
+// Vercel Environment Variables se keys uthayega
+const POLLINATION_KEYS = [
+  process.env.POLLINATION_API_KEY_1,
+  process.env.POLLINATION_API_KEY_2
+].filter(Boolean);
+
+let currentKeyIndex = 0;
+function getNextApiKey() {
+  if (POLLINATION_KEYS.length === 0) return null;
+  const key = POLLINATION_KEYS[currentKeyIndex];
+  currentKeyIndex = (currentKeyIndex + 1) % POLLINATION_KEYS.length;
+  return key;
+}
+
 function isBlocked(prompt) {
   const lower = prompt.toLowerCase();
   return BLOCKLIST.some((w) => {
@@ -34,35 +48,58 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Restricted keywords detected in prompt.' });
   }
 
-  // --- TUMHARA FLUX-SCHNELL WALA MODEL (500 img / 1 Pollen) ---
-  // model=flux = flux.1 schnell hi hai
-  const selectedModel = "flux"; // 0.002/gen wala
-  // agar real human chahiye to "flux-realism" kar dena
-  
+  const selectedModel = "dreamshaper";
   let cleanPrompt = `raw photo, ${prompt.trim()}, ${style || 'photorealistic'}, highly detailed, sharp focus, 8k resolution, professional lighting`;
+  const seed = Math.floor(Math.random() * 1000000);
 
-  // Pollination - Free wala, bina login ka, Pollen nahi katega
+  // --- STEP 1: Pehle API Key ke sath try karo ---
+  const apiKey = getNextApiKey();
+  if (apiKey) {
+    try {
+      let authUrl = `https://gen.pollinations.ai/image/${encodeURIComponent(cleanPrompt)}?model=${selectedModel}&width=1024&height=1024&nologo=true&seed=${seed}&key=${apiKey}`;
+      if (negative_prompt) authUrl += `&negative_prompt=${encodeURIComponent(negative_prompt)}`;
+
+      const authRes = await fetch(authUrl, {
+        method: 'GET',
+        headers: { "Authorization": `Bearer ${apiKey}` }
+      });
+
+      if (authRes.ok) {
+        const arrayBuffer = await authRes.arrayBuffer();
+        const base64 = Buffer.from(arrayBuffer).toString('base64');
+        return res.status(200).json({ 
+          image: `data:image/jpeg;base64,${base64}`,
+          provider: "pollinations-authenticated",
+          model: "dreamshaper"
+        });
+      }
+      console.log("Authenticated Pollinations failed, falling back to public open endpoint...");
+    } catch (e) {
+      console.log("Auth error, trying public URL:", e.message);
+    }
+  }
+
+  // --- STEP 2: Fallback - Bina API Key wala Public Open URL ---
   try {
-    // Pollination URL - flux-schnell
-    const pollinationUrl = `https://gen.pollinations.ai/image/${encodeURIComponent(cleanPrompt)}?model=${selectedModel}&width=1024&height=1024&nologo=true&enhance=true&seed=${Math.floor(Math.random()*1000000)}${negative_prompt ? `&negative_prompt=${encodeURIComponent(negative_prompt)}` : ''}`;
+    let publicUrl = `https://gen.pollinations.ai/image/${encodeURIComponent(cleanPrompt)}?model=${selectedModel}&width=1024&height=1024&nologo=true&seed=${seed}`;
+    if (negative_prompt) publicUrl += `&negative_prompt=${encodeURIComponent(negative_prompt)}`;
 
-    const polliRes = await fetch(pollinationUrl);
-    
-    if (polliRes.ok) {
-      const arrayBuffer = await polliRes.arrayBuffer();
+    const publicRes = await fetch(publicUrl);
+
+    if (publicRes.ok) {
+      const arrayBuffer = await publicRes.arrayBuffer();
       const base64 = Buffer.from(arrayBuffer).toString('base64');
-      // direct pollination image return
       return res.status(200).json({ 
         image: `data:image/jpeg;base64,${base64}`,
-        provider: "pollinations",
-        model: "flux.1-schnell (500 img / 1 pollen)"
+        provider: "pollinations-public",
+        model: "dreamshaper"
       });
     }
   } catch (e) {
-    console.log("Pollination failed, trying HuggingFace:", e.message);
+    console.log("Public Pollinations failed, trying HuggingFace:", e.message);
   }
 
-  // Fallback: Agar Pollination fail ho jaye to Huggingface
+  // --- STEP 3: Final Fallback - HuggingFace ---
   if (process.env.HUGGINGFACE_API_KEY) {
     try {
       const hfRes = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", {
@@ -78,15 +115,11 @@ export default async function handler(req, res) {
         const arrayBuffer = await hfRes.arrayBuffer();
         const base64 = Buffer.from(arrayBuffer).toString('base64');
         return res.status(200).json({ image: `data:image/jpeg;base64,${base64}`, provider: "huggingface" });
-      } else {
-        const errText = await hfRes.text();
-        return res.status(400).json({ error: "API Error: " + errText });
       }
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
   }
 
-  return res.status(500).json({ error: 'Image generation failed from both providers.' });
+  return res.status(500).json({ error: 'Image generation failed from all providers.' });
 }
-
