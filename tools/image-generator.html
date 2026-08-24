@@ -91,7 +91,7 @@
     <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / AI Image Generator</div>
     <span class="eyebrow">AI</span>
     <h1>AI Image Generator</h1>
-    <p style="max-width:60ch;">Generate simple images from text prompts in seconds with custom styles and dimensions.</p>
+    <p style="max-width:60ch;">Generate high-quality images from text prompts in seconds with custom styles and dimensions.</p>
     <div class="tool-badges"><span class="badge">Free</span><span class="badge">No Watermark</span><span class="badge">Advanced Controls</span></div>
   </div>
 </section>
@@ -128,7 +128,7 @@
             <option value="16:9">Landscape (16:9)</option>
           </select>
         </div>
-      </div> <!-- YAHI WALA DIV MISS THA - AB SAHI HAI -->
+      </div>
 
       <div id="warnBox" style="margin-top:12px;"></div>
       <button class="btn btn-primary btn-block" id="genBtn" style="margin-top:12px;">Generate image</button>
@@ -137,7 +137,7 @@
 
     <div class="panel center">
       <h2>Your image</h2>
-      <div id="output"><div class="empty-state">Your  generated image will appear here.</div></div>
+      <div id="output"><div class="empty-state">Your generated image will appear here.</div></div>
     </div>
     
   </div>
@@ -148,7 +148,7 @@
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>About this tool</h2>
-    <p>Describe a scene, select aspect ratios, add negative prompts to remove unwanted details, and generate high-quality images powered by simple AI models.</p>
+    <p>Describe a scene, select aspect ratios, add negative prompts to remove unwanted details, and generate high-quality images powered by advanced AI models.</p>
   </div>
 </section>
 <section>
@@ -217,44 +217,65 @@ function validateAndCheckBan(promptText) {
   return {allowed:true};
 }
 
-function executeGeneration() {
+async function executeGeneration() {
   var raw = document.getElementById('prompt').value.trim();
+  var negativePrompt = document.getElementById('negativePrompt').value.trim();
   var style = document.getElementById('style').value;
   var aspectRatio = document.getElementById('aspectRatio').value;
   var out = document.getElementById('output');
   var warnBox = document.getElementById('warnBox');
   var genBtn = document.getElementById('genBtn');
+  
   warnBox.innerHTML = '';
-  if(!raw){warnBox.innerHTML='<div class="alert alert-error">Please enter a prompt.</div>';return;}
+  if(!raw){
+    warnBox.innerHTML='<div class="alert alert-error">Please enter a prompt.</div>';
+    return;
+  }
+  
   var check = validateAndCheckBan(raw);
-  if(!check.allowed){warnBox.innerHTML='<div class="alert alert-error">'+check.message+'</div>';return;}
+  if(!check.allowed){
+    warnBox.innerHTML='<div class="alert alert-error">'+check.message+'</div>';
+    return;
+  }
 
-  genBtn.disabled=true;
-  genBtn.textContent='Generating...';
-  out.innerHTML='<div class="empty-state">Generating your image... please wait</div>';
+  genBtn.disabled = true;
+  genBtn.textContent = 'Generating...';
+  out.innerHTML = '<div class="empty-state">Generating your image with DreamShaper... please wait</div>';
 
-  var fullPrompt = raw + ", " + style + ", highly detailed, 8k";
-  var seed = Math.floor(Math.random()*10000000);
-  var width=1024,height=1024;
-  if(aspectRatio==='9:16'){width=768; height=1280;}
-  if(aspectRatio==='16:9'){width=1280; height=768;}
+  try {
+    // Vercel Backend API call jisme DreamShaper aur Key Rotation set hai
+    const response = await fetch('/api/image-generator', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: raw,
+        style: style,
+        negative_prompt: negativePrompt,
+        aspectRatio: aspectRatio
+      })
+    });
 
-  // Simple URL - flux = flux-schnell (500 img / 1 pollen) automatic
-  var imageUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(fullPrompt) + "?model=flux&width="+width+"&height="+height+"&seed="+seed+"&nologo=true&enhance=true";
+    const data = await response.json();
 
-  var img = new Image();
-  img.onload = function(){
+    if (!response.ok || !data.image) {
+      throw new Error(data.error || 'Failed to generate image.');
+    }
+
+    var imageUrl = data.image;
+
     out.innerHTML = '<img src="'+imageUrl+'" style="border-radius:12px;border:1px solid var(--border);margin:0 auto 14px;max-width:100%;display:block;">' +
-    '<div style="display:flex;gap:10px;justify-content:center;"><a class="btn btn-ghost btn-sm" href="'+imageUrl+'" target="_blank">Save image</a><button class="btn btn-primary btn-sm" id="regenBtn">🔄 Regenerate</button></div>';
+    '<div style="display:flex;gap:10px;justify-content:center;"><a class="btn btn-ghost btn-sm" href="'+imageUrl+'" target="_blank" download="toolsphere-image.jpg">Save image</a><button class="btn btn-primary btn-sm" id="regenBtn" type="button">🔄 Regenerate</button></div>';
+    
     document.getElementById('regenBtn').onclick = executeGeneration;
-    genBtn.disabled=false; genBtn.textContent='Generate image';
-  };
-  img.onerror = function(){
-    out.innerHTML='<div class="alert alert-error">Failed to load image. Try again.</div>';
-    genBtn.disabled=false; genBtn.textContent='Generate image';
-  };
-  img.src = imageUrl;
+  } catch (err) {
+    warnBox.innerHTML = '<div class="alert alert-error">' + err.message + '</div>';
+    out.innerHTML = '<div class="empty-state">Generation failed. Please try again.</div>';
+  } finally {
+    genBtn.disabled = false;
+    genBtn.textContent = 'Generate image';
+  }
 }
+
 document.getElementById('genBtn').addEventListener('click', executeGeneration);
 </script>
 </body>
