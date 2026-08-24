@@ -1,5 +1,24 @@
-export const config = { maxDuration: 299 };
+// ============================================================
+// FILE: pages/api/code-agent.js
+// ToolSphere AI Coding Agent - Backend API Route
+// ============================================================
+// This is the server-side API route that handles communication
+// with OpenRouter's AI models. It receives chat messages from
+// the frontend, forwards them to OpenRouter, and returns the
+// AI's response.
+//
+// Environment Variables Required:
+//   OPENROUTER_API_KEY - Your OpenRouter API key (get from openrouter.ai)
+//   OPENROUTER_MODEL   - (Optional) Preferred model, defaults to fallbacks
+// ============================================================
 
+export const config = {
+  maxDuration: 299 // Vercel function timeout (up to 5 minutes)
+};
+
+// ============================================================
+//  SYSTEM PROMPT - The AI's core instruction set
+// ============================================================
 const SYSTEM_PROMPT = `You are "ToolSphere Agent", an AI web-building agent embedded in a browser tool. You chat with the user to design and build real, working websites (HTML/CSS/JS, including single-page apps, 3D/animated pages with Three.js, and multi-file projects).
 
 STRICT OUTPUT RULES -- follow exactly, the app parses your response programmatically:
@@ -21,10 +40,15 @@ STRICT OUTPUT RULES -- follow exactly, the app parses your response programmatic
 
 If the user has set a personalization note (given below), follow it for style/tech preferences unless it conflicts with a direct instruction in the latest message.`;
 
-// OpenRouter allows a maximum of 3 models in the 'models' array.
+// ============================================================
+//  MODEL SELECTION
+//  OpenRouter allows a maximum of 3 models in the 'models' array.
+// ============================================================
 function getModelList() {
   const configured = process.env.OPENROUTER_MODEL;
   const list = [];
+  
+  // Add user-configured model first (if any)
   if (configured) list.push(configured);
   
   // Add fallback free models up to a total of 3 items max
@@ -43,38 +67,57 @@ function getModelList() {
   return list;
 }
 
+// ============================================================
+//  MAIN API HANDLER
+// ============================================================
 export default async function handler(req, res) {
+  // --- Method validation ---
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // --- API Key validation ---
   if (!process.env.OPENROUTER_API_KEY) {
     return res.status(500).json({
       error: 'Server is not configured. Set OPENROUTER_API_KEY in your Vercel Environment Variables (free key from openrouter.ai).'
     });
   }
 
+  // --- Request body validation ---
   const { messages, personalization } = req.body || {};
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'No conversation messages provided.' });
   }
+  
   if (messages.length > 40) {
-    return res.status(400).json({ error: 'Conversation too long for this session -- please start a new project.' });
+    return res.status(400).json({ 
+      error: 'Conversation too long for this session -- please start a new project.' 
+    });
   }
 
+  // --- Build system prompt with personalization ---
   let systemContent = SYSTEM_PROMPT;
   if (personalization && typeof personalization === 'string' && personalization.trim()) {
     systemContent += `\n\nUser personalization note: ${personalization.trim().slice(0, 500)}`;
   }
 
+  // --- Prepare OpenRouter payload ---
   const payload = {
     models: getModelList(),
-    messages: [{ role: 'system', content: systemContent }, ...messages],
-    max_tokens: 4000
+    messages: [
+      { role: 'system', content: systemContent },
+      ...messages
+    ],
+    max_tokens: 4000,
+    temperature: 0.7,          // Balanced creativity vs consistency
+    top_p: 0.9,               // Nucleus sampling for better output
+    frequency_penalty: 0.2,   // Slight penalty for repetition
+    presence_penalty: 0.1     // Slight penalty for topic repetition
   };
 
+  // --- Call OpenRouter API ---
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -87,20 +130,48 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload)
     });
 
+    // --- Handle API errors ---
     if (!response.ok) {
       const errText = await response.text();
-      return res.status(502).json({ error: `AI provider error: ${errText}` });
+      console.error('OpenRouter API error:', response.status, errText);
+      return res.status(502).json({ 
+        error: `AI provider error: ${errText}` 
+      });
     }
 
+    // --- Parse response ---
     const data = await response.json();
-    const reply = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    const reply = data.choices?.[0]?.message?.content;
 
     if (!reply) {
-      return res.status(502).json({ error: 'The AI did not return a response. Please try again.' });
+      console.error('OpenRouter returned empty response:', data);
+      return res.status(502).json({ 
+        error: 'The AI did not return a response. Please try again.' 
+      });
     }
 
-    return res.status(200).json({ success: true, reply, model: data.model || 'unknown' });
+    // --- Success ---
+    return res.status(200).json({
+      success: true,
+      reply: reply,
+      model: data.model || 'unknown'
+    });
+
   } catch (err) {
-    return res.status(502).json({ error: 'Could not reach the AI provider. Please try again shortly.' });
+    // --- Network or unexpected errors ---
+    console.error('OpenRouter request failed:', err);
+    return res.status(502).json({ 
+      error: 'Could not reach the AI provider. Please try again shortly.' 
+    });
   }
 }
+
+// ============================================================
+//  EXPORT for testing / debugging (optional)
+// ============================================================
+// If you need to test this handler locally, you can import it
+// and call it with mock request/response objects.
+// Example: 
+//   import handler from './code-agent.js'
+//   handler({ method: 'POST', body: { messages: [...] } }, res)
+// ============================================================
