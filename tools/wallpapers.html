@@ -357,6 +357,9 @@
   let activeCat = 'all';
   let searchQuery = '';
 
+  // Wallpapers ko sirf ek baar load hone par random shuffle karenge taaki glitch na ho
+  wallpapers.sort(() => Math.random() - 0.5);
+
   function imgPath(file) {
     return encodeURI(`/assets/wallpapers/${file}`);
   }
@@ -369,9 +372,6 @@
       let matchesSearch = (w.title.toLowerCase().includes(searchQuery) || w.cat.toLowerCase().includes(searchQuery));
       return matchesCat && matchesSearch;
     });
-
-    // Random Shuffle Logic (Pinterest Style)
-    list.sort(() => Math.random() - 0.5);
 
     if (list.length === 0) {
       grid.innerHTML = '<p class="wp-empty">No wallpapers found matching your search. Check back soon!</p>';
