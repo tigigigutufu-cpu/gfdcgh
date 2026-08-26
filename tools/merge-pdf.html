@@ -11,14 +11,14 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Merge PDF Files Online | ToolSphere</title>
-<meta name="description" content="Combine multiple PDF files into one document instantly, right in your browser. Free, no signup, no watermark.">
-<meta name="keywords" content="merge pdf, combine pdf files, join pdf online free, pdf merger, toolsphere">
+<title>Reorder & Merge PDF Files Online | ToolSphere</title>
+<meta name="description" content="Combine multiple PDF files into one document. Easily reorder pages before merging. Free, no signup, local processing in browser.">
+<meta name="keywords" content="merge pdf, combine pdf files, join pdf online free, pdf merger, reorder pdf, sort pdf pages, secure pdf combiner, free pdf tool, pdf joiner online, combine multiple pdfs, toolsphere">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="https://toolsphere.online/tools/merge-pdf">
 <meta property="og:title" content="Merge PDF Files Online | ToolSphere">
 <meta property="og:url" content="https://toolsphere.online/tools/merge-pdf">
-<meta property="og:description" content="Combine multiple PDF files into one document instantly, right in your browser.">
+<meta property="og:description" content="Combine multiple PDF files into one document instantly.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ToolSphere">
 <meta property="og:image" content="https://toolsphere.online/icon-192.png.jpg">
@@ -32,8 +32,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebApplication","name":"Merge PDF","url":"https://toolsphere.online/tools/merge-pdf","description":"Combine multiple PDF files into one document instantly.","applicationCategory":"UtilitiesApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+{"@context":"https://schema.org","@type":"WebApplication","name":"Merge PDF","url":"https://toolsphere.online/tools/merge-pdf","description":"Combine multiple PDF files into one document instantly. Includes reordering.","applicationCategory":"UtilitiesApplication","operatingSystem":"All","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
+<style>
+  #dropZone { border: 2px dashed var(--border-soft); border-radius: 12px; padding: 40px 20px; text-align: center; color: var(--text-muted); cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.02); margin-bottom: 16px; }
+  #dropZone:hover, #dropZone.dragover { border-color: var(--accent); background: rgba(67, 232, 216, 0.05); color: #fff; }
+  #fileList { list-style: none; padding: 0; margin: 0; }
+  #fileList li { background: #0f172a; border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .file-name { font-weight: 500; color: #fff; font-size: 0.9rem; word-break: break-all; max-width: 250px; }
+  .file-size { font-size: 0.75rem; color: var(--text-muted); }
+  .file-actions { display: flex; gap: 4px; }
+  .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 0.9rem; }
+  .icon-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -90,8 +101,8 @@
   <div class="wrap">
     <div class="crumbs"><a href="/">Home</a> / <a href="/tools">Tools</a> / Merge PDF</div>
     <span class="eyebrow">Documents</span>
-    <h1>Merge PDF Files</h1>
-    <p style="max-width:60ch;">Combine multiple PDF files into a single document, instantly, right in your browser.</p>
+    <h1>Merge & Reorder PDF Files</h1>
+    <p style="max-width:60ch;">Combine multiple PDF files into a single document instantly, right in your browser.</p>
     <div class="tool-badges"><span class="badge">Free</span><span class="badge">Private</span><span class="badge">No Watermark</span></div>
   </div>
 </section>
@@ -99,11 +110,15 @@
   <div class="wrap">
     <div class="panel">
       <h2>Upload PDFs</h2>
-      <div class="field"><label for="fileInput">Select 2 or more PDF files (in order)</label>
-        <input type="file" id="fileInput" accept="application/pdf" multiple>
+      <div id="dropZone">
+        Drag & drop PDFs here<br>or<br>
+        <button class="btn btn-ghost btn-sm" style="margin-top:8px;" type="button" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+        <input type="file" id="fileInput" accept="application/pdf" multiple style="display:none;">
       </div>
-      <div id="fileList" style="margin:12px 0;font-size:.9rem;"></div>
-      <button class="btn btn-primary btn-block" id="mergeBtn">Merge PDFs</button>
+      <ul id="fileList">
+        <li class="empty-state" id="listEmptyMsg" style="border:none; text-align:center;">No files selected.</li>
+      </ul>
+      <button class="btn btn-primary btn-block" id="mergeBtn" style="margin-top:12px;" disabled>Merge PDFs</button>
     </div>
     <div class="panel">
       <h2>Result</h2>
@@ -115,28 +130,26 @@
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>About this tool</h2>
-    <p>Combine two or more PDF files into a single document, in the order you select them &mdash; useful for merging
-    scanned pages, combining reports, or assembling a single file to submit or share. Everything is processed locally
-    in your browser; files are never uploaded to a server.</p>
+    <p>Combine two or more PDF files into a single document securely within your browser. Files are never uploaded to a server.</p>
   </div>
 </section>
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>How to use this tool</h2>
     <ol style="padding-left:20px;line-height:1.8;">
-      <li>Click the upload box and select two or more PDF files (they'll merge in the order selected).</li>
-      <li>Review the file list to confirm the order is correct.</li>
-      <li>Click Merge PDFs, then download your combined file.</li>
+      <li>Click 'Browse Files' or drag and drop your PDF files.</li>
+      <li>Use the up/down buttons to reorder files if needed.</li>
+      <li>Click Merge PDFs and download your combined file.</li>
     </ol>
   </div>
 </section>
 <section>
   <div class="wrap" style="max-width:820px;">
     <h2>Frequently asked questions</h2>
-    <details class="faq-item"><summary>Are my PDF files uploaded to a server?</summary><p>No, all merging happens locally in your browser using client-side processing. Your files never leave your device.</p></details>
-    <details class="faq-item"><summary>Is there a limit on file size or number of PDFs?</summary><p>You can merge multiple PDFs, though very large files may take longer to process depending on your device.</p></details>
-    <details class="faq-item"><summary>Will the merged PDF have a watermark?</summary><p>No, the output is a clean, watermark-free PDF.</p></details>
-    <details class="faq-item"><summary>Can I reorder the files before merging?</summary><p>Files merge in the order you select them in the upload dialog; select them in your desired final order.</p></details>
+    <details class="faq-item"><summary>Are my PDF files uploaded to a server?</summary><p>No, all merging happens locally in your browser.</p></details>
+    <details class="faq-item"><summary>Can I select multiple files?</summary><p>Yes, you can select multiple files at once or add more one by one.</p></details>
+    <details class="faq-item"><summary>Will the merged PDF have a watermark?</summary><p>No, the output is completely clean and watermark-free.</p></details>
+    <details class="faq-item"><summary>Is there a file size limit?</summary><p>It depends on your browser and device memory.</p></details>
   </div>
 </section>
 
@@ -189,42 +202,109 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
 (function(){
-  var fileInput = document.getElementById('fileInput');
-  var fileList = document.getElementById('fileList');
-  var mergeBtn = document.getElementById('mergeBtn');
-  var out = document.getElementById('output');
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const fileListEl = document.getElementById('fileList');
+  const mergeBtn = document.getElementById('mergeBtn');
+  const out = document.getElementById('output');
 
-  fileInput.addEventListener('change', function(){
-    var files = Array.from(fileInput.files);
-    fileList.innerHTML = files.map(function(f, i){ return (i+1) + '. ' + f.name; }).join('<br>');
+  let selectedFiles = [];
+
+  function updateFileList() {
+    if(selectedFiles.length === 0){
+      fileListEl.innerHTML = '<li class="empty-state" id="listEmptyMsg" style="border:none; text-align:center;">No files selected.</li>';
+      mergeBtn.disabled = true;
+      return;
+    }
+
+    mergeBtn.disabled = false;
+    fileListEl.innerHTML = '';
+    
+    selectedFiles.forEach((file, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div style="display:flex; flex-direction:column;">
+          <span class="file-name">${index + 1}. ${file.name}</span>
+          <span class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+        </div>
+        <div class="file-actions">
+          <button type="button" class="icon-btn" onclick="window.moveFile(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.3"' : ''}>▲</button>
+          <button type="button" class="icon-btn" onclick="window.moveFile(${index}, 1)" ${index === selectedFiles.length - 1 ? 'disabled style="opacity:0.3"' : ''}>▼</button>
+          <button type="button" class="icon-btn" onclick="window.removeFile(${index})" style="color:#ef4444;">✕</button>
+        </div>
+      `;
+      fileListEl.appendChild(li);
+    });
+  }
+
+  window.moveFile = function(index, direction) {
+    const newIndex = index + direction;
+    if(newIndex >= 0 && newIndex < selectedFiles.length) {
+      const temp = selectedFiles[index];
+      selectedFiles[index] = selectedFiles[newIndex];
+      selectedFiles[newIndex] = temp;
+      updateFileList();
+    }
+  };
+
+  window.removeFile = function(index) {
+    selectedFiles.splice(index, 1);
+    updateFileList();
+  };
+
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      if(file.type === 'application/pdf') {
+        selectedFiles.push(file);
+      }
+    });
+    updateFileList();
+    fileInput.value = ''; // Reset input so same file can be selected again if needed
+  }
+
+  fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
   });
 
-  mergeBtn.addEventListener('click', function(){
-    var files = Array.from(fileInput.files);
-    if(files.length < 2){
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  mergeBtn.addEventListener('click', async function(){
+    if(selectedFiles.length < 2){
       out.innerHTML = '<div class="alert alert-warn">Please select at least 2 PDF files.</div>';
       return;
     }
     out.innerHTML = '<div class="empty-state">Merging&hellip;</div>';
 
-    (async function(){
-      try{
-        var mergedPdf = await PDFLib.PDFDocument.create();
-        for(var i=0;i<files.length;i++){
-          var bytes = await files[i].arrayBuffer();
-          var pdf = await PDFLib.PDFDocument.load(bytes);
-          var pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-          pages.forEach(function(p){ mergedPdf.addPage(p); });
-        }
-        var mergedBytes = await mergedPdf.save();
-        var blob = new Blob([mergedBytes], {type:'application/pdf'});
-        var url = URL.createObjectURL(blob);
-        out.innerHTML = '<div class="output-item"><div class="txt">Merged PDF ready (' + files.length + ' files combined)</div></div>' +
-          '<a class="btn btn-primary btn-block" href="' + url + '" download="merged.pdf" style="margin-top:10px;">Download Merged PDF</a>';
-      } catch(err){
-        out.innerHTML = '<div class="alert alert-warn">Something went wrong merging these files. Please make sure all files are valid PDFs.</div>';
+    try{
+      const mergedPdf = await PDFLib.PDFDocument.create();
+      for(let i = 0; i < selectedFiles.length; i++){
+        const bytes = await selectedFiles[i].arrayBuffer();
+        const pdf = await PDFLib.PDFDocument.load(bytes);
+        const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        pages.forEach(p => mergedPdf.addPage(p));
       }
-    })();
+      const mergedBytes = await mergedPdf.save();
+      const blob = new Blob([mergedBytes], {type:'application/pdf'});
+      const url = URL.createObjectURL(blob);
+      out.innerHTML = '<div class="output-item"><div class="txt">Merged PDF ready (' + selectedFiles.length + ' files combined)</div></div>' +
+        '<a class="btn btn-primary btn-block" href="' + url + '" download="merged.pdf" style="margin-top:10px;">Download Merged PDF</a>';
+    } catch(err){
+      console.error(err);
+      out.innerHTML = '<div class="alert alert-warn">Something went wrong merging these files. Please make sure all files are valid, non-encrypted PDFs.</div>';
+    }
   });
 })();
 </script>
