@@ -13,7 +13,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Voice to Text Converter | ToolSphere</title>
 <meta name="description" content="Speak and instantly get live text transcription in your browser. Free voice-to-text tool, supports English and Hindi, no signup.">
-<meta name="keywords" content="voice to text, speech to text online, voice typing free, dictation tool, toolsphere">
+<meta name="keywords" content="voice to text, speech to text online, voice typing free, dictation tool, voice typing online, speech to text tool, voice dictation software, hindi voice typing online, english speech recognition, talk to text converter, speech to text free, voice notes transcriber, audio to text online, hands free typing tool, toolsphere">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <link rel="canonical" href="https://toolsphere.online/tools/voice-to-text">
 <meta property="og:title" content="Voice to Text Converter | ToolSphere">
@@ -92,7 +92,7 @@
     <span class="eyebrow">Productivity</span>
     <h1>Voice to Text Converter</h1>
     <p style="max-width:60ch;">Speak into your microphone and get live, editable text transcription instantly.</p>
-    <div class="tool-badges"><span class="badge">Free</span><span class="badge">Private</span><span class="badge">Live</span></div>
+    <div class="tool-badges"><span class="badge">Free</span><span class="badge">Private</span><span class="badge" id="statusBadge" style="background:rgba(67, 232, 216, 0.15); color:var(--accent);">Ready</span></div>
   </div>
 </section>
 <section class="workspace">
@@ -107,7 +107,7 @@
         </select>
       </div>
       <button class="btn btn-primary btn-block" id="startBtn">Start Speaking</button>
-      <button class="btn btn-ghost btn-block" id="stopBtn" style="margin-top:8px;">Stop</button>
+      <button class="btn btn-ghost btn-block" id="stopBtn" style="margin-top:8px;" disabled>Stop</button>
       <button class="btn btn-ghost btn-block" id="clearBtn" style="margin-top:8px;">Clear</button>
     </div>
     <div class="panel">
@@ -202,44 +202,99 @@
   var clearBtn = document.getElementById('clearBtn');
   var copyBtn = document.getElementById('copyBtn');
   var langSel = document.getElementById('lang');
-  var recognition, listening = false;
+  var statusBadge = document.getElementById('statusBadge');
+  var recognition, listening = false, finalTranscript = '';
 
   if(!SpeechRecognition){
     startBtn.disabled = true;
     output.value = 'Speech recognition is not supported in this browser. Please try Chrome or Edge.';
+    statusBadge.textContent = 'Not Supported';
   } else {
     recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
 
+    recognition.onstart = function() {
+      listening = true;
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      statusBadge.textContent = 'Listening... 🎙️';
+      statusBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+      statusBadge.style.color = '#ef4444';
+    };
+
     recognition.onresult = function(event){
-      var finalTranscript = '';
-      for(var i=event.resultIndex; i<event.results.length; i++){
+      var interimTranscript = '';
+      for(var i = event.resultIndex; i < event.results.length; ++i){
         if(event.results[i].isFinal){
           finalTranscript += event.results[i][0].transcript + ' ';
+        } else {
+          interimTranscript += event.results[i][0].transcript;
         }
       }
-      if(finalTranscript) output.value += finalTranscript;
+      output.value = finalTranscript + interimTranscript;
     };
+
+    recognition.onerror = function(event){
+      console.error('Speech recognition error', event.error);
+      if(event.error === 'not-allowed') {
+        alert('Microphone access blocked! Please enable microphone permissions in your browser address bar.');
+      }
+    };
+
     recognition.onend = function(){
-      if(listening){ recognition.start(); } // auto-restart while active
+      if(listening){
+        try {
+          recognition.start(); // Safe restart if user didn't explicitly stop
+        } catch(e) {
+          console.error(e);
+        }
+      } else {
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        statusBadge.textContent = 'Ready';
+        statusBadge.style.background = 'rgba(67, 232, 216, 0.15)';
+        statusBadge.style.color = 'var(--accent)';
+      }
     };
 
     startBtn.addEventListener('click', function(){
+      finalTranscript = output.value ? output.value + ' ' : '';
       recognition.lang = langSel.value;
       listening = true;
-      recognition.start();
+      try {
+        recognition.start();
+      } catch(e) {
+        console.error(e);
+      }
     });
+
     stopBtn.addEventListener('click', function(){
       listening = false;
-      recognition.stop();
+      try {
+        recognition.stop();
+      } catch(e) {
+        console.error(e);
+      }
     });
   }
 
-  clearBtn.addEventListener('click', function(){ output.value = ''; });
+  clearBtn.addEventListener('click', function(){ 
+    output.value = ''; 
+    finalTranscript = '';
+  });
+
   copyBtn.addEventListener('click', function(){
-    output.select();
-    document.execCommand('copy');
+    if(!output.value) return;
+    navigator.clipboard.writeText(output.value).then(() => {
+      var originalText = copyBtn.textContent;
+      copyBtn.textContent = 'Copied! ✅';
+      setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
+    }).catch(err => {
+      output.select();
+      document.execCommand('copy');
+      alert('Text copied to clipboard!');
+    });
   });
 })();
 </script>
