@@ -101,37 +101,101 @@
     .wp-tab-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-soft); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; white-space: nowrap; cursor: pointer; flex-shrink: 0; }
     .wp-tab-btn.active { background: var(--accent); color: #0A0E1F; border-color: var(--accent); }
     
-    /* Grid system setup for stability */
-    .wp-grid { 
-      display: grid; 
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 14px; 
+    /* True Pinterest Style Masonry */
+    .wp-pinterest-container {
+      column-count: 2;
+      column-gap: 14px;
+      width: 100%;
     }
-    @media (min-width: 640px) { .wp-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (min-width: 1024px) { .wp-grid { grid-template-columns: repeat(4, 1fr); } }
     
+    @media (min-width: 640px) {
+      .wp-pinterest-container { column-count: 3; }
+    }
+    @media (min-width: 1024px) {
+      .wp-pinterest-container { column-count: 4; }
+    }
+
     .wp-card { 
       position: relative; 
       border-radius: 12px; 
       overflow: hidden; 
       background: #0f172a; 
       border: 1px solid var(--border-soft); 
-      width: 100%;
-      box-sizing: border-box;
-      aspect-ratio: 3 / 4; /* Keeps height predictable and prevents jumping */
+      margin-bottom: 14px;
+      break-inside: avoid;
+      transform: translateZ(0);
     }
+    
+    /* Original Aspect Ratio Maintained */
     .wp-card img { 
       width: 100%; 
-      height: 100%; 
-      object-fit: cover; 
+      height: auto; 
       display: block; 
+      border-radius: 12px;
     }
-    .wp-card .wp-badge { position: absolute; top: 8px; left: 8px; background: rgba(10,14,31,0.75); color: var(--accent); font-size: 0.7rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; pointer-events: none; z-index: 2; }
-    .wp-card-actions { position: absolute; bottom: 8px; left: 8px; right: 8px; display: flex; gap: 6px; justify-content: center; opacity: 0; transition: opacity 0.2s ease; background: rgba(10,14,31,0.4); padding: 6px; border-radius: 8px; z-index: 2; }
+    
+    .wp-card .wp-badge { 
+      position: absolute; 
+      top: 8px; 
+      left: 8px; 
+      background: rgba(10,14,31,0.75); 
+      color: var(--accent); 
+      font-size: 0.7rem; 
+      font-weight: 700; 
+      padding: 3px 9px; 
+      border-radius: 20px; 
+      pointer-events: none; 
+      z-index: 2; 
+    }
+    
+    .wp-card-actions { 
+      position: absolute; 
+      bottom: 8px; 
+      left: 8px; 
+      right: 8px; 
+      display: flex; 
+      gap: 6px; 
+      justify-content: center; 
+      opacity: 0; 
+      transition: opacity 0.2s ease; 
+      background: rgba(10,14,31,0.6); 
+      backdrop-filter: blur(4px);
+      padding: 6px; 
+      border-radius: 8px; 
+      z-index: 2; 
+    }
+    
     .wp-card:hover .wp-card-actions { opacity: 1; }
-    .wp-action-btn { background: rgba(10,14,31,0.9); border: 1px solid var(--border-soft); color: #fff; padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 4px; text-decoration: none; transition: background 0.2s, color 0.2s; white-space: nowrap; }
-    .wp-action-btn:hover { background: var(--accent); color: #0A0E1F; border-color: var(--accent); }
-    .wp-empty { grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 0.9rem; }
+    
+    .wp-action-btn { 
+      background: rgba(10,14,31,0.9); 
+      border: 1px solid var(--border-soft); 
+      color: #fff; 
+      padding: 6px 10px; 
+      border-radius: 8px; 
+      font-size: 0.75rem; 
+      cursor: pointer; 
+      display: flex; 
+      align-items: center; 
+      gap: 4px; 
+      text-decoration: none; 
+      transition: background 0.2s, color 0.2s; 
+      white-space: nowrap; 
+    }
+    
+    .wp-action-btn:hover { 
+      background: var(--accent); 
+      color: #0A0E1F; 
+      border-color: var(--accent); 
+    }
+    
+    .wp-empty { 
+      text-align: center; 
+      color: var(--text-muted); 
+      padding: 40px 10px; 
+      font-size: 0.9rem; 
+      column-span: all;
+    }
   </style>
 </head>
 <body>
@@ -211,7 +275,7 @@
       <button class="wp-tab-btn" data-cat="islamic">Islamic</button>
     </div>
 
-    <div class="wp-grid" id="wpGrid"></div>
+    <div class="wp-pinterest-container" id="wpGrid"></div>
   </div>
 </section>
 
@@ -244,6 +308,7 @@
     </ol>
   </div>
 </section>
+
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-grid">
@@ -293,6 +358,7 @@
 <script src="../assets/js/common.js"></script>
 
 <script>
+  // Complete list of 221 Wallpapers
   const wallpapers = [
     { id: "wp1", file: "floating_island_sunrise.webp", title: "floating island sunrise", cat: "nature" },
     { id: "wp2", file: "cherry_blossom_sunset_street.webp", title: "cherry blossom sunset", cat: "nature" },
@@ -514,7 +580,7 @@
     { id: "wp218", file: "serene_stable_moment.webp", title: "serene stable moment", cat: "anime" },
     { id: "wp219", file: "modest_girl_tulips.webp", title: "modest girl tulips", cat: "islamic" },
     { id: "wp220", file: "sunlit_meadow_golden_hour.webp", title: "sunlit meadow golden hour", cat: "nature" },
-    { id: "wp221", file: "luxury_swan_sunlight.webp", title: "luxury swan sunlight", cat: "nature" }    
+    { id: "wp221", file: "luxury_swan_sunlight.webp", title: "luxury swan sunlight", cat: "nature" }
   ];
 
   const grid = document.getElementById('wpGrid');
@@ -524,14 +590,10 @@
   let activeCat = 'all';
   let searchQuery = '';
 
-  // Shuffle only ONCE when page loads
-  wallpapers.sort(() => Math.random() - 0.5);
-
   function imgPath(file) {
     return encodeURI(`/assets/wallpapers/${file}`);
   }
 
-  // Render elements once to prevent re-creating DOM nodes continuously
   function initGrid() {
     grid.innerHTML = '';
     wallpapers.forEach(w => {
@@ -558,7 +620,6 @@
     });
   }
 
-  // Hide / Show existing cards instead of rebuilding HTML structure on keypress
   function filterGrid() {
     let visibleCount = 0;
     const cards = grid.querySelectorAll('.wp-card');
@@ -581,9 +642,9 @@
     let emptyMsg = grid.querySelector('.wp-empty');
     if (visibleCount === 0) {
       if (!emptyMsg) {
-        emptyMsg = document.createElement('p');
+        emptyMsg = document.createElement('div');
         emptyMsg.className = 'wp-empty';
-        emptyMsg.innerText = 'No wallpapers found matching your search. Check back soon!';
+        emptyMsg.innerText = 'No wallpapers found matching your search.';
         grid.appendChild(emptyMsg);
       }
       emptyMsg.style.display = 'block';
@@ -595,14 +656,14 @@
   function shareWallpaper(w) {
     const shareData = {
       title: 'Free HD Wallpaper - ' + w.title,
-      text: 'Check out this amazing free HD/4K wallpaper on ToolSphere!',
+      text: 'Check out this amazing free HD wallpaper!',
       url: window.location.origin + imgPath(w.file)
     };
     if (navigator.share) {
       navigator.share(shareData).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareData.url);
-      alert('Wallpaper link copied to clipboard!');
+      alert('Link copied to clipboard!');
     }
   }
 
@@ -620,7 +681,6 @@
     });
   });
 
-  // Run initialization once
   initGrid();
 </script>
 </body>
